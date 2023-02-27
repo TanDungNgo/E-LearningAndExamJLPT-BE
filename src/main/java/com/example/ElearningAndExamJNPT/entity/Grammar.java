@@ -20,15 +20,14 @@ public class Grammar extends BaseEntity{
     @Size(min = 3, max = 50)
     private String text;
     @NotBlank
-    @Size(min = 3, max = 100)
+    @Size(min = 3, max = 255)
     private String explanation ;
     @NotBlank
     @Size(min = 3, max = 255)
     private String example;
     @NotBlank
-    @Size(min = 3, max = 255)
+    @Size(min = 3, max = 50)
     private String means;
-    @NotBlank
     @Enumerated(EnumType.STRING)
     private Level level;
 }
