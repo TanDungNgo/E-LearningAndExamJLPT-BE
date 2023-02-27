@@ -1,0 +1,84 @@
+package com.example.ElearningAndExamJNPT.controller;
+
+import com.example.ElearningAndExamJNPT.dto.response.ResponseObject;
+import com.example.ElearningAndExamJNPT.entity.Course;
+import com.example.ElearningAndExamJNPT.service.impl.CourseServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/courses")
+public class CourseController {
+    @Autowired
+    private CourseServiceImpl courseService;
+
+    @GetMapping
+    public ResponseEntity<ResponseObject> getAllCourse() {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Query successfully", courseService.getAll())
+        );
+    }
+
+    @PostMapping(consumes = "application/json")
+    public ResponseEntity<ResponseObject> add(@RequestBody Course course) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                new ResponseObject("ok", "Insert course successfully", courseService.save(course))
+        );
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseObject> findByID(@PathVariable("id") Long id) {
+        Optional<Course> foundProduct = courseService.getById(id);
+        return foundProduct.isPresent() ?
+                ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject("ok", "Query course successfully", foundProduct)
+                ) :
+                ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                        new ResponseObject("failed", "Cannot find course with id = " + id, "")
+                );
+    }
+
+    @PutMapping(value = "/{id}", consumes= "application/json")
+    public ResponseEntity<ResponseObject> update(@PathVariable("id") Long id, @RequestBody Course newCourse) {
+        Course updatedCourse = courseService.getById(id)
+                .map(course -> {
+                    course.setName(newCourse.getName());
+                    course.setDescription(newCourse.getDescription());
+                    course.setLevel(newCourse.getLevel());
+                    course.setBanner(newCourse.getBanner());
+                    course.setRate(newCourse.getRate());
+                    course.setPrice(newCourse.getPrice());
+                    return courseService.save(course);
+                }).orElseGet(()->{
+                    newCourse.setId(id);
+                    return courseService.save(newCourse);
+                });
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok","Update course successfully", updatedCourse)
+        );
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseObject> delete(@PathVariable("id") Long id) {
+        Optional<Course> foundCourse = courseService.getById(id);
+        if (foundCourse.isPresent()) {
+            courseService.deleteById(id);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "Delete course successfully", "")
+            );
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject("failed", "Cannot find course with id = " + id, "")
+            );
+        }
+    }
+    @GetMapping("/search")
+    public ResponseEntity<List<Course>> searchCourses(@RequestParam("query") String query){
+        return ResponseEntity.ok(courseService.searchCourses(query));
+    }
+}
