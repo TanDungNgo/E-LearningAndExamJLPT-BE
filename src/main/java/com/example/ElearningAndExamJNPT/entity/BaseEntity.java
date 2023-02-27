@@ -3,7 +3,6 @@ package com.example.ElearningAndExamJNPT.entity;
 import com.example.ElearningAndExamJNPT.entity.User.User;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Entity;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -21,7 +20,6 @@ public abstract class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column
     @CreatedBy
     private String createdBy;
@@ -37,3 +35,4 @@ public abstract class BaseEntity {
     private Date modifiedDate;
 
 }
+

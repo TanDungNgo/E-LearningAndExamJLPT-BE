@@ -3,7 +3,6 @@ package com.example.ElearningAndExamJNPT.controller;
 import com.example.ElearningAndExamJNPT.dto.response.ResponseObject;
 import com.example.ElearningAndExamJNPT.entity.Grammar;
 import com.example.ElearningAndExamJNPT.service.impl.GrammarServiceImpl;
-import com.example.ElearningAndExamJNPT.service.impl.GrammarServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +43,7 @@ public class GrammarController {
                 );
     }
 
-    @PutMapping(value = "/{id}", consumes= "application/json")
+    @PutMapping(value = "/{id}", consumes = "application/json")
     public ResponseEntity<ResponseObject> update(@PathVariable("id") Long id, @RequestBody Grammar newGrammar) {
         Grammar updatedGrammar = grammarService.getById(id)
                 .map(grammar -> {
@@ -54,12 +53,12 @@ public class GrammarController {
                     grammar.setExample(newGrammar.getExample());
                     grammar.setLevel(newGrammar.getLevel());
                     return grammarService.save(grammar);
-                }).orElseGet(()->{
+                }).orElseGet(() -> {
                     newGrammar.setId(id);
                     return grammarService.save(newGrammar);
                 });
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("ok","Update grammar successfully", updatedGrammar)
+                new ResponseObject("ok", "Update grammar successfully", updatedGrammar)
         );
     }
 
