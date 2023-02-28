@@ -1,6 +1,7 @@
 package com.example.ElearningAndExamJNPT.entity;
 
 import com.example.ElearningAndExamJNPT.entity.User.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
@@ -20,16 +21,18 @@ public abstract class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column
     @CreatedBy
-    private String createdBy;
+    @ManyToOne
+    @JoinColumn(name = "created_by")
+    private User createdBy;
     @Column
     @CreatedDate
     private Date createdDate;
 
-    @Column
     @LastModifiedBy
-    private String modifiedBy;
+    @ManyToOne
+    @JoinColumn(name = "modified_by")
+    private User modifiedBy;
     @Column
     @LastModifiedDate
     private Date modifiedDate;
