@@ -33,10 +33,10 @@ public class CourseController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ResponseObject> findByID(@PathVariable("id") Long id) {
-        Optional<Course> foundProduct = courseService.getById(id);
-        return foundProduct.isPresent() ?
+        Optional<Course> foundCourse = courseService.getById(id);
+        return foundCourse.isPresent() ?
                 ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseObject("ok", "Query course successfully", foundProduct)
+                        new ResponseObject("ok", "Query course successfully", foundCourse)
                 ) :
                 ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                         new ResponseObject("failed", "Cannot find course with id = " + id, "")
