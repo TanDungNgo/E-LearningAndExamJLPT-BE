@@ -1,5 +1,8 @@
 package com.example.ElearningAndExamJNPT.entity.User;
 
+import com.example.ElearningAndExamJNPT.entity.Grammar;
+import com.example.ElearningAndExamJNPT.entity.Vocabulary;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +14,9 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -77,4 +82,8 @@ public class User {
         this.password = encode;
         this.avatar = avatar;
     }
+
+    @OneToMany(mappedBy = "createdBy")
+    @JsonBackReference
+    private List<Grammar> grammars = new ArrayList<>();
 }
