@@ -4,6 +4,8 @@ import com.example.ElearningAndExamJNPT.entity.Course;
 import com.example.ElearningAndExamJNPT.repository.ICourseRepository;
 import com.example.ElearningAndExamJNPT.service.ICourseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,5 +42,10 @@ public class CourseServiceImpl implements ICourseService {
     @Override
     public List<Course> searchCourses(String query) {
         return courseRepository.searchCourses(query);
+    }
+
+    @Override
+    public Page<Course> findAll(Pageable pageable) {
+        return courseRepository.findAll(pageable);
     }
 }
