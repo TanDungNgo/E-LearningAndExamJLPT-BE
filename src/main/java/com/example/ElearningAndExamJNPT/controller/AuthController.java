@@ -6,7 +6,6 @@ import com.example.ElearningAndExamJNPT.dto.request.SignUpForm;
 import com.example.ElearningAndExamJNPT.dto.response.JwtResponse;
 import com.example.ElearningAndExamJNPT.dto.response.ResponMessage;
 import com.example.ElearningAndExamJNPT.dto.response.ResponseObject;
-import com.example.ElearningAndExamJNPT.entity.User.GenderType;
 import com.example.ElearningAndExamJNPT.entity.User.Role;
 import com.example.ElearningAndExamJNPT.entity.User.RoleName;
 import com.example.ElearningAndExamJNPT.entity.User.User;

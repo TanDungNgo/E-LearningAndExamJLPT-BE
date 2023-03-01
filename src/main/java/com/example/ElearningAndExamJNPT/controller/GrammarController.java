@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/grammars")
+@RequestMapping("/api/grammars")
 public class GrammarController {
     @Autowired
     private GrammarServiceImpl grammarService;

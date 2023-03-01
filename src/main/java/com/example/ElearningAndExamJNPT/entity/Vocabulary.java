@@ -1,5 +1,6 @@
 package com.example.ElearningAndExamJNPT.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,5 +34,6 @@ public class Vocabulary extends BaseEntity{
 
     @ManyToOne
     @JoinColumn(name = "VocabularyFolder_id")
+    @JsonBackReference
     private VocabularyFolder vocabularyFolder;
 }

@@ -2,7 +2,6 @@ package com.example.ElearningAndExamJNPT.controller;
 
 import com.example.ElearningAndExamJNPT.dto.LessonDTO;
 import com.example.ElearningAndExamJNPT.dto.response.ResponseObject;
-import com.example.ElearningAndExamJNPT.entity.Course;
 import com.example.ElearningAndExamJNPT.entity.Lesson;
 import com.example.ElearningAndExamJNPT.service.impl.LessonServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("lessons")
+@RequestMapping("/api/lessons")
 public class LessonController {
     @Autowired
     private LessonServiceImpl lessonService;
@@ -74,5 +74,9 @@ public class LessonController {
                     new ResponseObject("failed", "Cannot find lesson with id = " + id, "")
             );
         }
+    }
+    @GetMapping("/search")
+    public ResponseEntity<List<Lesson>> searchLessons(@RequestParam("query") String query){
+        return ResponseEntity.ok(lessonService.searchLessons(query));
     }
 }

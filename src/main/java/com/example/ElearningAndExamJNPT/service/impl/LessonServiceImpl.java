@@ -45,6 +45,11 @@ public class LessonServiceImpl implements ILessonService {
     }
 
     @Override
+    public List<Lesson> searchLessons(String query) {
+        return lessonRepository.searchLessons(query);
+    }
+
+    @Override
     public Lesson update(Lesson entity) {
         return lessonRepository.save(entity);
     }

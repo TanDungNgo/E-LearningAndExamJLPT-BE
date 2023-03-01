@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/vocabularyFolders")
+@RequestMapping("/api/vocabularyFolders")
 public class VocabularyFolderController {
     @Autowired
     private VocabularyFolderServiceImpl vocabularyFolderService;
@@ -33,10 +33,10 @@ public class VocabularyFolderController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ResponseObject> findByID(@PathVariable("id") Long id) {
-        Optional<VocabularyFolder> foundProduct = vocabularyFolderService.getById(id);
-        return foundProduct.isPresent() ?
+        Optional<VocabularyFolder> foundVocabularyFolder = vocabularyFolderService.getById(id);
+        return foundVocabularyFolder.isPresent() ?
                 ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseObject("ok", "Query vocabularyFolder successfully", foundProduct)
+                        new ResponseObject("ok", "Query vocabularyFolder successfully", foundVocabularyFolder)
                 ) :
                 ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                         new ResponseObject("failed", "Cannot find vocabularyFolder with id = " + id, "")
