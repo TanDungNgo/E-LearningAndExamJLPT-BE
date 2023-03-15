@@ -11,15 +11,11 @@ import springfox.documentation.spi.DocumentationType;
 
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
-
-import springfox.documentation.swagger.web.SecurityConfiguration;
-import springfox.documentation.swagger.web.SecurityConfigurationBuilder;
-import springfox.documentation.swagger.web.UiConfiguration;
-import springfox.documentation.swagger.web.UiConfigurationBuilder;
 import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collections;
+
 
 
 @Configuration
@@ -40,60 +36,20 @@ public class SwaggerConfig implements WebMvcConfigurer {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Demo API")
-                .description("Demo API description")
-                .version("1.0.0")
+                .title("API for E-learning")
+                .description("API description")
+                .version("1.0.1")
                 .build();
     }
 
     private ApiKey apiKey() {
-        return new ApiKey("Bearer", "Authorization", "header");
+        return new ApiKey("JWT", "Authorization", "header");
     }
+
     private SecurityContext securityContext() {
-        return SecurityContext.builder().securityReferences(defaultAuth()).build();
-    }
-
-    private List<SecurityReference> defaultAuth() {
-        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
-        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
-        authorizationScopes[0] = authorizationScope;
-        return Arrays.asList(new SecurityReference("Bearer", authorizationScopes));
-    }
-
-    @Bean
-    public SecurityConfiguration securityConfiguration() {
-        return SecurityConfigurationBuilder.builder()
-                .clientId(null)
-                .clientSecret(null)
-                .realm(null)
-                .appName(null)
-                .scopeSeparator(",")
-                .additionalQueryStringParams(null)
-                .useBasicAuthenticationWithAccessCodeGrant(false)
+        return SecurityContext.builder()
+                .securityReferences(Collections.singletonList(new SecurityReference("JWT", new AuthorizationScope[0])))
                 .build();
-    }
-
-    @Bean
-    public UiConfiguration uiConfiguration() {
-        return UiConfigurationBuilder.builder()
-                .displayRequestDuration(true)
-                .validatorUrl("")
-                .build();
-    }
-
-    @Bean
-    public SecurityScheme securityScheme() {
-        GrantType grantType = new AuthorizationCodeGrantBuilder()
-                .tokenEndpoint(new TokenEndpoint("url/to/token", "oauthtoken"))
-                .tokenRequestEndpoint(
-                        new TokenRequestEndpoint("url/to/auth", "clientId", "clientSecret"))
-                .build();
-
-        SecurityScheme oauth = new OAuthBuilder().name("spring_oauth")
-                .grantTypes(Arrays.asList(grantType))
-                .scopes(Arrays.asList(scopes()))
-                .build();
-        return oauth;
     }
 
     private AuthorizationScope[] scopes() {
@@ -103,6 +59,4 @@ public class SwaggerConfig implements WebMvcConfigurer {
                 new AuthorizationScope("foo", "Access foo API")};
         return scopes;
     }
-
-
 }
