@@ -4,12 +4,16 @@ import com.example.ElearningAndExamJNPT.converter.VocabularyConverter;
 import com.example.ElearningAndExamJNPT.dto.VocabularyDTO;
 import com.example.ElearningAndExamJNPT.entity.Vocabulary;
 import com.example.ElearningAndExamJNPT.entity.VocabularyFolder;
+import com.example.ElearningAndExamJNPT.repository.IUserRepository;
 import com.example.ElearningAndExamJNPT.repository.IVocabularyFolderRepository;
 import com.example.ElearningAndExamJNPT.repository.IVocabularyRepository;
 import com.example.ElearningAndExamJNPT.service.IVocabularyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +24,8 @@ public class VocabularyServiceImpl implements IVocabularyService {
     @Autowired
     private IVocabularyFolderRepository vocabularyFolderRepository;
     @Autowired
-    private VocabularyConverter vocabularyConverter;
+    private IUserRepository userRepository;
+
     @Override
     public List<Vocabulary> getAll() {
         return vocabularyRepository.findAll();
@@ -33,25 +38,27 @@ public class VocabularyServiceImpl implements IVocabularyService {
 
     @Override
     public Vocabulary save(Vocabulary entity) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        LocalDateTime now = LocalDateTime.now();
+        entity.setCreatedBy(userRepository.findByUsername(authentication.getName()).get());
+        entity.setCreatedDate(now);
+        entity.setModifiedBy(userRepository.findByUsername(authentication.getName()).get());
+        entity.setModifiedDate(now);
         return vocabularyRepository.save(entity);
     }
 
     @Override
     public Vocabulary update(Vocabulary entity) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        LocalDateTime now = LocalDateTime.now();
+        entity.setModifiedBy(userRepository.findByUsername(authentication.getName()).get());
+        entity.setModifiedDate(now);
         return vocabularyRepository.save(entity);
     }
 
     @Override
     public void deleteById(Long id) {
         vocabularyRepository.deleteById(id);
-    }
-
-    @Override
-    public Vocabulary save(VocabularyDTO dto) {
-        Vocabulary entity = vocabularyConverter.toVocabularyEntity(dto);
-        VocabularyFolder vocabularyFolder = vocabularyFolderRepository.findById(dto.getVocabularyFolder_id()).get();
-        entity.setVocabularyFolder(vocabularyFolder);
-        return vocabularyRepository.save(entity);
     }
 
     @Override

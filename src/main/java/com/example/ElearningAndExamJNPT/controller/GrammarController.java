@@ -1,5 +1,6 @@
 package com.example.ElearningAndExamJNPT.controller;
 
+import com.example.ElearningAndExamJNPT.dto.GrammarDTO;
 import com.example.ElearningAndExamJNPT.dto.response.ResponseObject;
 import com.example.ElearningAndExamJNPT.entity.Grammar;
 import com.example.ElearningAndExamJNPT.service.impl.GrammarServiceImpl;
@@ -25,7 +26,13 @@ public class GrammarController {
     }
 
     @PostMapping(consumes = "application/json")
-    public ResponseEntity<ResponseObject> add(@RequestBody Grammar grammar) {
+    public ResponseEntity<ResponseObject> add(@RequestBody GrammarDTO grammarDTO) {
+        Grammar grammar = new Grammar();
+        grammar.setText(grammarDTO.getText());
+        grammar.setMeans(grammarDTO.getMeans());
+        grammar.setExplanation(grammarDTO.getExplanation());
+        grammar.setLevel(grammarDTO.getLevel());
+        grammar.setExample(grammarDTO.getExample());
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new ResponseObject("ok", "Insert grammar successfully", grammarService.save(grammar))
         );
@@ -44,7 +51,7 @@ public class GrammarController {
     }
 
     @PutMapping(value = "/{id}", consumes = "application/json")
-    public ResponseEntity<ResponseObject> update(@PathVariable("id") Long id, @RequestBody Grammar newGrammar) {
+    public ResponseEntity<ResponseObject> update(@PathVariable("id")final Long id, @RequestBody final GrammarDTO newGrammar) {
         Grammar updatedGrammar = grammarService.getById(id)
                 .map(grammar -> {
                     grammar.setText(newGrammar.getText());
@@ -52,10 +59,16 @@ public class GrammarController {
                     grammar.setExplanation(newGrammar.getExplanation());
                     grammar.setExample(newGrammar.getExample());
                     grammar.setLevel(newGrammar.getLevel());
-                    return grammarService.save(grammar);
+                    return grammarService.update(grammar);
                 }).orElseGet(() -> {
-                    newGrammar.setId(id);
-                    return grammarService.save(newGrammar);
+                    Grammar grammar = new Grammar();
+                    grammar.setText(newGrammar.getText());
+                    grammar.setMeans(newGrammar.getMeans());
+                    grammar.setExplanation(newGrammar.getExplanation());
+                    grammar.setLevel(newGrammar.getLevel());
+                    grammar.setExample(newGrammar.getExample());
+                    grammar.setId(id);
+                    return grammarService.save(grammar);
                 });
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("ok", "Update grammar successfully", updatedGrammar)
