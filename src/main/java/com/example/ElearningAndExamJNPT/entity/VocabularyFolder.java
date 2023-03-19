@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -23,7 +24,7 @@ public class VocabularyFolder extends BaseEntity{
     @NotBlank
     @Size(min = 3, max = 50)
     private String title;
-
+    @Formula("(SELECT COUNT(*) FROM vocabularies v WHERE v.vocabulary_folder_id = id)")
     private Integer count;
 
     @OneToMany(mappedBy = "vocabularyFolder")
