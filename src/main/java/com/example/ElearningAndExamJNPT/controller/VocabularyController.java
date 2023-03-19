@@ -1,5 +1,6 @@
 package com.example.ElearningAndExamJNPT.controller;
 
+import com.example.ElearningAndExamJNPT.converter.VocabularyConverter;
 import com.example.ElearningAndExamJNPT.dto.VocabularyDTO;
 import com.example.ElearningAndExamJNPT.dto.response.ResponseObject;
 import com.example.ElearningAndExamJNPT.entity.Vocabulary;
@@ -17,6 +18,8 @@ import java.util.Optional;
 public class VocabularyController {
     @Autowired
     private VocabularyServiceImpl vocabularyService;
+    @Autowired
+    private VocabularyConverter vocabularyConverter;
     @GetMapping
     public ResponseEntity<ResponseObject> getAllVocabulary() {
         return ResponseEntity.status(HttpStatus.OK).body(
@@ -26,8 +29,9 @@ public class VocabularyController {
 
     @PostMapping(consumes = "application/json")
     public ResponseEntity<ResponseObject> add(@RequestBody VocabularyDTO vocabularyDTO) {
+        Vocabulary vocabulary = vocabularyConverter.toVocabularyEntity(vocabularyDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                new ResponseObject("ok", "Insert vocabulary successfully", vocabularyService.save(vocabularyDTO))
+                new ResponseObject("ok", "Insert vocabulary successfully", vocabularyService.save(vocabulary))
         );
     }
 
@@ -44,13 +48,15 @@ public class VocabularyController {
     }
 
     @PutMapping(value = "/{id}", consumes= "application/json")
-    public ResponseEntity<ResponseObject> update(@PathVariable("id") Long id, @RequestBody VocabularyDTO newVocabularyDTO) {
+    public ResponseEntity<ResponseObject> update(@PathVariable("id") Long id, @RequestBody VocabularyDTO newVocabulary) {
         Vocabulary updatedVocabulary = vocabularyService.getById(id)
                 .map(vocabulary -> {
+                    vocabulary = vocabularyConverter.toVocabularyEntity(newVocabulary);
                     return vocabularyService.save(vocabulary);
                 }).orElseGet(()->{
-//                    newVocabularyDTO.setId(id);
-                    return vocabularyService.save(newVocabularyDTO);
+                    Vocabulary vocabulary = vocabularyConverter.toVocabularyEntity(newVocabulary);
+                    vocabulary.setId(id);
+                    return vocabularyService.save(vocabulary);
                 });
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("ok","Update vocabularyFolder successfully", updatedVocabulary)

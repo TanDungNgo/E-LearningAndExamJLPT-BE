@@ -1,5 +1,6 @@
 package com.example.ElearningAndExamJNPT.controller;
 
+import com.example.ElearningAndExamJNPT.dto.CourseDTO;
 import com.example.ElearningAndExamJNPT.dto.response.ResponseObject;
 import com.example.ElearningAndExamJNPT.entity.Course;
 import com.example.ElearningAndExamJNPT.service.impl.CourseServiceImpl;
@@ -30,7 +31,7 @@ public class CourseController {
     @GetMapping("/page")
     public ResponseEntity<ResponseObject> getCoursesByPage(@RequestParam(name = "page", defaultValue = "0") int page,
                                                            @RequestParam(name = "size", defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page-1, size);
+        Pageable pageable = PageRequest.of(page - 1, size);
         Page<Course> courses = courseService.findAll(pageable);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("ok", "Query successfully", courses)
@@ -38,7 +39,14 @@ public class CourseController {
     }
 
     @PostMapping(consumes = "application/json")
-    public ResponseEntity<ResponseObject> add(@RequestBody Course course) {
+    public ResponseEntity<ResponseObject> add(@RequestBody CourseDTO courseDTO) {
+        Course course = new Course();
+        course.setName(courseDTO.getName());
+        course.setDescription(courseDTO.getDescription());
+        course.setLevel(courseDTO.getLevel());
+        course.setBanner(courseDTO.getBanner());
+        course.setRate(courseDTO.getRate());
+        course.setPrice(courseDTO.getPrice());
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new ResponseObject("ok", "Insert course successfully", courseService.save(course))
         );
@@ -56,8 +64,8 @@ public class CourseController {
                 );
     }
 
-    @PutMapping(value = "/{id}", consumes= "application/json")
-    public ResponseEntity<ResponseObject> update(@PathVariable("id") Long id, @RequestBody Course newCourse) {
+    @PutMapping(value = "/{id}", consumes = "application/json")
+    public ResponseEntity<ResponseObject> update(@PathVariable("id") Long id, @RequestBody CourseDTO newCourse) {
         Course updatedCourse = courseService.getById(id)
                 .map(course -> {
                     course.setName(newCourse.getName());
@@ -66,13 +74,20 @@ public class CourseController {
                     course.setBanner(newCourse.getBanner());
                     course.setRate(newCourse.getRate());
                     course.setPrice(newCourse.getPrice());
+                    return courseService.update(course);
+                }).orElseGet(() -> {
+                    Course course = new Course();
+                    course.setName(newCourse.getName());
+                    course.setDescription(newCourse.getDescription());
+                    course.setLevel(newCourse.getLevel());
+                    course.setBanner(newCourse.getBanner());
+                    course.setRate(newCourse.getRate());
+                    course.setPrice(newCourse.getPrice());
+                    course.setId(id);
                     return courseService.save(course);
-                }).orElseGet(()->{
-                    newCourse.setId(id);
-                    return courseService.save(newCourse);
                 });
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("ok","Update course successfully", updatedCourse)
+                new ResponseObject("ok", "Update course successfully", updatedCourse)
         );
     }
 
@@ -90,8 +105,9 @@ public class CourseController {
             );
         }
     }
+
     @GetMapping("/search")
-    public ResponseEntity<List<Course>> searchCourses(@RequestParam("query") String query){
+    public ResponseEntity<List<Course>> searchCourses(@RequestParam("query") String query) {
         return ResponseEntity.ok(courseService.searchCourses(query));
     }
 }

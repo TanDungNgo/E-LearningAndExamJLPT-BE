@@ -2,12 +2,16 @@ package com.example.ElearningAndExamJNPT.service.impl;
 
 import com.example.ElearningAndExamJNPT.entity.Course;
 import com.example.ElearningAndExamJNPT.repository.ICourseRepository;
+import com.example.ElearningAndExamJNPT.repository.IUserRepository;
 import com.example.ElearningAndExamJNPT.service.ICourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +19,8 @@ import java.util.Optional;
 public class CourseServiceImpl implements ICourseService {
     @Autowired
     private ICourseRepository courseRepository;
+    @Autowired
+    private IUserRepository userRepository;
     @Override
     public List<Course> getAll() {
         return courseRepository.findAll();
@@ -27,11 +33,21 @@ public class CourseServiceImpl implements ICourseService {
 
     @Override
     public Course save(Course entity) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        LocalDateTime now = LocalDateTime.now();
+        entity.setCreatedBy(userRepository.findByUsername(authentication.getName()).get());
+        entity.setCreatedDate(now);
+        entity.setModifiedBy(userRepository.findByUsername(authentication.getName()).get());
+        entity.setModifiedDate(now);
         return courseRepository.save(entity);
     }
 
     @Override
     public Course update(Course entity) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        LocalDateTime now = LocalDateTime.now();
+        entity.setModifiedBy(userRepository.findByUsername(authentication.getName()).get());
+        entity.setModifiedDate(now);
         return courseRepository.save(entity);
     }
 

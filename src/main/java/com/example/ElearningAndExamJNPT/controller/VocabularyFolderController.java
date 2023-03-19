@@ -1,5 +1,6 @@
 package com.example.ElearningAndExamJNPT.controller;
 
+import com.example.ElearningAndExamJNPT.dto.VocabularyFolderDTO;
 import com.example.ElearningAndExamJNPT.dto.response.ResponseObject;
 import com.example.ElearningAndExamJNPT.entity.VocabularyFolder;
 import com.example.ElearningAndExamJNPT.service.impl.VocabularyFolderServiceImpl;
@@ -25,7 +26,10 @@ public class VocabularyFolderController {
     }
 
     @PostMapping(consumes = "application/json")
-    public ResponseEntity<ResponseObject> add(@RequestBody VocabularyFolder vocabularyFolder) {
+    public ResponseEntity<ResponseObject> add(@RequestBody VocabularyFolderDTO vocabularyFolderDTO) {
+        VocabularyFolder vocabularyFolder = new VocabularyFolder();
+        vocabularyFolder.setLevel(vocabularyFolderDTO.getLevel());
+        vocabularyFolder.setTitle(vocabularyFolderDTO.getTitle());
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new ResponseObject("ok", "Insert vocabularyFolder successfully", vocabularyFolderService.save(vocabularyFolder))
         );
@@ -44,15 +48,18 @@ public class VocabularyFolderController {
     }
 
     @PutMapping(value = "/{id}", consumes= "application/json")
-    public ResponseEntity<ResponseObject> update(@PathVariable("id") Long id, @RequestBody VocabularyFolder newVocabularyFolder) {
+    public ResponseEntity<ResponseObject> update(@PathVariable("id") Long id, @RequestBody VocabularyFolderDTO newVocabularyFolder) {
         VocabularyFolder updatedVocabularyFolder = vocabularyFolderService.getById(id)
                 .map(vocabularyFolder -> {
                     vocabularyFolder.setLevel(newVocabularyFolder.getLevel());
                     vocabularyFolder.setTitle(newVocabularyFolder.getTitle());
-                    return vocabularyFolderService.save(vocabularyFolder);
+                    return vocabularyFolderService.update(vocabularyFolder);
                 }).orElseGet(()->{
-                    newVocabularyFolder.setId(id);
-                    return vocabularyFolderService.save(newVocabularyFolder);
+                    VocabularyFolder vocabularyFolder = new VocabularyFolder();
+                    vocabularyFolder.setLevel(newVocabularyFolder.getLevel());
+                    vocabularyFolder.setTitle(newVocabularyFolder.getTitle());
+                    vocabularyFolder.setId(id);
+                    return vocabularyFolderService.save(vocabularyFolder);
                 });
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("ok","Update vocabularyFolder successfully", updatedVocabularyFolder)

@@ -25,7 +25,12 @@ public class LessonController {
     }
 
     @PostMapping(consumes = "application/json")
-    public ResponseEntity<ResponseObject> add(@RequestBody LessonDTO lesson) {
+    public ResponseEntity<ResponseObject> add(@RequestBody LessonDTO lessonDTO) {
+        Lesson lesson = new Lesson();
+        lesson.setName(lessonDTO.getName());
+        lesson.setDescription(lessonDTO.getDescription());
+        lesson.setUrlVideo(lessonDTO.getUrlVideo());
+        lesson.setRate(lessonDTO.getRate());
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new ResponseObject("ok", "Insert lesson successfully", lessonService.save(lesson))
         );
@@ -44,17 +49,22 @@ public class LessonController {
     }
 
     @PutMapping(value = "/{id}", consumes= "application/json")
-    public ResponseEntity<ResponseObject> update(@PathVariable("id") Long id, @RequestBody Lesson newLesson) {
+    public ResponseEntity<ResponseObject> update(@PathVariable("id") Long id, @RequestBody LessonDTO newLesson) {
         Lesson updatedLesson = lessonService.getById(id)
                 .map(lesson -> {
                     lesson.setName(newLesson.getName());
                     lesson.setDescription(newLesson.getDescription());
                     lesson.setUrlVideo(newLesson.getUrlVideo());
                     lesson.setRate(newLesson.getRate());
-                    return lessonService.save(lesson);
+                    return lessonService.update(lesson);
                 }).orElseGet(()->{
-                    newLesson.setId(id);
-                    return lessonService.save(newLesson);
+                    Lesson lesson = new Lesson();
+                    lesson.setName(newLesson.getName());
+                    lesson.setDescription(newLesson.getDescription());
+                    lesson.setUrlVideo(newLesson.getUrlVideo());
+                    lesson.setRate(newLesson.getRate());
+                    lesson.setId(id);
+                    return lessonService.save(lesson);
                 });
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("ok","Update lesson successfully", updatedLesson)
