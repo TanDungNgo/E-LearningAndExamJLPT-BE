@@ -10,9 +10,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -21,10 +26,10 @@ public class CourseController {
     @Autowired
     private CourseServiceImpl courseService;
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<ResponseObject> getAllCourse() {
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("ok", "Query successfully", courseService.getAll())
+                new ResponseObject("ok", "Query course successfully", courseService.getAll())
         );
     }
 
@@ -34,26 +39,37 @@ public class CourseController {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<Course> courses = courseService.findAll(pageable);
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("ok", "Query successfully", courses)
+                new ResponseObject("ok", "Query course successfully", courses)
         );
     }
 
     @PostMapping(consumes = "application/json")
-    public ResponseEntity<ResponseObject> add(@RequestBody CourseDTO courseDTO) {
+    public ResponseEntity<ResponseObject> createCourse(@RequestBody @Valid CourseDTO courseDTO) {
         Course course = new Course();
         course.setName(courseDTO.getName());
         course.setDescription(courseDTO.getDescription());
         course.setLevel(courseDTO.getLevel());
         course.setBanner(courseDTO.getBanner());
-        course.setRate(courseDTO.getRate());
         course.setPrice(courseDTO.getPrice());
+        course.setDuration(courseDTO.getDuration());
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new ResponseObject("ok", "Insert course successfully", courseService.save(course))
         );
     }
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex){
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error)->{
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return errors;
+    }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseObject> findByID(@PathVariable("id") Long id) {
+    public ResponseEntity<ResponseObject> getCourseByID(@PathVariable("id") Long id) {
         Optional<Course> foundCourse = courseService.getById(id);
         return foundCourse.isPresent() ?
                 ResponseEntity.status(HttpStatus.OK).body(
@@ -65,14 +81,13 @@ public class CourseController {
     }
 
     @PutMapping(value = "/{id}", consumes = "application/json")
-    public ResponseEntity<ResponseObject> update(@PathVariable("id") Long id, @RequestBody CourseDTO newCourse) {
+    public ResponseEntity<ResponseObject> updateCourse(@PathVariable("id") Long id, @RequestBody CourseDTO newCourse) {
         Course updatedCourse = courseService.getById(id)
                 .map(course -> {
                     course.setName(newCourse.getName());
                     course.setDescription(newCourse.getDescription());
                     course.setLevel(newCourse.getLevel());
                     course.setBanner(newCourse.getBanner());
-                    course.setRate(newCourse.getRate());
                     course.setPrice(newCourse.getPrice());
                     return courseService.update(course);
                 }).orElseGet(() -> {
@@ -81,7 +96,6 @@ public class CourseController {
                     course.setDescription(newCourse.getDescription());
                     course.setLevel(newCourse.getLevel());
                     course.setBanner(newCourse.getBanner());
-                    course.setRate(newCourse.getRate());
                     course.setPrice(newCourse.getPrice());
                     course.setId(id);
                     return courseService.save(course);
@@ -92,7 +106,7 @@ public class CourseController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseObject> delete(@PathVariable("id") Long id) {
+    public ResponseEntity<ResponseObject> deleteCourse(@PathVariable("id") Long id) {
         Optional<Course> foundCourse = courseService.getById(id);
         if (foundCourse.isPresent()) {
             courseService.deleteById(id);
@@ -107,7 +121,9 @@ public class CourseController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Course>> searchCourses(@RequestParam("query") String query) {
-        return ResponseEntity.ok(courseService.searchCourses(query));
+    public ResponseEntity<ResponseObject> searchCourses(@RequestParam("query") String query) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Search course successfully", courseService.searchCourses(query))
+        );
     }
 }

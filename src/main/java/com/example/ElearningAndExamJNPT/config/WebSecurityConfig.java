@@ -56,7 +56,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/webjars/**",
             "/swagger-ui/**",
             "/api/auth/**",
-            "/api/courses"
+            "/api/courses/all",
+            "/api/grammars/all",
+            "/api/courses/search",
+            "/api/grammars/search",
     };
 
     @Override

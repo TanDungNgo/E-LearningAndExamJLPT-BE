@@ -21,13 +21,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @RequestMapping("/api/auth")
@@ -48,10 +49,10 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> register(@Valid @RequestBody SignUpForm signUpForm) {
         if (userService.existsByUsername(signUpForm.getUsername())) {
-            return new ResponseEntity<>(new ResponMessage("The username existed! Please try again!"), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponMessage("The username existed! Please try again!"), HttpStatus.CONFLICT);
         }
         if (userService.existsByEmail(signUpForm.getEmail())) {
-            return new ResponseEntity<>(new ResponMessage("The email existed! Please try again!"), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponMessage("The email existed! Please try again!"), HttpStatus.CONFLICT);
         }
         User user = new User(signUpForm.getFirstname(), signUpForm.getLastname(), signUpForm.getUsername(), signUpForm.getGender(), signUpForm.getEmail(), passwordEncoder.encode(signUpForm.getPassword()), signUpForm.getAvatar());
 
@@ -92,5 +93,16 @@ public class AuthController {
                 new ResponseObject("ok", "Signin successfully",
                         new JwtResponse(userPrinciple.getId(), token, userPrinciple.getFirstname(), userPrinciple.getLastname(), userPrinciple.getAvatar(), userPrinciple.getAuthorities())
                 ));
+    }
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex){
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error)->{
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return errors;
     }
 }

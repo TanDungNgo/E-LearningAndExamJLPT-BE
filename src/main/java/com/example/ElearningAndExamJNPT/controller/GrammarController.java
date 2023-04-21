@@ -7,9 +7,14 @@ import com.example.ElearningAndExamJNPT.service.impl.GrammarServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -18,7 +23,7 @@ public class GrammarController {
     @Autowired
     private GrammarServiceImpl grammarService;
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<ResponseObject> getAllGrammar() {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("ok", "Query successfully", grammarService.getAll())
@@ -26,7 +31,7 @@ public class GrammarController {
     }
 
     @PostMapping(consumes = "application/json")
-    public ResponseEntity<ResponseObject> add(@RequestBody GrammarDTO grammarDTO) {
+    public ResponseEntity<ResponseObject> createGrammar(@RequestBody @Valid GrammarDTO grammarDTO) {
         Grammar grammar = new Grammar();
         grammar.setText(grammarDTO.getText());
         grammar.setMeans(grammarDTO.getMeans());
@@ -36,6 +41,18 @@ public class GrammarController {
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new ResponseObject("ok", "Insert grammar successfully", grammarService.save(grammar))
         );
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return errors;
     }
 
     @GetMapping("/{id}")
@@ -51,7 +68,7 @@ public class GrammarController {
     }
 
     @PutMapping(value = "/{id}", consumes = "application/json")
-    public ResponseEntity<ResponseObject> update(@PathVariable("id")final Long id, @RequestBody final GrammarDTO newGrammar) {
+    public ResponseEntity<ResponseObject> update(@PathVariable("id") final Long id, @RequestBody final GrammarDTO newGrammar) {
         Grammar updatedGrammar = grammarService.getById(id)
                 .map(grammar -> {
                     grammar.setText(newGrammar.getText());
@@ -89,8 +106,9 @@ public class GrammarController {
             );
         }
     }
+
     @GetMapping("/search")
-    public ResponseEntity<List<Grammar>> searchGrammars(@RequestParam("query") String query){
+    public ResponseEntity<List<Grammar>> searchGrammars(@RequestParam("query") String query) {
         return ResponseEntity.ok(grammarService.searchGrammars(query));
     }
 }

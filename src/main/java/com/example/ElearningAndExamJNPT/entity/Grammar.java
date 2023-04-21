@@ -19,16 +19,16 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @Table(name = "grammars")
 public class Grammar extends BaseEntity{
-    @NotBlank
+    @NotBlank(message = "Grammar text is mandatory")
     @Size(min = 3, max = 50)
     private String text;
-    @NotBlank
+    @NotBlank(message = "Grammar explanation is mandatory")
     @Size(min = 3, max = 255)
     private String explanation ;
-    @NotBlank
+    @NotBlank(message = "Grammar example is mandatory")
     @Size(min = 3, max = 255)
     private String example;
-    @NotBlank
+    @NotBlank(message = "Grammar means is mandatory")
     @Size(min = 3, max = 50)
     private String means;
     @Enumerated(EnumType.STRING)
