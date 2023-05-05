@@ -54,6 +54,15 @@ public class AuthController {
         if (userService.existsByEmail(signUpForm.getEmail())) {
             return new ResponseEntity<>(new ResponMessage("The email existed! Please try again!"), HttpStatus.CONFLICT);
         }
+        String strGender = String.valueOf(signUpForm.getGender());
+        if(strGender == "Male")
+        {
+            signUpForm.setAvatar("https://i.pinimg.com/736x/04/b2/51/04b2516f33364982853c0bec7cae9fe3.jpg");
+        }
+        else{
+            signUpForm.setAvatar("https://i.pinimg.com/736x/84/fe/b0/84feb03ef83bc2cdacfdcc03a8a3aa69.jpg");
+        }
+
         User user = new User(signUpForm.getFirstname(), signUpForm.getLastname(), signUpForm.getUsername(), signUpForm.getGender(), signUpForm.getEmail(), passwordEncoder.encode(signUpForm.getPassword()), signUpForm.getAvatar());
 
         Set<String> strRoles = signUpForm.getRoles();
