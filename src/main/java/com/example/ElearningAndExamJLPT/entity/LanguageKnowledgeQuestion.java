@@ -28,7 +28,8 @@ public class LanguageKnowledgeQuestion extends BaseEntity{
     private String option3;
     private String option4;
     @JsonIgnore
-    private Integer correct_answer;
+    @JoinColumn(name = "correct_answer")
+    private Integer correctAnswer;
 
     @ManyToOne
     @JoinColumn(name = "exam_id")

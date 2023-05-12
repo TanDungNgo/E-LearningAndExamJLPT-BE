@@ -1,6 +1,7 @@
 package com.example.ElearningAndExamJLPT.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,7 +29,9 @@ public class ReadingQuestion extends BaseEntity{
     private String option2;
     private String option3;
     private String option4;
-    private Integer correct_answer;
+    @JsonIgnore
+    @JoinColumn(name = "correct_answer")
+    private Integer correctAnswer;
 
     @ManyToOne
     @JoinColumn(name = "exam_id")

@@ -1,6 +1,7 @@
 package com.example.ElearningAndExamJLPT.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,9 +19,10 @@ import javax.validation.constraints.NotNull;
 @Table(name = "listening_questions")
 @Validated
 public class ListeningQuestion extends BaseEntity {
-    @NotNull(message = "audio_file is mandatory")
+    @NotNull(message = "Audio_file is mandatory")
     @Lob
-    private String audio_file;
+    @JoinColumn(name = "audio_file")
+    private String audioFile;
     @Lob
     private String image;
     private String text;
@@ -31,7 +33,9 @@ public class ListeningQuestion extends BaseEntity {
     private String option2;
     private String option3;
     private String option4;
-    private Integer correct_answer;
+    @JsonIgnore
+    @JoinColumn(name = "correct_answer")
+    private Integer correctAnswer;
 
     @ManyToOne
     @JoinColumn(name = "exam_id")
