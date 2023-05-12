@@ -3,6 +3,7 @@ package com.example.ElearningAndExamJLPT.controller;
 import com.example.ElearningAndExamJLPT.dto.LessonDTO;
 import com.example.ElearningAndExamJLPT.dto.response.ResponseObject;
 import com.example.ElearningAndExamJLPT.entity.Lesson;
+import com.example.ElearningAndExamJLPT.service.impl.CourseServiceImpl;
 import com.example.ElearningAndExamJLPT.service.impl.LessonServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,8 @@ import java.util.Optional;
 public class LessonController {
     @Autowired
     private LessonServiceImpl lessonService;
+    @Autowired
+    private CourseServiceImpl courseService;
     @GetMapping
     public ResponseEntity<ResponseObject> getAllLesson() {
         return ResponseEntity.status(HttpStatus.OK).body(
@@ -31,6 +34,7 @@ public class LessonController {
         lesson.setDescription(lessonDTO.getDescription());
         lesson.setUrlVideo(lessonDTO.getUrlVideo());
         lesson.setRate(lessonDTO.getRate());
+        lesson.setCourse(courseService.getById(lessonDTO.getCourse_id()).get());
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new ResponseObject("ok", "Insert lesson successfully", lessonService.save(lesson))
         );

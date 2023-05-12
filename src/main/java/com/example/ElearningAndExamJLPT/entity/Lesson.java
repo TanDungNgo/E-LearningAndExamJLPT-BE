@@ -30,6 +30,7 @@ public class Lesson extends BaseEntity{
     @Min(0)
     @Max(5)
     private Double rate;
+    private boolean status;
 
     @ManyToOne
     @JoinColumn(name = "course_id")

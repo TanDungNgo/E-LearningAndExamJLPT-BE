@@ -34,6 +34,8 @@ public class Course extends BaseEntity{
     @NotNull(message = "Course level is mandatory")
     @Enumerated(EnumType.STRING)
     private Level level;
+    @NotNull(message = "Course type is mandatory")
+    private String type;
     @Lob
     private String banner;
 

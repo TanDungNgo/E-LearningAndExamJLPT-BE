@@ -36,7 +36,7 @@ public class User {
     @Size(min = 3, max = 20)
     private String firstname;
     @NotBlank
-    @Size(min = 3, max = 20)
+    @Size(min = 2, max = 20)
     private String lastname;
     @NotBlank
     @Size(min = 3, max = 50)

@@ -26,10 +26,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @RequestMapping("/api/auth")
 @RestController
@@ -113,5 +110,14 @@ public class AuthController {
             errors.put(fieldName, errorMessage);
         });
         return errors;
+    }
+
+    @GetMapping("/info")
+    public ResponseEntity<?> getUserInfo(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Optional<User> user = userService.findByUsername(authentication.getName());
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Get user info successfully", user)
+        );
     }
 }

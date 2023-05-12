@@ -26,6 +26,8 @@ public class CourseDTO {
     private Double price;
     @NotNull(message = "Course level is mandatory")
     private Level level;
+    @NotNull(message = "Course type is mandatory")
+    private String type;
     private String banner;
     private String duration;
 }

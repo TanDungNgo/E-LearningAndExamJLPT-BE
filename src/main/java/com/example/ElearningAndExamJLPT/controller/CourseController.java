@@ -48,6 +48,7 @@ public class CourseController {
         course.setName(courseDTO.getName());
         course.setDescription(courseDTO.getDescription());
         course.setLevel(courseDTO.getLevel());
+        course.setType(courseDTO.getType());
         course.setBanner(courseDTO.getBanner());
         course.setPrice(courseDTO.getPrice());
         course.setDuration(courseDTO.getDuration());
@@ -88,6 +89,8 @@ public class CourseController {
                     course.setLevel(newCourse.getLevel());
                     course.setBanner(newCourse.getBanner());
                     course.setPrice(newCourse.getPrice());
+                    course.setDuration(newCourse.getDuration());
+                    course.setType(newCourse.getType());
                     return courseService.update(course);
                 }).orElseGet(() -> {
                     Course course = new Course();
@@ -96,6 +99,8 @@ public class CourseController {
                     course.setLevel(newCourse.getLevel());
                     course.setBanner(newCourse.getBanner());
                     course.setPrice(newCourse.getPrice());
+                    course.setDuration(newCourse.getDuration());
+                    course.setType(newCourse.getType());
                     course.setId(id);
                     return courseService.save(course);
                 });

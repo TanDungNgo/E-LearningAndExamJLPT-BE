@@ -30,6 +30,7 @@ public class Exam extends BaseEntity{
     private Level level;
     @Min(value = 0, message = "Price should not be less than 0")
     private Double price;
+    private boolean status;
 
     @OneToMany(mappedBy = "exam")
     private List<LanguageKnowledgeQuestion> languageKnowledgeQuestions = new ArrayList<>();

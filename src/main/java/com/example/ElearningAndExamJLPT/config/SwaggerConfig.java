@@ -17,7 +17,6 @@ import java.util.Arrays;
 import java.util.Collections;
 
 
-
 @Configuration
 @EnableSwagger2WebMvc
 public class SwaggerConfig implements WebMvcConfigurer {
@@ -36,8 +35,8 @@ public class SwaggerConfig implements WebMvcConfigurer {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("API for E-learning")
-                .description("API description")
+                .title("API Swagger Documentation - Learning Japanese and JLPT Exam WebsiteAPI Swagger Documentation - Learning Japanese and JLPT Exam Website")
+                .description("This document provides detailed information about the API endpoints and functionality for the Learning Japanese and JLPT Exam website. The website aims to assist users in learning the Japanese language and preparing for the Japanese Language Proficiency Test (JLPT). The API Swagger documentation presents a comprehensive overview of the available resources, request methods, parameters, and response formats.")
                 .version("1.0.1")
                 .build();
     }

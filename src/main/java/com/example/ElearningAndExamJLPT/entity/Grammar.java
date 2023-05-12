@@ -33,4 +33,5 @@ public class Grammar extends BaseEntity{
     private String means;
     @Enumerated(EnumType.STRING)
     private Level level;
+    private boolean status;
 }

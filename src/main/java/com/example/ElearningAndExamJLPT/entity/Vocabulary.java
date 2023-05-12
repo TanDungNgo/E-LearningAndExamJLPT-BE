@@ -21,6 +21,8 @@ public class Vocabulary extends BaseEntity{
     @Size(min = 3, max = 10)
     private String text;
     @NotBlank
+    private String meaning;
+    @NotBlank
     @Size(min = 3, max = 50)
     private String pronunciation;
     @NotBlank
