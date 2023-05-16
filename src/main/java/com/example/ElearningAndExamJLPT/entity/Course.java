@@ -18,12 +18,13 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "courses")
 @Validated
-public class Course extends BaseEntity{
+public class Course extends BaseEntity {
     @NotBlank(message = "Course name is mandatory")
     @Size(min = 3, max = 100)
     private String name;
     @NotBlank(message = "Course description is mandatory")
     @Size(min = 3)
+    @Lob
     private String description;
     @Min(0)
     @Max(5)
