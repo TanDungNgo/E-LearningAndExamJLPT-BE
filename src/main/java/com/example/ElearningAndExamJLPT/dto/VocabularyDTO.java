@@ -11,6 +11,7 @@ import lombok.Setter;
 @Setter
 public class VocabularyDTO {
     private String text;
+    private String meaning;
     private String pronunciation;
     private String spelling;
     private String example;
