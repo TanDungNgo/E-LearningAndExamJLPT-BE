@@ -23,7 +23,7 @@ public class Course extends BaseEntity {
     @Size(min = 3, max = 100)
     private String name;
     @NotBlank(message = "Course description is mandatory")
-    @Size(min = 3)
+//    @Size(min = 3)
     @Lob
     private String description;
     @Min(0)
