@@ -7,11 +7,13 @@ import com.example.ElearningAndExamJLPT.service.IEnrollmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class EnrollmentServiceImpl implements IEnrollmentService {
     @Autowired
     private IEnrollmentRepository enrollmentRepository;
@@ -32,7 +34,7 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
     public Enrollment save(Enrollment entity) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         LocalDateTime now = LocalDateTime.now();
-        entity.setUserId(userRepository.findByUsername(authentication.getName()).get().getId());
+        entity.setUserId(userRepository.findByUsername(authentication.getName()).get());
         entity.setRegistrationDate(now);
         return enrollmentRepository.save(entity);
     }

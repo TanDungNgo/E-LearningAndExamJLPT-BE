@@ -56,11 +56,12 @@ public class CourseController {
                 new ResponseObject("ok", "Insert course successfully", courseService.save(course))
         );
     }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex){
+    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error)->{
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
@@ -130,4 +131,5 @@ public class CourseController {
                 new ResponseObject("ok", "Search course successfully", courseService.searchCourses(query))
         );
     }
+
 }

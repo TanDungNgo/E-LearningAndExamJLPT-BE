@@ -42,4 +42,7 @@ public class Course extends BaseEntity {
 
     @OneToMany(mappedBy = "course")
     private List<Lesson> lessons = new ArrayList<>();
+
+    @OneToMany(mappedBy = "courseId")
+    private List<Enrollment> enrollments;
 }

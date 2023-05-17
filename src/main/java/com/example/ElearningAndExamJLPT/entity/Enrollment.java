@@ -1,5 +1,7 @@
 package com.example.ElearningAndExamJLPT.entity;
 
+import com.example.ElearningAndExamJLPT.entity.User.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,11 +19,16 @@ import java.time.LocalDateTime;
 public class Enrollment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonBackReference
     private Long id;
+    @ManyToOne
     @JoinColumn(name = "user_id")
-    private Long userId;
+    @JsonBackReference
+    private User userId;
+    @ManyToOne
     @JoinColumn(name = "course_id")
-    private Long courseId;
+    @JsonBackReference
+    private Course courseId;
 
     private LocalDateTime registrationDate;
 }
