@@ -64,7 +64,7 @@ public class User {
             joinColumns = @JoinColumn(name="user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     Set<Role> roles = new HashSet<>();
 
-    @OneToMany(mappedBy = "userId")
+    @OneToMany(mappedBy = "studentId")
     private List<Enrollment> enrollments;
 
     public User(@NotBlank @Size(min = 3, max = 20) String firstname,

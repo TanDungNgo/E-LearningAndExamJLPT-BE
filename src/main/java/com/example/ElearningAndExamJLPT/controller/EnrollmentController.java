@@ -1,15 +1,16 @@
 package com.example.ElearningAndExamJLPT.controller;
 
+import com.example.ElearningAndExamJLPT.dto.response.ResponMessage;
 import com.example.ElearningAndExamJLPT.dto.response.ResponseObject;
 import com.example.ElearningAndExamJLPT.entity.Enrollment;
 import com.example.ElearningAndExamJLPT.service.impl.CourseServiceImpl;
 import com.example.ElearningAndExamJLPT.service.impl.EnrollmentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/enroll")
@@ -19,12 +20,25 @@ public class EnrollmentController {
     @Autowired
     private CourseServiceImpl courseService;
 
-    @PostMapping(value = "/{id}")
-    public ResponseEntity<ResponseObject> enrollCourse(@PathVariable("id") Long id) {
+    @PostMapping(value = "/{courseId}")
+    public ResponseEntity<?> enrollCourse(@PathVariable("courseId") Long courseId) {
+        boolean checkEnrolled = enrollmentService.existsByStudentIdAndCourseId(courseId);
+        if (checkEnrolled == true) {
+            return new ResponseEntity<>(new ResponMessage("Enrolled!"), HttpStatus.OK);
+        }
         Enrollment enrollment = new Enrollment();
-        enrollment.setCourseId(courseService.getById(id).get());
+        enrollment.setCourseId(courseService.getById(courseId).get());
         return ResponseEntity.ok().body(
                 new ResponseObject("ok", "Enroll course successfully", enrollmentService.save(enrollment)
-        ));
+                ));
+    }
+
+    @GetMapping(value = "/check/{courseId}")
+    public ResponseEntity<?> checkEnrolledCourse(@PathVariable("courseId") Long courseId) {
+        boolean checkEnrolled = enrollmentService.existsByStudentIdAndCourseId(courseId);
+        if (checkEnrolled == true) {
+            return new ResponseEntity<>(new ResponMessage("Enrolled!"), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new ResponMessage("Not enrolled!"), HttpStatus.OK);
     }
 }

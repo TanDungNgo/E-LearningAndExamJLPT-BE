@@ -22,9 +22,9 @@ public class Enrollment {
     @JsonBackReference
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "student_id")
     @JsonBackReference
-    private User userId;
+    private User studentId;
     @ManyToOne
     @JoinColumn(name = "course_id")
     @JsonBackReference

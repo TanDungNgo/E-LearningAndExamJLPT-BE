@@ -1,6 +1,9 @@
 package com.example.ElearningAndExamJLPT.service.impl;
 
+import com.example.ElearningAndExamJLPT.entity.Course;
 import com.example.ElearningAndExamJLPT.entity.Enrollment;
+import com.example.ElearningAndExamJLPT.entity.User.User;
+import com.example.ElearningAndExamJLPT.repository.ICourseRepository;
 import com.example.ElearningAndExamJLPT.repository.IEnrollmentRepository;
 import com.example.ElearningAndExamJLPT.repository.IUserRepository;
 import com.example.ElearningAndExamJLPT.service.IEnrollmentService;
@@ -19,6 +22,8 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
     private IEnrollmentRepository enrollmentRepository;
     @Autowired
     private IUserRepository userRepository;
+    @Autowired
+    private ICourseRepository courseRepository;
 
     @Override
     public List<Enrollment> getAll() {
@@ -34,7 +39,7 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
     public Enrollment save(Enrollment entity) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         LocalDateTime now = LocalDateTime.now();
-        entity.setUserId(userRepository.findByUsername(authentication.getName()).get());
+        entity.setStudentId(userRepository.findByUsername(authentication.getName()).get());
         entity.setRegistrationDate(now);
         return enrollmentRepository.save(entity);
     }
@@ -47,5 +52,14 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
     @Override
     public void deleteById(Long id) {
 
+    }
+
+
+    @Override
+    public boolean existsByStudentIdAndCourseId(Long courseId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = userRepository.findByUsername(authentication.getName()).get();
+        Course course = courseRepository.findById(courseId).get();
+        return enrollmentRepository.existsByStudentIdAndCourseId(currentUser, course);
     }
 }
