@@ -1,5 +1,6 @@
 package com.example.ElearningAndExamJLPT.entity.User;
 
+import com.example.ElearningAndExamJLPT.entity.Enrollment;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,6 +13,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -61,6 +63,9 @@ public class User {
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name="user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     Set<Role> roles = new HashSet<>();
+
+    @OneToMany(mappedBy = "studentId")
+    private List<Enrollment> enrollments;
 
     public User(@NotBlank @Size(min = 3, max = 20) String firstname,
                 @NotBlank @Size(min = 3, max = 20) String lastname,
