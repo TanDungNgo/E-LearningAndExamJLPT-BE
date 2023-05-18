@@ -35,4 +35,5 @@ public class LanguageKnowledgeQuestion extends BaseEntity{
     @JoinColumn(name = "exam_id")
     @JsonBackReference
     private Exam exam;
+    private boolean status = true;
 }

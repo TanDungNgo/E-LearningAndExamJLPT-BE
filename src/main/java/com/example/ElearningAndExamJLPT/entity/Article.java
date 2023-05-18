@@ -28,5 +28,5 @@ public class Article extends BaseEntity{
     @NotBlank(message = "Content is mandatory")
     private String content;
     private String image;
-    private boolean status;
+    private boolean status = true;
 }

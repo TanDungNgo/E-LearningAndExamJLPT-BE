@@ -23,8 +23,6 @@ public class Course extends BaseEntity {
     @Size(min = 3, max = 100)
     private String name;
     @NotBlank(message = "Course description is mandatory")
-//    @Size(min = 3)
-    @Lob
     private String description;
     @Min(0)
     @Max(5)
@@ -45,4 +43,5 @@ public class Course extends BaseEntity {
 
     @OneToMany(mappedBy = "courseId")
     private List<Enrollment> enrollments;
+    private boolean status = true;
 }

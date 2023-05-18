@@ -66,6 +66,7 @@ public class User {
 
     @OneToMany(mappedBy = "studentId")
     private List<Enrollment> enrollments;
+    private boolean status = true;
 
     public User(@NotBlank @Size(min = 3, max = 20) String firstname,
                 @NotBlank @Size(min = 3, max = 20) String lastname,

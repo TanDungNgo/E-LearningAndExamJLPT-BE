@@ -34,6 +34,8 @@ public class Vocabulary extends BaseEntity{
     @Lob
     private String audio;
 
+    private boolean status = true;
+
     @ManyToOne
     @JoinColumn(name = "VocabularyFolder_id")
     @JsonBackReference

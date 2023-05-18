@@ -26,7 +26,7 @@ public class VocabularyFolder extends BaseEntity{
     private String title;
     @Formula("(SELECT COUNT(*) FROM vocabularies v WHERE v.vocabulary_folder_id = id)")
     private Integer count;
-    private boolean status;
+    private boolean status = true;
 
     @OneToMany(mappedBy = "vocabularyFolder")
     private List<Vocabulary> vocabularies = new ArrayList<>();
