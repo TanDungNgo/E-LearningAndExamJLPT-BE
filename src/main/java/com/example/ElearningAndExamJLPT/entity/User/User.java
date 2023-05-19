@@ -64,8 +64,10 @@ public class User {
             joinColumns = @JoinColumn(name="user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     Set<Role> roles = new HashSet<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "studentId")
     private List<Enrollment> enrollments;
+    @JsonIgnore
     private boolean status = true;
 
     public User(@NotBlank @Size(min = 3, max = 20) String firstname,

@@ -1,5 +1,6 @@
 package com.example.ElearningAndExamJLPT.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "vocabulary_folders")
-public class VocabularyFolder extends BaseEntity{
+public class VocabularyFolder extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Level level;
     @NotBlank
@@ -26,6 +27,7 @@ public class VocabularyFolder extends BaseEntity{
     private String title;
     @Formula("(SELECT COUNT(*) FROM vocabularies v WHERE v.vocabulary_folder_id = id)")
     private Integer count;
+    @JsonIgnore
     private boolean status = true;
 
     @OneToMany(mappedBy = "vocabularyFolder")

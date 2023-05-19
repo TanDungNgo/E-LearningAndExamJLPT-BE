@@ -11,6 +11,8 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -36,4 +38,7 @@ public class Lesson extends BaseEntity{
     @JoinColumn(name = "course_id")
     @JsonBackReference
     private Course course;
+
+    @OneToMany(mappedBy = "lesson")
+    private List<Comment> comments = new ArrayList<>();
 }

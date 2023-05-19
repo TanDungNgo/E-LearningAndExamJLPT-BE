@@ -1,6 +1,7 @@
 package com.example.ElearningAndExamJLPT.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +17,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "vocabularies")
-public class Vocabulary extends BaseEntity{
+public class Vocabulary extends BaseEntity {
     @NotBlank
     @Size(min = 3, max = 10)
     private String text;
@@ -33,7 +34,7 @@ public class Vocabulary extends BaseEntity{
     private String example;
     @Lob
     private String audio;
-
+    @JsonIgnore
     private boolean status = true;
 
     @ManyToOne

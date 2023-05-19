@@ -1,5 +1,6 @@
 package com.example.ElearningAndExamJLPT.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,5 +34,6 @@ public class Grammar extends BaseEntity{
     private String means;
     @Enumerated(EnumType.STRING)
     private Level level;
+    @JsonIgnore
     private boolean status = true;
 }
