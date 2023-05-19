@@ -102,15 +102,37 @@ public class CommentController {
 
 
     @PutMapping("/{commentId}")
-    public Comment updateComment(
+    public ResponseEntity<ResponseObject> updateComment(
             @PathVariable(value = "commentId") Long commentId,
-            @RequestBody Comment commentDetails
+            @RequestBody CommentDTO commentDTO
     ) {
-        return null;
+        Optional<Comment> foundComment = commentService.getById(commentId);
+        if (foundComment.isPresent()) {
+            Comment comment = foundComment.get();
+            comment.setContent(commentDTO.getContent());
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "Update comment successfully", commentService.save(comment))
+            );
+        }
+        else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject("failed", "Cannot find comment with id = " + commentId, "")
+            );
+        }
     }
 
     @DeleteMapping("/{commentId}")
-    public void deleteComment(@PathVariable(value = "commentId") Long commentId) {
-        commentService.deleteById(commentId);
+    public ResponseEntity<ResponseObject> deleteComment(@PathVariable(value = "commentId") Long commentId) {
+        Optional<Comment> foundComment = commentService.getById(commentId);
+        if (foundComment.isPresent()) {
+            commentService.deleteById(commentId);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "Delete comment successfully", "")
+            );
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject("failed", "Cannot find comment with id = " + commentId, "")
+            );
+        }
     }
 }
