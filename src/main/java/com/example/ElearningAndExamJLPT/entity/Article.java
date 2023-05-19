@@ -1,5 +1,6 @@
 package com.example.ElearningAndExamJLPT.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,5 +29,6 @@ public class Article extends BaseEntity{
     @NotBlank(message = "Content is mandatory")
     private String content;
     private String image;
+    @JsonIgnore
     private boolean status = true;
 }

@@ -32,6 +32,7 @@ public class ReadingQuestion extends BaseEntity{
     @JsonIgnore
     @JoinColumn(name = "correct_answer")
     private Integer correctAnswer;
+    @JsonIgnore
     private boolean status = true;
 
     @ManyToOne

@@ -1,5 +1,6 @@
 package com.example.ElearningAndExamJLPT.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,7 @@ public class Exam extends BaseEntity{
     private Level level;
     @Min(value = 0, message = "Price should not be less than 0")
     private Double price;
+    @JsonIgnore
     private boolean status = true;
 
     @OneToMany(mappedBy = "exam")

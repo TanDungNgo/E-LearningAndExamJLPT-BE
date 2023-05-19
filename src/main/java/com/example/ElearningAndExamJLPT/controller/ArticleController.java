@@ -33,10 +33,10 @@ public class ArticleController {
         Optional<Article> foundCourse = articleService.getById(id);
         return foundCourse.isPresent() ?
                 ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseObject("ok", "Query course successfully", foundCourse)
+                        new ResponseObject("ok", "Query article successfully", foundCourse)
                 ) :
                 ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                        new ResponseObject("failed", "Cannot find course with id = " + id, "")
+                        new ResponseObject("failed", "Cannot find article with id = " + id, "")
                 );
     }
 
