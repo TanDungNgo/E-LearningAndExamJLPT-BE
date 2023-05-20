@@ -23,6 +23,7 @@ public class Course extends BaseEntity {
     @NotBlank(message = "Course name is mandatory")
     @Size(min = 3, max = 100)
     private String name;
+    @Lob
     @NotBlank(message = "Course description is mandatory")
     private String description;
     @Min(0)
