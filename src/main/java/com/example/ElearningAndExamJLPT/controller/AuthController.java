@@ -1,6 +1,7 @@
 package com.example.ElearningAndExamJLPT.controller;
 
 
+import com.example.ElearningAndExamJLPT.dto.request.ChangePasswordRequest;
 import com.example.ElearningAndExamJLPT.dto.request.SignInForm;
 import com.example.ElearningAndExamJLPT.dto.request.SignUpForm;
 import com.example.ElearningAndExamJLPT.dto.response.JwtResponse;
@@ -120,4 +121,49 @@ public class AuthController {
                 new ResponseObject("ok", "Get user info successfully", user)
         );
     }
+
+    @PutMapping("/change")
+    public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordRequest request) {
+        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        currentUser.getName(), request.getOldPassword()
+                )
+        );
+        // Kiểm tra xác thực thành công
+        if (authentication.isAuthenticated()) {
+            // Kiểm tra mật khẩu mới và xác nhận mật khẩu
+            if (request.getNewPassword().equals(request.getConfirmPassword())) {
+                // Mã hóa mật khẩu mới
+                String encodedPassword = passwordEncoder.encode(request.getNewPassword());
+
+                // Lưu trữ mật khẩu mới vào cơ sở dữ liệu
+                // Tìm người dùng trong cơ sở dữ liệu
+                User user = userService.findByUsername(currentUser.getName()).get();
+
+                if (user != null) {
+                    // Cập nhật mật khẩu mới cho người dùng
+                    user.setPassword(encodedPassword);
+                    userService.save(user);
+
+                    return ResponseEntity.status(HttpStatus.OK).body(
+                            new ResponseObject("ok", "Password changed successfully.", "")
+                    );
+                } else {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                            new ResponseObject("Fail", "User not found.", "")
+                    );
+                }
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                        new ResponseObject("Fail", "New password and confirm password do not match.", "")
+                );
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ResponseObject("Fail", "Invalid username or password.", "")
+            );
+        }
+    }
+
 }
