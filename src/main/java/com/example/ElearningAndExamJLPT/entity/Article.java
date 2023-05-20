@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -27,6 +28,7 @@ public class Article extends BaseEntity{
     @Size(min = 3, max = 255)
     private String description;
     @NotBlank(message = "Content is mandatory")
+    @Lob
     private String content;
     private String image;
     @JsonIgnore
