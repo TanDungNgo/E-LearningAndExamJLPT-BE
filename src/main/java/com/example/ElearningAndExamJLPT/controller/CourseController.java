@@ -28,7 +28,7 @@ public class CourseController {
     @GetMapping("/all")
     public ResponseEntity<ResponseObject> getAllCourse() {
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("ok", "Query course successfully", courseService.getAll())
+                new ResponseObject("ok", "Query course successfully", courseService.getAllCourse())
         );
     }
 

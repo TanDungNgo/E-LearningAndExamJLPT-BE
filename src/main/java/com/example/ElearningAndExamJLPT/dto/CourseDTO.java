@@ -20,7 +20,6 @@ public class CourseDTO {
     @Size(min = 3, max = 100)
     private String name;
     @NotBlank(message = "Course description is mandatory")
-    @Size(min = 3, max = 255)
     private String description;
     @Min(value = 0, message = "Price should not be less than 0")
     private Double price;

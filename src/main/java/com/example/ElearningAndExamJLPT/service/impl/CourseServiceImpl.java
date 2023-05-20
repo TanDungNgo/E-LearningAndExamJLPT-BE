@@ -1,5 +1,6 @@
 package com.example.ElearningAndExamJLPT.service.impl;
 
+import com.example.ElearningAndExamJLPT.dto.response.ResponseCourse;
 import com.example.ElearningAndExamJLPT.entity.Course;
 import com.example.ElearningAndExamJLPT.repository.ICourseRepository;
 import com.example.ElearningAndExamJLPT.repository.IUserRepository;
@@ -12,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,5 +65,26 @@ public class CourseServiceImpl implements ICourseService {
     @Override
     public Page<Course> findAll(Pageable pageable) {
         return courseRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<ResponseCourse> getAllCourse() {
+        List<ResponseCourse> courses = new ArrayList<>();
+        List<Course> courseList = courseRepository.findAll();
+        for (Course course : courseList) {
+            ResponseCourse responseCourse = new ResponseCourse();
+            responseCourse.setId(course.getId());
+            responseCourse.setName(course.getName());
+            responseCourse.setBanner(course.getBanner());
+            responseCourse.setPrice(course.getPrice());
+            responseCourse.setDescription(course.getDescription());
+            responseCourse.setDuration(course.getDuration());
+            responseCourse.setLevel(course.getLevel());
+            responseCourse.setType(course.getType());
+            responseCourse.setTeacherName(course.getCreatedBy().getUsername());
+            responseCourse.setTeacherAvatar(course.getCreatedBy().getAvatar());
+            courses.add(responseCourse);
+        }
+        return courses;
     }
 }
