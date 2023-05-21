@@ -15,9 +15,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/courses")
@@ -132,4 +130,12 @@ public class CourseController {
         );
     }
 
+    // Endpoint gợi ý các khóa học dựa trên sở thích và lịch sử học tập của người dùng
+    @GetMapping("/suggest")
+    public ResponseEntity<ResponseObject> getSuggestedCourses() {
+        List<Course> suggestedCourses = new ArrayList<>();
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Suggested Course for you", courseService.getSuggestedCourses())
+        );
+    }
 }

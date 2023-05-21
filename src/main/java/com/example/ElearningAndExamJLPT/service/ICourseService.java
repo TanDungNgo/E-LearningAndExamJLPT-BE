@@ -12,4 +12,5 @@ public interface ICourseService extends IService<Course,Long> {
     Page<Course> findAll(Pageable pageable);
     List<ResponseCourse> getAllCourse();
     ResponseCourse getCourse(Course course);
+    List<ResponseCourse> getSuggestedCourses();
 }
