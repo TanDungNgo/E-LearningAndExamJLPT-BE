@@ -84,6 +84,7 @@ public class CourseServiceImpl implements ICourseService {
             responseCourse.setDuration(course.getDuration());
             responseCourse.setLevel(course.getLevel());
             responseCourse.setType(course.getType());
+            responseCourse.setRate(course.getRate());
             responseCourse.setTeacherName(course.getCreatedBy().getFirstname()+" "+course.getCreatedBy().getLastname());
             responseCourse.setTeacherAvatar(course.getCreatedBy().getAvatar());
             courses.add(responseCourse);
@@ -102,6 +103,7 @@ public class CourseServiceImpl implements ICourseService {
         responseCourse.setDuration(course.getDuration());
         responseCourse.setLevel(course.getLevel());
         responseCourse.setType(course.getType());
+        responseCourse.setRate(course.getRate());
         responseCourse.setTeacherName(course.getCreatedBy().getFirstname()+" "+course.getCreatedBy().getLastname());
         responseCourse.setTeacherAvatar(course.getCreatedBy().getAvatar());
         return responseCourse;
@@ -128,6 +130,7 @@ public class CourseServiceImpl implements ICourseService {
             responseCourse.setDuration(course.getDuration());
             responseCourse.setLevel(course.getLevel());
             responseCourse.setType(course.getType());
+            responseCourse.setRate(course.getRate());
             responseCourse.setTeacherName(course.getCreatedBy().getFirstname()+" "+course.getCreatedBy().getLastname());
             responseCourse.setTeacherAvatar(course.getCreatedBy().getAvatar());
             // Gợi ý khóa học cùng chủ đề

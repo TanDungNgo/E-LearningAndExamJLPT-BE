@@ -60,6 +60,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/grammars/all",
             "/api/courses/search",
             "/api/grammars/search",
+            "/api/articles/all",
+            "/api/articles/{id}",
     };
 
     @Override

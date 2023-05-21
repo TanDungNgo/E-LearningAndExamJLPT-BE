@@ -30,6 +30,7 @@ public class Article extends BaseEntity{
     @NotBlank(message = "Content is mandatory")
     @Lob
     private String content;
+    @Lob
     private String image;
     @JsonIgnore
     private boolean status = true;
