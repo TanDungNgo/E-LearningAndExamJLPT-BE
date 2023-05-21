@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -83,7 +84,7 @@ public class CourseServiceImpl implements ICourseService {
             responseCourse.setDuration(course.getDuration());
             responseCourse.setLevel(course.getLevel());
             responseCourse.setType(course.getType());
-            responseCourse.setTeacherName(course.getCreatedBy().getUsername());
+            responseCourse.setTeacherName(course.getCreatedBy().getFirstname()+" "+course.getCreatedBy().getLastname());
             responseCourse.setTeacherAvatar(course.getCreatedBy().getAvatar());
             courses.add(responseCourse);
         }
@@ -101,8 +102,63 @@ public class CourseServiceImpl implements ICourseService {
         responseCourse.setDuration(course.getDuration());
         responseCourse.setLevel(course.getLevel());
         responseCourse.setType(course.getType());
-        responseCourse.setTeacherName(course.getCreatedBy().getUsername());
+        responseCourse.setTeacherName(course.getCreatedBy().getFirstname()+" "+course.getCreatedBy().getLastname());
         responseCourse.setTeacherAvatar(course.getCreatedBy().getAvatar());
         return responseCourse;
+    }
+
+    @Override
+    public List<ResponseCourse> getSuggestedCourses() {
+        List<ResponseCourse> suggestedCourses = new ArrayList<>();
+        List<Course> courses = courseRepository.findAll();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = userRepository.findByUsername(authentication.getName()).get().getId();
+        // Lấy thông tin sở thích và lịch sử học tập của người dùng từ cơ sở dữ liệu hoặc hệ thống lưu trữ tương ứng
+        List<String> userPreferences = getUserPreferences(userId);
+        List<Course> userHistory = getUserHistory(userId);
+
+        // Gợi ý khóa học dựa trên các yếu tố như chủ đề, cấp độ, ngôn ngữ, độ phổ biến, v.v.
+        for (Course course : courses) {
+            ResponseCourse responseCourse = new ResponseCourse();
+            responseCourse.setId(course.getId());
+            responseCourse.setName(course.getName());
+            responseCourse.setBanner(course.getBanner());
+            responseCourse.setPrice(course.getPrice());
+            responseCourse.setDescription(course.getDescription());
+            responseCourse.setDuration(course.getDuration());
+            responseCourse.setLevel(course.getLevel());
+            responseCourse.setType(course.getType());
+            responseCourse.setTeacherName(course.getCreatedBy().getFirstname()+" "+course.getCreatedBy().getLastname());
+            responseCourse.setTeacherAvatar(course.getCreatedBy().getAvatar());
+            // Gợi ý khóa học cùng chủ đề
+            if (userPreferences.contains(course.getType())) {
+                suggestedCourses.add(responseCourse);
+            }
+            // Gợi ý khóa học cùng cấp độ
+            else if (userPreferences.contains(course.getLevel().toString())) {
+                suggestedCourses.add(responseCourse);
+            }
+            // Gợi ý khóa học dựa trên độ phổ biến (ví dụ: top 10 khóa học được xem nhiều nhất)
+            else if (userHistory.contains(course) && suggestedCourses.size() < 10) {
+                suggestedCourses.add(responseCourse);
+            }
+        }
+        return suggestedCourses;
+    }
+
+    // Hàm giả định lấy thông tin sở thích của người dùng từ cơ sở dữ liệu hoặc hệ thống lưu trữ tương ứng
+    private List<String> getUserPreferences(Long userId) {
+        // Logic lấy thông tin sở thích từ cơ sở dữ liệu hoặc hệ thống lưu trữ
+        List<String> preferences = new ArrayList<>();
+        preferences.add("N3");
+        preferences.add("N2");
+        return preferences; // Trả về danh sách sở thích của người dùng
+    }
+
+    private List<Course> getUserHistory(Long userId) {
+        // Logic to retrieve user's learning history from the database or storage system
+        // ...
+
+        return Collections.emptyList(); // Return the user's learning history
     }
 }
