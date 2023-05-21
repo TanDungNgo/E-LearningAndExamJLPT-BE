@@ -74,8 +74,8 @@ public class CourseController {
         Optional<Course> foundCourse = courseService.getById(id);
         return foundCourse.isPresent() ?
                 ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseObject("ok", "Query course successfully", foundCourse)
-                ) :
+                        new ResponseObject("ok", "Query course successfully", courseService.getCourse(foundCourse.get())
+                        )) :
                 ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                         new ResponseObject("failed", "Cannot find course with id = " + id, "")
                 );
