@@ -23,6 +23,7 @@ public class CourseServiceImpl implements ICourseService {
     private ICourseRepository courseRepository;
     @Autowired
     private IUserRepository userRepository;
+
     @Override
     public List<Course> getAll() {
         return courseRepository.findAll();
@@ -57,6 +58,7 @@ public class CourseServiceImpl implements ICourseService {
     public void deleteById(Long id) {
         courseRepository.deleteById(id);
     }
+
     @Override
     public List<Course> searchCourses(String query) {
         return courseRepository.searchCourses(query);
@@ -86,5 +88,21 @@ public class CourseServiceImpl implements ICourseService {
             courses.add(responseCourse);
         }
         return courses;
+    }
+
+    @Override
+    public ResponseCourse getCourse(Course course) {
+        ResponseCourse responseCourse = new ResponseCourse();
+        responseCourse.setId(course.getId());
+        responseCourse.setName(course.getName());
+        responseCourse.setBanner(course.getBanner());
+        responseCourse.setPrice(course.getPrice());
+        responseCourse.setDescription(course.getDescription());
+        responseCourse.setDuration(course.getDuration());
+        responseCourse.setLevel(course.getLevel());
+        responseCourse.setType(course.getType());
+        responseCourse.setTeacherName(course.getCreatedBy().getUsername());
+        responseCourse.setTeacherAvatar(course.getCreatedBy().getAvatar());
+        return responseCourse;
     }
 }
