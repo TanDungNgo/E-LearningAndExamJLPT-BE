@@ -18,6 +18,7 @@ public class ResponseCourse {
     private String type;
     private String banner;
     private String duration;
+    private Double rate;
     private String teacherName;
     private String teacherAvatar;
 }
