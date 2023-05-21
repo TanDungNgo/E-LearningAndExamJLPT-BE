@@ -24,17 +24,17 @@ public class ArticleController {
     @GetMapping("/all")
     public ResponseEntity<ResponseObject> getAllArticle() {
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("ok", "Query article successfully", articleService.getAll())
+                new ResponseObject("ok", "Query article successfully", articleService.getAllArticle())
         );
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ResponseObject> getArticleById(@PathVariable("id") Long id) {
-        Optional<Article> foundCourse = articleService.getById(id);
-        return foundCourse.isPresent() ?
+        Optional<Article> foundArticle = articleService.getById(id);
+        return foundArticle.isPresent() ?
                 ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseObject("ok", "Query article successfully", foundCourse)
-                ) :
+                        new ResponseObject("ok", "Query article successfully", articleService.getArticle(foundArticle.get())
+                        )) :
                 ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                         new ResponseObject("failed", "Cannot find article with id = " + id, "")
                 );

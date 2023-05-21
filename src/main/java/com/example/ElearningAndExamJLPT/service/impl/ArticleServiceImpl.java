@@ -1,5 +1,6 @@
 package com.example.ElearningAndExamJLPT.service.impl;
 
+import com.example.ElearningAndExamJLPT.dto.response.ResponseArticle;
 import com.example.ElearningAndExamJLPT.entity.Article;
 import com.example.ElearningAndExamJLPT.repository.IArticleRepository;
 import com.example.ElearningAndExamJLPT.repository.IUserRepository;
@@ -10,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +26,40 @@ public class ArticleServiceImpl implements IArticleService {
     @Override
     public List<Article> searchArticles(String query) {
         return articleRepository.searchArticles(query);
+    }
+
+    @Override
+    public List<ResponseArticle> getAllArticle() {
+        List<Article> articles = articleRepository.findAll();
+        List<ResponseArticle> responseArticles = new ArrayList<>();
+        for (Article article : articles) {
+            ResponseArticle responseArticle = new ResponseArticle();
+            responseArticle.setId(article.getId());
+            responseArticle.setTitle(article.getTitle());
+            responseArticle.setDescription(article.getDescription());
+            responseArticle.setImage(article.getImage());
+            responseArticle.setContent(article.getContent());
+            responseArticle.setCreatedDate(String.valueOf(article.getCreatedDate()));
+            responseArticle.setModifiedDate(String.valueOf(article.getModifiedDate()));
+            responseArticle.setCreatedBy(article.getCreatedBy().getFirstname()+" "+article.getCreatedBy().getLastname());
+            responseArticles.add(responseArticle);
+        }
+        return responseArticles;
+
+    }
+
+    @Override
+    public ResponseArticle getArticle(Article article) {
+        ResponseArticle responseArticle = new ResponseArticle();
+        responseArticle.setId(article.getId());
+        responseArticle.setTitle(article.getTitle());
+        responseArticle.setDescription(article.getDescription());
+        responseArticle.setImage(article.getImage());
+        responseArticle.setContent(article.getContent());
+        responseArticle.setCreatedDate(String.valueOf(article.getCreatedDate()));
+        responseArticle.setModifiedDate(String.valueOf(article.getModifiedDate()));
+        responseArticle.setCreatedBy(article.getCreatedBy().getFirstname()+" "+article.getCreatedBy().getLastname());
+        return responseArticle;
     }
 
     @Override
