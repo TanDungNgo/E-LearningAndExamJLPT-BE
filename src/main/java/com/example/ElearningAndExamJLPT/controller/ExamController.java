@@ -35,7 +35,7 @@ public class ExamController {
         Optional<Exam> foundExam = examService.getById(id);
         return foundExam.isPresent() ?
                 ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseObject("ok", "Query exam successfully", foundExam)
+                        new ResponseObject("ok", "Query exam successfully", examService.getExam(foundExam.get()))
                 ) :
                 ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                         new ResponseObject("failed", "Cannot find exam with id = " + id, "")
