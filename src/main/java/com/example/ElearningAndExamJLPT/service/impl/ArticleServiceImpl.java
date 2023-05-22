@@ -42,6 +42,7 @@ public class ArticleServiceImpl implements IArticleService {
             responseArticle.setCreatedDate(String.valueOf(article.getCreatedDate()));
             responseArticle.setModifiedDate(String.valueOf(article.getModifiedDate()));
             responseArticle.setCreatedBy(article.getCreatedBy().getFirstname()+" "+article.getCreatedBy().getLastname());
+            responseArticle.setAvatarCreatedBy(article.getCreatedBy().getAvatar());
             responseArticles.add(responseArticle);
         }
         return responseArticles;
@@ -59,6 +60,7 @@ public class ArticleServiceImpl implements IArticleService {
         responseArticle.setCreatedDate(String.valueOf(article.getCreatedDate()));
         responseArticle.setModifiedDate(String.valueOf(article.getModifiedDate()));
         responseArticle.setCreatedBy(article.getCreatedBy().getFirstname()+" "+article.getCreatedBy().getLastname());
+        responseArticle.setAvatarCreatedBy(article.getCreatedBy().getAvatar());
         return responseArticle;
     }
 

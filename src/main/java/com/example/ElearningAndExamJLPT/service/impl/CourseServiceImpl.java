@@ -104,7 +104,7 @@ public class CourseServiceImpl implements ICourseService {
         responseCourse.setLevel(course.getLevel());
         responseCourse.setType(course.getType());
         responseCourse.setRate(course.getRate());
-        responseCourse.setTeacherName(course.getCreatedBy().getFirstname()+" "+course.getCreatedBy().getLastname());
+        responseCourse.setTeacherName(course.getCreatedBy().getFirstname());
         responseCourse.setTeacherAvatar(course.getCreatedBy().getAvatar());
         return responseCourse;
     }

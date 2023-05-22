@@ -18,4 +18,5 @@ public class ResponseArticle {
     private String createdDate;
     private String modifiedDate;
     private String createdBy;
+    private String avatarCreatedBy;
 }
