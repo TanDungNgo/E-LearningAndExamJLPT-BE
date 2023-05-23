@@ -18,6 +18,7 @@ public class VocabularyConverter {
         entity.setSpelling(dto.getSpelling());
         entity.setExample(dto.getExample());
         entity.setAudio(dto.getAudio());
+        entity.setMeaning(dto.getMeaning());
         entity.setVocabularyFolder(vocabularyFolderService.getById(dto.getVocabularyFolder_id()).get());
         return entity;
     }

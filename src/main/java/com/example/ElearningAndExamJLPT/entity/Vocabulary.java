@@ -19,18 +19,15 @@ import javax.validation.constraints.Size;
 @Table(name = "vocabularies")
 public class Vocabulary extends BaseEntity {
     @NotBlank
-    @Size(min = 3, max = 10)
     private String text;
     @NotBlank
     private String meaning;
     @NotBlank
-    @Size(min = 3, max = 50)
     private String pronunciation;
     @NotBlank
-    @Size(min = 3, max = 50)
     private String spelling;
     @NotBlank
-    @Size(min = 3, max = 255)
+    @Lob
     private String example;
     @Lob
     private String audio;
