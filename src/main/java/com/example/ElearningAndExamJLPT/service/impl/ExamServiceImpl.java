@@ -2,10 +2,7 @@ package com.example.ElearningAndExamJLPT.service.impl;
 
 import com.example.ElearningAndExamJLPT.dto.response.ResponseExam;
 import com.example.ElearningAndExamJLPT.dto.response.ResponseQuestion;
-import com.example.ElearningAndExamJLPT.entity.Exam;
-import com.example.ElearningAndExamJLPT.entity.LanguageKnowledgeQuestion;
-import com.example.ElearningAndExamJLPT.entity.ListeningQuestion;
-import com.example.ElearningAndExamJLPT.entity.ReadingQuestion;
+import com.example.ElearningAndExamJLPT.entity.*;
 import com.example.ElearningAndExamJLPT.repository.IExamRepository;
 import com.example.ElearningAndExamJLPT.service.IExamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +19,7 @@ public class ExamServiceImpl implements IExamService {
 
     @Override
     public List<Exam> getAll() {
-        return null;
+        return examRepository.findAll();
     }
 
     @Override
@@ -51,10 +48,13 @@ public class ExamServiceImpl implements IExamService {
         List<ResponseQuestion> listLanguageKnowledgeQuestions = new ArrayList<>();
         List<ResponseQuestion> listReadingQuestions = new ArrayList<>();
         List<ResponseQuestion> listListeningQuestions = new ArrayList<>();
+        int durationLanguageKnowledgeQuestion = 0;
+        int durationReadingQuestion = 0;
+        int durationListeningQuestion = 0;
         responseExam.setId(exam.getId());
         responseExam.setName(exam.getName());
         responseExam.setLevel(exam.getLevel());
-//        responseExam.setDuration(exam.getDuration());
+
         for (LanguageKnowledgeQuestion question : exam.getLanguageKnowledgeQuestions()) {
             ResponseQuestion responseQuestion = new ResponseQuestion();
             responseQuestion.setId(question.getId());
@@ -64,6 +64,7 @@ public class ExamServiceImpl implements IExamService {
             responseQuestion.setOption3(question.getOption3());
             responseQuestion.setOption4(question.getOption4());
             listLanguageKnowledgeQuestions.add(responseQuestion);
+            durationLanguageKnowledgeQuestion += 1;
         }
         for (ReadingQuestion question : exam.getReadingQuestions()) {
             ResponseQuestion responseQuestion = new ResponseQuestion();
@@ -75,6 +76,7 @@ public class ExamServiceImpl implements IExamService {
             responseQuestion.setOption3(question.getOption3());
             responseQuestion.setOption4(question.getOption4());
             listReadingQuestions.add(responseQuestion);
+            durationReadingQuestion += 5;
         }
         for (ListeningQuestion question : exam.getListeningQuestions()) {
             ResponseQuestion responseQuestion = new ResponseQuestion();
@@ -87,10 +89,41 @@ public class ExamServiceImpl implements IExamService {
             responseQuestion.setOption3(question.getOption3());
             responseQuestion.setOption4(question.getOption4());
             listListeningQuestions.add(responseQuestion);
+            durationListeningQuestion += 2;
         }
+        responseExam.setDurationLanguageKnowledge(durationLanguageKnowledgeQuestion);
+        responseExam.setDurationReading(durationReadingQuestion);
+        responseExam.setDurationListening(durationListeningQuestion);
         responseExam.setLanguageKnowledgeQuestions(listLanguageKnowledgeQuestions);
         responseExam.setReadingQuestions(listReadingQuestions);
         responseExam.setListeningQuestions(listListeningQuestions);
         return responseExam;
+    }
+
+    @Override
+    public ResponseExam getRandomExam(String level) {
+        List<Exam> listExam = new ArrayList<>();
+        switch (level) {
+            case "N5":
+                listExam = examRepository.findAllByLevel(Level.N5);
+                break;
+            case "N4":
+                listExam = examRepository.findAllByLevel(Level.N4);
+                break;
+            case "N3":
+                listExam = examRepository.findAllByLevel(Level.N3);
+                break;
+            case "N2":
+                listExam = examRepository.findAllByLevel(Level.N2);
+                break;
+            case "N1":
+                listExam = examRepository.findAllByLevel(Level.N1);
+                break;
+        }
+        if (listExam.size() > 0) {
+            int randomIndex = (int) (Math.random() * listExam.size());
+            return getExam(listExam.get(randomIndex));
+        }
+        return null;
     }
 }

@@ -16,7 +16,9 @@ public class ResponseExam {
     private Long id;
     private String name;
     private Level level;
-    private String duration;
+    private Integer durationLanguageKnowledge;
+    private Integer durationReading;
+    private Integer durationListening;
     private List<ResponseQuestion> languageKnowledgeQuestions;
     private List<ResponseQuestion> readingQuestions;
     private List<ResponseQuestion> listeningQuestions;

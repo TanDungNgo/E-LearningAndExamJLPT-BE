@@ -5,4 +5,5 @@ import com.example.ElearningAndExamJLPT.entity.Exam;
 
 public interface IExamService extends IService<Exam,Long>{
     ResponseExam getExam(Exam exam);
+    ResponseExam getRandomExam(String level);
 }
