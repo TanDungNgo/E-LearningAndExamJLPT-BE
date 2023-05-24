@@ -1,5 +1,6 @@
 package com.example.ElearningAndExamJLPT.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,4 +41,7 @@ public class Exam extends BaseEntity{
     private List<ReadingQuestion> readingQuestions = new ArrayList<>();
     @OneToMany(mappedBy = "exam")
     private List<ListeningQuestion> listeningQuestions = new ArrayList<>();
+    @OneToMany(mappedBy = "examId")
+    @JsonBackReference
+    private List<ExamResult> examResults = new ArrayList<>();
 }

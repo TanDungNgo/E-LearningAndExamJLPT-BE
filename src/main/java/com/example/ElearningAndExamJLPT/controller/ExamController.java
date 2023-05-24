@@ -35,7 +35,7 @@ public class ExamController {
         Optional<Exam> foundExam = examService.getById(id);
         return foundExam.isPresent() ?
                 ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseObject("ok", "Query exam successfully", foundExam)
+                        new ResponseObject("ok", "Query exam successfully", examService.getExam(foundExam.get()))
                 ) :
                 ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                         new ResponseObject("failed", "Cannot find exam with id = " + id, "")
@@ -114,4 +114,17 @@ public class ExamController {
                 new ResponseObject("ok", "Submit exam successfully", responseExamResult)
         );
     }
+
+    @GetMapping("/level/{level}")
+    public ResponseEntity<ResponseObject> getRandomExamByLevel(@PathVariable("level") String level) {
+        if (examService.getRandomExam(level) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject("failed", "Cannot find exam with level = " + level, examService.getRandomExam(level))
+            );
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Query exam successfully", examService.getRandomExam(level))
+        );
+    }
+
 }
