@@ -1,6 +1,7 @@
 package com.example.ElearningAndExamJLPT.entity.User;
 
 import com.example.ElearningAndExamJLPT.entity.Enrollment;
+import com.example.ElearningAndExamJLPT.entity.ExamResult;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -67,6 +68,9 @@ public class User {
     @JsonIgnore
     @OneToMany(mappedBy = "studentId")
     private List<Enrollment> enrollments;
+    @JsonIgnore
+    @OneToMany(mappedBy = "studentId")
+    private List<ExamResult> examResults;
     @JsonIgnore
     private boolean status = true;
 

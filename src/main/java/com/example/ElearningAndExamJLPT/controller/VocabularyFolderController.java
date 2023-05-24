@@ -18,7 +18,7 @@ public class VocabularyFolderController {
     @Autowired
     private VocabularyFolderServiceImpl vocabularyFolderService;
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<ResponseObject> getAllVocabularyFolder() {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("ok", "Query successfully", vocabularyFolderService.getAll())

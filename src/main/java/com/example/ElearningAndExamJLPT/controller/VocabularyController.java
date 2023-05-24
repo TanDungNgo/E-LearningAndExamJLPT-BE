@@ -20,7 +20,8 @@ public class VocabularyController {
     private VocabularyServiceImpl vocabularyService;
     @Autowired
     private VocabularyConverter vocabularyConverter;
-    @GetMapping
+
+    @GetMapping("/all")
     public ResponseEntity<ResponseObject> getAllVocabulary() {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("ok", "Query successfully", vocabularyService.getAll())

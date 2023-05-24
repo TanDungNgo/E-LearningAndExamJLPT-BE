@@ -57,11 +57,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/swagger-ui/**",
             "/api/auth/**",
             "/api/courses/all",
-            "/api/grammars/all",
+            "/api/courses/{id}",
             "/api/courses/search",
+            "/api/grammars/all",
+            "/api/grammars/{id}",
             "/api/grammars/search",
             "/api/articles/all",
             "/api/articles/{id}",
+            "/api/articles/search",
+            "/api/vocabularyFolders/all",
+            "/api/vocabularyFolders/{id}",
+            "/api/vocabularyFolders/search",
+            "/api/vocabularyFolders/{id}/vocabularies",
     };
 
     @Override
