@@ -11,6 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ResponseQuestion {
     private Long id;
+    private String title;
     private String text;
     private String image;
     private String audioFile;

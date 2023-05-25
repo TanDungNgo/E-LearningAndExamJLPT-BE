@@ -19,6 +19,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "listening_questions")
 @Validated
 public class ListeningQuestion extends BaseEntity {
+    private String title;
     @NotNull(message = "Audio_file is mandatory")
     @Lob
     @JoinColumn(name = "audio_file")

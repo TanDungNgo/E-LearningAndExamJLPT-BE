@@ -59,6 +59,7 @@ public class ExamServiceImpl implements IExamService {
             ResponseQuestion responseQuestion = new ResponseQuestion();
             responseQuestion.setId(question.getId());
             responseQuestion.setText(question.getText());
+            responseQuestion.setTitle(question.getTitle());
             responseQuestion.setOption1(question.getOption1());
             responseQuestion.setOption2(question.getOption2());
             responseQuestion.setOption3(question.getOption3());
@@ -70,6 +71,7 @@ public class ExamServiceImpl implements IExamService {
             ResponseQuestion responseQuestion = new ResponseQuestion();
             responseQuestion.setId(question.getId());
             responseQuestion.setText(question.getText());
+            responseQuestion.setTitle(question.getTitle());
             responseQuestion.setImage(question.getImage());
             responseQuestion.setOption1(question.getOption1());
             responseQuestion.setOption2(question.getOption2());
@@ -82,6 +84,7 @@ public class ExamServiceImpl implements IExamService {
             ResponseQuestion responseQuestion = new ResponseQuestion();
             responseQuestion.setId(question.getId());
             responseQuestion.setText(question.getText());
+            responseQuestion.setTitle(question.getTitle());
             responseQuestion.setAudioFile(question.getAudioFile());
             responseQuestion.setImage(question.getImage());
             responseQuestion.setOption1(question.getOption1());
