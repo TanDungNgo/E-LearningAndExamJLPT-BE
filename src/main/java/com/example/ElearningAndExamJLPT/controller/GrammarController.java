@@ -26,7 +26,7 @@ public class GrammarController {
     @GetMapping("/all")
     public ResponseEntity<ResponseObject> getAllGrammar() {
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("ok", "Query successfully", grammarService.getAll())
+                new ResponseObject("ok", "Query successfully", grammarService.getAllGrammars())
         );
     }
 
@@ -60,8 +60,8 @@ public class GrammarController {
         Optional<Grammar> foundGrammar = grammarService.getById(id);
         return foundGrammar.isPresent() ?
                 ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseObject("ok", "Query grammar successfully", foundGrammar)
-                ) :
+                        new ResponseObject("ok", "Query grammar successfully", grammarService.getGrammar(foundGrammar.get())
+                )) :
                 ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                         new ResponseObject("failed", "Cannot find grammar with id = " + id, "")
                 );
