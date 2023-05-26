@@ -10,7 +10,6 @@ public class LessonConverter {
         Lesson entity = new Lesson();
         entity.setName(dto.getName());
         entity.setDescription(dto.getDescription());
-        entity.setRate(dto.getRate());
         entity.setUrlVideo(dto.getUrlVideo());
         return entity;
     }
