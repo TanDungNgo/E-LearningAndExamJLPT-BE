@@ -13,4 +13,5 @@ public interface ICourseService extends IService<Course,Long> {
     List<ResponseCourse> getAllCourse();
     ResponseCourse getCourse(Course course);
     List<ResponseCourse> getSuggestedCourses();
+    void rateCourse(Course course, double rating);
 }

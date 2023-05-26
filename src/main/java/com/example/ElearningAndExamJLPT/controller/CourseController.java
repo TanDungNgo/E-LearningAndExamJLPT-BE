@@ -138,4 +138,19 @@ public class CourseController {
                 new ResponseObject("ok", "Suggested Course for you", courseService.getSuggestedCourses())
         );
     }
+    @PostMapping("/rate/{id}")
+    public  ResponseEntity<?> rateCourse(@PathVariable("id") Long id, @RequestParam("rate") double rate){
+        Optional<Course> foundCourse = courseService.getById(id);
+        if (foundCourse.isPresent()) {
+            Course course = foundCourse.get();
+            courseService.rateCourse(course, rate);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "Rate course successfully", "")
+            );
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject("failed", "Cannot find course with id = " + id, "")
+            );
+        }
+    }
 }
