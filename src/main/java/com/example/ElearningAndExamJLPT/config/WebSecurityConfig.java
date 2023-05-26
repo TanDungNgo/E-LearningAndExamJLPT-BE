@@ -56,6 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/webjars/**",
             "/swagger-ui/**",
             "/api/auth/**",
+            "/api/users/teacher",
             "/api/courses/all",
             "/api/courses/{id}",
             "/api/courses/search",
@@ -69,6 +70,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/vocabularyFolders/{id}",
             "/api/vocabularyFolders/search",
             "/api/vocabularyFolders/{id}/vocabularies",
+            "/api/vocabularies/all",
+            "/api/vocabularies/{id}",
     };
 
     @Override

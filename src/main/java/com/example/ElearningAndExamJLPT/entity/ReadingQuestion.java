@@ -19,6 +19,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "reading_questions")
 @Validated
 public class ReadingQuestion extends BaseEntity{
+    private String title;
     @Lob
     private String image;
     private String text;

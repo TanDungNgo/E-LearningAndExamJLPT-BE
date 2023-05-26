@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -37,5 +38,11 @@ public class UserController {
                         new ResponseObject("failed", "Cannot find user with id = " + id, "")
                 );
     }
-
+    @GetMapping("/teacher")
+    public ResponseEntity<?> getUserByTeacher() {
+        List<User> listTeacher = userService.findByTeacher();
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Query user successfully", listTeacher)
+        );
+    }
 }

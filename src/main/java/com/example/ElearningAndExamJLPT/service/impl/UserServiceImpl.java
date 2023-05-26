@@ -1,6 +1,8 @@
 package com.example.ElearningAndExamJLPT.service.impl;
 
 
+import com.example.ElearningAndExamJLPT.entity.User.Role;
+import com.example.ElearningAndExamJLPT.entity.User.RoleName;
 import com.example.ElearningAndExamJLPT.entity.User.User;
 import com.example.ElearningAndExamJLPT.repository.IUserRepository;
 import com.example.ElearningAndExamJLPT.service.IUserService;
@@ -45,6 +47,14 @@ public class UserServiceImpl implements IUserService {
     @Override
     public User save(User user) {
         return userRepository.save(user);
+    }
+
+    @Override
+    public List<User> findByTeacher() {
+        Role role = new Role();
+        role.setId(2L);
+        role.setName(RoleName.TEACHER);
+        return userRepository.findByRoles(role);
     }
 
     @Override

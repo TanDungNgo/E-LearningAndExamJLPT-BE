@@ -1,22 +1,21 @@
 package com.example.ElearningAndExamJLPT.dto.response;
 
+import com.example.ElearningAndExamJLPT.entity.Level;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class ResponseQuestion {
+@AllArgsConstructor
+public class ResponseVocabularyFolder {
     private Long id;
+    private Level level;
     private String title;
-    private String text;
-    private String image;
-    private String audioFile;
-    private String option1;
-    private String option2;
-    private String option3;
-    private String option4;
+    private Integer count;
+    private List<ResponseVocabulary> vocabularies;
 }

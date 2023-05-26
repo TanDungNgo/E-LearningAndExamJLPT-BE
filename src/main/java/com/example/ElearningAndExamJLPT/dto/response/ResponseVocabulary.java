@@ -7,16 +7,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class ResponseQuestion {
+@AllArgsConstructor
+public class ResponseVocabulary {
     private Long id;
-    private String title;
     private String text;
-    private String image;
-    private String audioFile;
-    private String option1;
-    private String option2;
-    private String option3;
-    private String option4;
+    private String meaning;
+    private String pronunciation;
+    private String spelling;
+    private String example;
+    private String audio;
 }

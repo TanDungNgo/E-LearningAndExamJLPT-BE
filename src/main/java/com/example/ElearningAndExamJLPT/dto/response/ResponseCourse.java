@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -21,4 +24,5 @@ public class ResponseCourse {
     private Double rate;
     private String teacherName;
     private String teacherAvatar;
+    private List<ResponseLesson> lessons;
 }

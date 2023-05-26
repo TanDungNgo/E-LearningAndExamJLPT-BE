@@ -1,5 +1,6 @@
 package com.example.ElearningAndExamJLPT.service.impl;
 
+import com.example.ElearningAndExamJLPT.dto.response.ResponseGrammar;
 import com.example.ElearningAndExamJLPT.entity.Grammar;
 import com.example.ElearningAndExamJLPT.repository.IGrammarRepository;
 import com.example.ElearningAndExamJLPT.repository.IUserRepository;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,5 +63,34 @@ public class GrammarServiceImpl implements IGrammarService {
     public List<Grammar> searchGrammars(String query) {
         List<Grammar> grammars = grammarRepository.searchGrammars(query);
         return grammars;
+    }
+
+    @Override
+    public List<ResponseGrammar> getAllGrammars() {
+        List<ResponseGrammar> responseGrammars = new ArrayList<>();
+        List<Grammar> grammars = grammarRepository.findAll();
+        for (Grammar grammar : grammars) {
+            ResponseGrammar responseGrammar = new ResponseGrammar();
+            responseGrammar.setId(grammar.getId());
+            responseGrammar.setText(grammar.getText());
+            responseGrammar.setExplanation(grammar.getExplanation());
+            responseGrammar.setMeans(grammar.getMeans());
+            responseGrammar.setLevel(grammar.getLevel());
+            responseGrammar.setExample(grammar.getExample());
+            responseGrammars.add(responseGrammar);
+        }
+        return responseGrammars;
+    }
+
+    @Override
+    public ResponseGrammar getGrammar(Grammar grammar) {
+        ResponseGrammar responseGrammar = new ResponseGrammar();
+        responseGrammar.setId(grammar.getId());
+        responseGrammar.setText(grammar.getText());
+        responseGrammar.setExplanation(grammar.getExplanation());
+        responseGrammar.setMeans(grammar.getMeans());
+        responseGrammar.setLevel(grammar.getLevel());
+        responseGrammar.setExample(grammar.getExample());
+        return responseGrammar;
     }
 }

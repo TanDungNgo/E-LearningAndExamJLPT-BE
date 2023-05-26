@@ -19,6 +19,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "language_knowledge_questions")
 @Validated
 public class LanguageKnowledgeQuestion extends BaseEntity{
+    private String title;
     private String text;
     @NotNull(message = "Level is mandatory")
     @Enumerated(EnumType.STRING)
