@@ -3,7 +3,10 @@ package com.example.ElearningAndExamJLPT.service.impl;
 import com.example.ElearningAndExamJLPT.dto.response.ResponseCourse;
 import com.example.ElearningAndExamJLPT.dto.response.ResponseLesson;
 import com.example.ElearningAndExamJLPT.entity.Course;
+import com.example.ElearningAndExamJLPT.entity.CourseRating;
 import com.example.ElearningAndExamJLPT.entity.Lesson;
+import com.example.ElearningAndExamJLPT.entity.User.User;
+import com.example.ElearningAndExamJLPT.repository.ICourseRatingRepository;
 import com.example.ElearningAndExamJLPT.repository.ICourseRepository;
 import com.example.ElearningAndExamJLPT.repository.IUserRepository;
 import com.example.ElearningAndExamJLPT.service.ICourseService;
@@ -26,6 +29,8 @@ public class CourseServiceImpl implements ICourseService {
     private ICourseRepository courseRepository;
     @Autowired
     private IUserRepository userRepository;
+    @Autowired
+    private ICourseRatingRepository courseRatingRepository;
 
     @Override
     public List<Course> getAll() {
@@ -90,7 +95,7 @@ public class CourseServiceImpl implements ICourseService {
             responseCourse.setTeacherName(course.getCreatedBy().getFirstname());
             responseCourse.setTeacherAvatar(course.getCreatedBy().getAvatar());
             List<ResponseLesson> lessons = new ArrayList<>();
-            for(Lesson lesson : course.getLessons()){
+            for (Lesson lesson : course.getLessons()) {
                 ResponseLesson responseLesson = new ResponseLesson();
                 responseLesson.setId(lesson.getId());
                 responseLesson.setName(lesson.getName());
@@ -119,7 +124,7 @@ public class CourseServiceImpl implements ICourseService {
         responseCourse.setTeacherName(course.getCreatedBy().getFirstname());
         responseCourse.setTeacherAvatar(course.getCreatedBy().getAvatar());
         List<ResponseLesson> lessons = new ArrayList<>();
-        for(Lesson lesson : course.getLessons()){
+        for (Lesson lesson : course.getLessons()) {
             ResponseLesson responseLesson = new ResponseLesson();
             responseLesson.setId(lesson.getId());
             responseLesson.setName(lesson.getName());
@@ -156,7 +161,7 @@ public class CourseServiceImpl implements ICourseService {
             responseCourse.setTeacherName(course.getCreatedBy().getFirstname());
             responseCourse.setTeacherAvatar(course.getCreatedBy().getAvatar());
             List<ResponseLesson> lessons = new ArrayList<>();
-            for(Lesson lesson : course.getLessons()){
+            for (Lesson lesson : course.getLessons()) {
                 ResponseLesson responseLesson = new ResponseLesson();
                 responseLesson.setId(lesson.getId());
                 responseLesson.setName(lesson.getName());
@@ -179,6 +184,25 @@ public class CourseServiceImpl implements ICourseService {
             }
         }
         return suggestedCourses;
+    }
+
+    @Override
+    public void rateCourse(Course course, double rating) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findByUsername(authentication.getName()).get();
+        CourseRating courseRating = new CourseRating();
+        courseRating.setCourse(course);
+        courseRating.setUser(user);
+        courseRating.setRate(rating);
+        courseRatingRepository.save(courseRating);
+        List<CourseRating> courseRatings = courseRatingRepository.findByCourse(course);
+        double rate = 0;
+        for (CourseRating c : courseRatings) {
+            rate += c.getRate();
+        }
+        rate = rate / courseRatings.size();
+        course.setRate((double) Math.round(rate * 10.0) / 10.0);
+        courseRepository.save(course);
     }
 
     // Hàm giả định lấy thông tin sở thích của người dùng từ cơ sở dữ liệu hoặc hệ thống lưu trữ tương ứng
