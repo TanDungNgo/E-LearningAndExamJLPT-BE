@@ -33,7 +33,6 @@ public class LessonController {
         lesson.setName(lessonDTO.getName());
         lesson.setDescription(lessonDTO.getDescription());
         lesson.setUrlVideo(lessonDTO.getUrlVideo());
-        lesson.setRate(lessonDTO.getRate());
         lesson.setCourse(courseService.getById(lessonDTO.getCourse_id()).get());
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new ResponseObject("ok", "Insert lesson successfully", lessonService.save(lesson))
@@ -59,14 +58,12 @@ public class LessonController {
                     lesson.setName(newLesson.getName());
                     lesson.setDescription(newLesson.getDescription());
                     lesson.setUrlVideo(newLesson.getUrlVideo());
-                    lesson.setRate(newLesson.getRate());
                     return lessonService.update(lesson);
                 }).orElseGet(()->{
                     Lesson lesson = new Lesson();
                     lesson.setName(newLesson.getName());
                     lesson.setDescription(newLesson.getDescription());
                     lesson.setUrlVideo(newLesson.getUrlVideo());
-                    lesson.setRate(newLesson.getRate());
                     lesson.setId(id);
                     return lessonService.save(lesson);
                 });

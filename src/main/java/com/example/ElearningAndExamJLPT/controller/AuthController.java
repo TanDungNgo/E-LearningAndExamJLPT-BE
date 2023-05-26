@@ -4,6 +4,7 @@ package com.example.ElearningAndExamJLPT.controller;
 import com.example.ElearningAndExamJLPT.dto.request.ChangePasswordRequest;
 import com.example.ElearningAndExamJLPT.dto.request.SignInForm;
 import com.example.ElearningAndExamJLPT.dto.request.SignUpForm;
+import com.example.ElearningAndExamJLPT.dto.request.UpdateProfileRequest;
 import com.example.ElearningAndExamJLPT.dto.response.JwtResponse;
 import com.example.ElearningAndExamJLPT.dto.response.ResponMessage;
 import com.example.ElearningAndExamJLPT.dto.response.ResponseObject;
@@ -166,4 +167,19 @@ public class AuthController {
         }
     }
 
+    @PutMapping("/update")
+    public ResponseEntity<?> updateProfile(@Valid @RequestBody UpdateProfileRequest request){
+        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findByUsername(currentUser.getName()).get();
+        user.setFirstname(request.getFirstname());
+        user.setLastname(request.getLastname());
+        user.setGender(request.getGender());
+        user.setEmail(request.getEmail());
+        user.setAvatar(request.getAvatar());
+        userService.save(user);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Update profile successfully", "")
+        );
+
+    }
 }

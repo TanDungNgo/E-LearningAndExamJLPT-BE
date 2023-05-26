@@ -1,4 +1,4 @@
-package com.example.ElearningAndExamJLPT.dto;
+package com.example.ElearningAndExamJLPT.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,9 +9,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class LessonDTO {
+public class ResponseLesson {
+    private Long id;
     private String name;
     private String description;
     private String urlVideo;
-    private Long course_id;
+    private Double rate;
 }

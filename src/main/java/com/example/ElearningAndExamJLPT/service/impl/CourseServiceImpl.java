@@ -1,7 +1,9 @@
 package com.example.ElearningAndExamJLPT.service.impl;
 
 import com.example.ElearningAndExamJLPT.dto.response.ResponseCourse;
+import com.example.ElearningAndExamJLPT.dto.response.ResponseLesson;
 import com.example.ElearningAndExamJLPT.entity.Course;
+import com.example.ElearningAndExamJLPT.entity.Lesson;
 import com.example.ElearningAndExamJLPT.repository.ICourseRepository;
 import com.example.ElearningAndExamJLPT.repository.IUserRepository;
 import com.example.ElearningAndExamJLPT.service.ICourseService;
@@ -87,6 +89,16 @@ public class CourseServiceImpl implements ICourseService {
             responseCourse.setRate(course.getRate());
             responseCourse.setTeacherName(course.getCreatedBy().getFirstname());
             responseCourse.setTeacherAvatar(course.getCreatedBy().getAvatar());
+            List<ResponseLesson> lessons = new ArrayList<>();
+            for(Lesson lesson : course.getLessons()){
+                ResponseLesson responseLesson = new ResponseLesson();
+                responseLesson.setId(lesson.getId());
+                responseLesson.setName(lesson.getName());
+                responseLesson.setUrlVideo(lesson.getUrlVideo());
+                responseLesson.setRate(lesson.getRate());
+                lessons.add(responseLesson);
+            }
+            responseCourse.setLessons(lessons);
             courses.add(responseCourse);
         }
         return courses;
@@ -106,6 +118,16 @@ public class CourseServiceImpl implements ICourseService {
         responseCourse.setRate(course.getRate());
         responseCourse.setTeacherName(course.getCreatedBy().getFirstname());
         responseCourse.setTeacherAvatar(course.getCreatedBy().getAvatar());
+        List<ResponseLesson> lessons = new ArrayList<>();
+        for(Lesson lesson : course.getLessons()){
+            ResponseLesson responseLesson = new ResponseLesson();
+            responseLesson.setId(lesson.getId());
+            responseLesson.setName(lesson.getName());
+            responseLesson.setUrlVideo(lesson.getUrlVideo());
+            responseLesson.setRate(lesson.getRate());
+            lessons.add(responseLesson);
+        }
+        responseCourse.setLessons(lessons);
         return responseCourse;
     }
 
@@ -133,6 +155,16 @@ public class CourseServiceImpl implements ICourseService {
             responseCourse.setRate(course.getRate());
             responseCourse.setTeacherName(course.getCreatedBy().getFirstname());
             responseCourse.setTeacherAvatar(course.getCreatedBy().getAvatar());
+            List<ResponseLesson> lessons = new ArrayList<>();
+            for(Lesson lesson : course.getLessons()){
+                ResponseLesson responseLesson = new ResponseLesson();
+                responseLesson.setId(lesson.getId());
+                responseLesson.setName(lesson.getName());
+                responseLesson.setUrlVideo(lesson.getUrlVideo());
+                responseLesson.setRate(lesson.getRate());
+                lessons.add(responseLesson);
+            }
+            responseCourse.setLessons(lessons);
             // Gợi ý khóa học cùng chủ đề
             if (userPreferences.contains(course.getType())) {
                 suggestedCourses.add(responseCourse);
