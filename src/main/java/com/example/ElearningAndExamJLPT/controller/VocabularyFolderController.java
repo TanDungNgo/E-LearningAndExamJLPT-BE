@@ -21,7 +21,7 @@ public class VocabularyFolderController {
     @GetMapping("/all")
     public ResponseEntity<ResponseObject> getAllVocabularyFolder() {
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("ok", "Query successfully", vocabularyFolderService.getAll())
+                new ResponseObject("ok", "Query successfully", vocabularyFolderService.getAllVocabularyFolders())
         );
     }
 
@@ -40,7 +40,7 @@ public class VocabularyFolderController {
         Optional<VocabularyFolder> foundVocabularyFolder = vocabularyFolderService.getById(id);
         return foundVocabularyFolder.isPresent() ?
                 ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseObject("ok", "Query vocabularyFolder successfully", foundVocabularyFolder)
+                        new ResponseObject("ok", "Query vocabularyFolder successfully", vocabularyFolderService.getVocabularyFolder(foundVocabularyFolder.get()))
                 ) :
                 ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                         new ResponseObject("failed", "Cannot find vocabularyFolder with id = " + id, "")
