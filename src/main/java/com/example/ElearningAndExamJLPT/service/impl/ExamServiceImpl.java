@@ -94,9 +94,9 @@ public class ExamServiceImpl implements IExamService {
             listListeningQuestions.add(responseQuestion);
             durationListeningQuestion += 2;
         }
-        responseExam.setDurationLanguageKnowledge(durationLanguageKnowledgeQuestion);
-        responseExam.setDurationReading(durationReadingQuestion);
-        responseExam.setDurationListening(durationListeningQuestion);
+        responseExam.setDurationLanguageKnowledge(durationLanguageKnowledgeQuestion * 60);
+        responseExam.setDurationReading(durationReadingQuestion * 60);
+        responseExam.setDurationListening(durationListeningQuestion * 60);
         responseExam.setLanguageKnowledgeQuestions(listLanguageKnowledgeQuestions);
         responseExam.setReadingQuestions(listReadingQuestions);
         responseExam.setListeningQuestions(listListeningQuestions);
