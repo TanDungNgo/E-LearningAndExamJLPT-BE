@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class EnrollmentServiceImpl implements IEnrollmentService {
@@ -62,4 +63,13 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
         Course course = courseRepository.findById(courseId).get();
         return enrollmentRepository.existsByStudentIdAndCourseId(currentUser, course);
     }
+    @Override
+    public List<User> getStudentsByCourse(Course course) {
+        List<Enrollment> enrollments = enrollmentRepository.findByCourseId(course);
+        List<User> students = enrollments.stream()
+                .map(Enrollment::getStudentId)
+                .collect(Collectors.toList());
+        return students;
+    }
+
 }
