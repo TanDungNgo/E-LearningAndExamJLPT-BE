@@ -3,6 +3,7 @@ package com.example.ElearningAndExamJLPT.controller;
 
 import com.example.ElearningAndExamJLPT.dto.response.ResponseExamResult;
 import com.example.ElearningAndExamJLPT.dto.response.ResponseObject;
+import com.example.ElearningAndExamJLPT.dto.response.ResponseQuestion;
 import com.example.ElearningAndExamJLPT.entity.Exam;
 import com.example.ElearningAndExamJLPT.entity.LanguageKnowledgeQuestion;
 import com.example.ElearningAndExamJLPT.entity.ListeningQuestion;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,14 +60,53 @@ public class ExamController {
 
         List<ListeningQuestion> listeningQuestions = foundExam.get().getListeningQuestions();
         int[] correctAnswerListeningQuestion = new int[listeningQuestions.size()];
-
+        List<ResponseQuestion> languageKnowledge = new ArrayList<>();
+        List<ResponseQuestion> reading = new ArrayList<>();
+        List<ResponseQuestion> listening = new ArrayList<>();
         for (int i = 0; i < languageKnowledgeQuestions.size(); i++) {
+            ResponseQuestion responseQuestion = new ResponseQuestion();
+            responseQuestion.setId(languageKnowledgeQuestions.get(i).getId());
+            responseQuestion.setTitle(languageKnowledgeQuestions.get(i).getTitle());
+            responseQuestion.setText(languageKnowledgeQuestions.get(i).getText());
+            responseQuestion.setOption1(languageKnowledgeQuestions.get(i).getOption1());
+            responseQuestion.setOption2(languageKnowledgeQuestions.get(i).getOption2());
+            responseQuestion.setOption3(languageKnowledgeQuestions.get(i).getOption3());
+            responseQuestion.setOption4(languageKnowledgeQuestions.get(i).getOption4());
+            responseQuestion.setCorrectAnswer(languageKnowledgeQuestions.get(i).getCorrectAnswer());
+            responseQuestion.setAnswer(answers[i]);
+            languageKnowledge.add(responseQuestion);
             correctAnswerLanguageKnowledgeQuestion[i] = languageKnowledgeQuestions.get(i).getCorrectAnswer();
+
         }
         for (int i = 0; i < readingQuestions.size(); i++) {
+            ResponseQuestion responseQuestion = new ResponseQuestion();
+            responseQuestion.setId(readingQuestions.get(i).getId());
+            responseQuestion.setTitle(readingQuestions.get(i).getTitle());
+            responseQuestion.setText(readingQuestions.get(i).getText());
+            responseQuestion.setImage(readingQuestions.get(i).getImage());
+            responseQuestion.setOption1(readingQuestions.get(i).getOption1());
+            responseQuestion.setOption2(readingQuestions.get(i).getOption2());
+            responseQuestion.setOption3(readingQuestions.get(i).getOption3());
+            responseQuestion.setOption4(readingQuestions.get(i).getOption4());
+            responseQuestion.setCorrectAnswer(readingQuestions.get(i).getCorrectAnswer());
+            responseQuestion.setAnswer(answers[i + languageKnowledgeQuestions.size()]);
+            reading.add(responseQuestion);
             correctAnswerReadingQuestion[i] = readingQuestions.get(i).getCorrectAnswer();
         }
         for (int i = 0; i < listeningQuestions.size(); i++) {
+            ResponseQuestion responseQuestion = new ResponseQuestion();
+            responseQuestion.setId(listeningQuestions.get(i).getId());
+            responseQuestion.setTitle(listeningQuestions.get(i).getTitle());
+            responseQuestion.setText(listeningQuestions.get(i).getText());
+            responseQuestion.setImage(listeningQuestions.get(i).getImage());
+            responseQuestion.setAudioFile(listeningQuestions.get(i).getAudioFile());
+            responseQuestion.setOption1(listeningQuestions.get(i).getOption1());
+            responseQuestion.setOption2(listeningQuestions.get(i).getOption2());
+            responseQuestion.setOption3(listeningQuestions.get(i).getOption3());
+            responseQuestion.setOption4(listeningQuestions.get(i).getOption4());
+            responseQuestion.setCorrectAnswer(listeningQuestions.get(i).getCorrectAnswer());
+            responseQuestion.setAnswer(answers[i + languageKnowledgeQuestions.size() + readingQuestions.size()]);
+            listening.add(responseQuestion);
             correctAnswerListeningQuestion[i] = listeningQuestions.get(i).getCorrectAnswer();
         }
         int totalCorrectLanguageKnowledgeQuestion = 0;
@@ -104,6 +145,9 @@ public class ExamController {
         responseExamResult.setTotalQuestion(totalQuestion);
         responseExamResult.setPercentage((int) Math.round(percentage));
         responseExamResult.setExamDate(String.valueOf(LocalDateTime.now()));
+        responseExamResult.setLanguageKnowledgeQuestions(languageKnowledge);
+        responseExamResult.setReadingQuestions(reading);
+        responseExamResult.setListeningQuestions(listening);
         if (percentage >= 50) {
             responseExamResult.setStatus("Pass");
         } else {

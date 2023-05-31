@@ -182,4 +182,17 @@ public class AuthController {
         );
 
     }
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout() {
+        // Lấy đối tượng Authentication từ SecurityContextHolder
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null) {
+            // Xóa session hiện tại và đăng xuất người dùng
+            SecurityContextHolder.clearContext();
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Logout successfully", "")
+        );
+    }
 }
