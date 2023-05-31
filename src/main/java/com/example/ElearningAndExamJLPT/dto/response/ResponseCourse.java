@@ -22,6 +22,7 @@ public class ResponseCourse {
     private String banner;
     private String duration;
     private Double rate;
+    private Integer numberOfStudent;
     private String teacherName;
     private String teacherAvatar;
     private List<ResponseLesson> lessons;

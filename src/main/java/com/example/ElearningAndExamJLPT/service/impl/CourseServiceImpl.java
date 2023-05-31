@@ -4,10 +4,12 @@ import com.example.ElearningAndExamJLPT.dto.response.ResponseCourse;
 import com.example.ElearningAndExamJLPT.dto.response.ResponseLesson;
 import com.example.ElearningAndExamJLPT.entity.Course;
 import com.example.ElearningAndExamJLPT.entity.CourseRating;
+import com.example.ElearningAndExamJLPT.entity.Enrollment;
 import com.example.ElearningAndExamJLPT.entity.Lesson;
 import com.example.ElearningAndExamJLPT.entity.User.User;
 import com.example.ElearningAndExamJLPT.repository.ICourseRatingRepository;
 import com.example.ElearningAndExamJLPT.repository.ICourseRepository;
+import com.example.ElearningAndExamJLPT.repository.IEnrollmentRepository;
 import com.example.ElearningAndExamJLPT.repository.IUserRepository;
 import com.example.ElearningAndExamJLPT.service.ICourseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseServiceImpl implements ICourseService {
@@ -31,6 +34,8 @@ public class CourseServiceImpl implements ICourseService {
     private IUserRepository userRepository;
     @Autowired
     private ICourseRatingRepository courseRatingRepository;
+    @Autowired
+    private IEnrollmentRepository enrollmentRepository;
 
     @Override
     public List<Course> getAll() {
@@ -123,6 +128,13 @@ public class CourseServiceImpl implements ICourseService {
         responseCourse.setRate(course.getRate());
         responseCourse.setTeacherName(course.getCreatedBy().getFirstname());
         responseCourse.setTeacherAvatar(course.getCreatedBy().getAvatar());
+        //
+        List<Enrollment> enrollments = enrollmentRepository.findByCourseId(course);
+        List<User> students = enrollments.stream()
+                .map(Enrollment::getStudentId)
+                .collect(Collectors.toList());
+        responseCourse.setNumberOfStudent(students.size());
+        //
         List<ResponseLesson> lessons = new ArrayList<>();
         for (Lesson lesson : course.getLessons()) {
             ResponseLesson responseLesson = new ResponseLesson();
@@ -132,7 +144,17 @@ public class CourseServiceImpl implements ICourseService {
             responseLesson.setRate(lesson.getRate());
             lessons.add(responseLesson);
         }
-        responseCourse.setLessons(lessons);
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication != null && authentication.isAuthenticated()) {
+                User currentUser = userRepository.findByUsername(authentication.getName()).get();
+                if (enrollmentRepository.existsByStudentIdAndCourseId(currentUser, course))
+                    responseCourse.setLessons(lessons);
+            }
+        }
+        catch (Exception e) {
+            responseCourse.setLessons(Collections.emptyList());
+        }
         return responseCourse;
     }
 

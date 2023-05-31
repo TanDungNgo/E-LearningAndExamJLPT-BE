@@ -19,4 +19,8 @@ public class ResponseQuestion {
     private String option2;
     private String option3;
     private String option4;
+    private Integer answer;
+    private Integer correctAnswer;
+    private String explanation;
+
 }

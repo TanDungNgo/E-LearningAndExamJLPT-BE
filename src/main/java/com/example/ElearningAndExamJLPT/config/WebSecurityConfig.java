@@ -83,7 +83,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and().exceptionHandling()
                 .authenticationEntryPoint(jwtEntryPoint)
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .headers()
+                .cacheControl()
+                .disable()
+                .and()
+                .logout() // Cấu hình logout
+                .logoutUrl("/logout") // Đường dẫn URL cho việc logout
+                .logoutSuccessUrl("/login?logout") // Đường dẫn sau khi logout thành công
+                .invalidateHttpSession(true) // Hủy phiên làm việc
+                .deleteCookies("JSESSIONID"); // Xóa các cookies nếu có
         http.addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }
