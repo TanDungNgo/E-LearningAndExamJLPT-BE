@@ -153,4 +153,16 @@ public class CourseController {
             );
         }
     }
+    @GetMapping("/my-courses")
+    public ResponseEntity<ResponseObject> getMyCourse() {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Query course successfully", courseService.getMyCourse())
+        );
+    }
+    @GetMapping("/top")
+    public ResponseEntity<?> getTopCourse() {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Query course successfully", courseService.getAllCourse())
+        );
+    }
 }
