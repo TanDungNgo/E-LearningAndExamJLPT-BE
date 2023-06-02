@@ -25,21 +25,21 @@ public class VocabularyServiceImpl implements IVocabularyService {
 
     @Override
     public List<Vocabulary> getAll() {
-        return vocabularyRepository.findAll();
+        return vocabularyRepository.findAllByDeletedFalse();
     }
 
     @Override
     public Optional<Vocabulary> getById(Long id) {
-        return vocabularyRepository.findById(id);
+        return vocabularyRepository.findVocabularyByDeletedFalseAndId(id);
     }
 
     @Override
     public Vocabulary save(Vocabulary entity) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         LocalDateTime now = LocalDateTime.now();
-        entity.setCreatedBy(userRepository.findByUsername(authentication.getName()).get());
+        entity.setCreatedBy(userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get());
         entity.setCreatedDate(now);
-        entity.setModifiedBy(userRepository.findByUsername(authentication.getName()).get());
+        entity.setModifiedBy(userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get());
         entity.setModifiedDate(now);
         return vocabularyRepository.save(entity);
     }
@@ -48,14 +48,17 @@ public class VocabularyServiceImpl implements IVocabularyService {
     public Vocabulary update(Vocabulary entity) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         LocalDateTime now = LocalDateTime.now();
-        entity.setModifiedBy(userRepository.findByUsername(authentication.getName()).get());
+        entity.setModifiedBy(userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get());
         entity.setModifiedDate(now);
         return vocabularyRepository.save(entity);
     }
 
     @Override
     public void deleteById(Long id) {
-        vocabularyRepository.deleteById(id);
+//        vocabularyRepository.deleteById(id);
+        Vocabulary vocabulary = vocabularyRepository.findVocabularyByDeletedFalseAndId(id).get();
+        vocabulary.setDeleted(true);
+        vocabularyRepository.save(vocabulary);
     }
 
     @Override

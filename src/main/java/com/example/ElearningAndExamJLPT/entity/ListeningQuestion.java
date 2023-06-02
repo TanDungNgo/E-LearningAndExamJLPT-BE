@@ -39,6 +39,8 @@ public class ListeningQuestion extends BaseEntity {
     private Integer correctAnswer;
     @JsonIgnore
     private boolean status = true;
+    @JsonIgnore
+    private boolean deleted = false;
     @ManyToOne
     @JoinColumn(name = "exam_id")
     @JsonBackReference

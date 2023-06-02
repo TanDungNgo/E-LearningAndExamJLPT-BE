@@ -33,7 +33,8 @@ public class Vocabulary extends BaseEntity {
     private String audio;
     @JsonIgnore
     private boolean status = true;
-
+    @JsonIgnore
+    private boolean deleted = false;
     @ManyToOne
     @JoinColumn(name = "VocabularyFolder_id")
     @JsonBackReference

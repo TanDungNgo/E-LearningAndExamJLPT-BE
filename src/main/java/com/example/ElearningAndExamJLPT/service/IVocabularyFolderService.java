@@ -9,4 +9,5 @@ public interface IVocabularyFolderService extends IService<VocabularyFolder,Long
     List<VocabularyFolder> searchVocabularyFolders(String query);
     List<ResponseVocabularyFolder> getAllVocabularyFolders();
     ResponseVocabularyFolder getVocabularyFolder(VocabularyFolder vocabularyFolder);
+    List<ResponseVocabularyFolder> getNextVocabularyFolders(Long id);
 }

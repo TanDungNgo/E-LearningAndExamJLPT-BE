@@ -1,6 +1,7 @@
 package com.example.ElearningAndExamJLPT.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,6 +34,8 @@ public class Lesson extends BaseEntity{
     @Max(5)
     private Double rate;
     private boolean status = true;
+    @JsonIgnore
+    private boolean deleted = false;
 
     @ManyToOne
     @JoinColumn(name = "course_id")

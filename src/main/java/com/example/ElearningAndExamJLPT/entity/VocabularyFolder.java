@@ -29,7 +29,8 @@ public class VocabularyFolder extends BaseEntity {
     private Integer count;
     @JsonIgnore
     private boolean status = true;
-
+    @JsonIgnore
+    private boolean deleted = false;
     @OneToMany(mappedBy = "vocabularyFolder")
     private List<Vocabulary> vocabularies = new ArrayList<>();
 }

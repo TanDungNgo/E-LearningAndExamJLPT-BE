@@ -70,6 +70,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/vocabularyFolders/{id}",
             "/api/vocabularyFolders/search",
             "/api/vocabularyFolders/{id}/vocabularies",
+            "/api/vocabularyFolders/next/{id}",
             "/api/vocabularies/all",
             "/api/vocabularies/{id}",
     };

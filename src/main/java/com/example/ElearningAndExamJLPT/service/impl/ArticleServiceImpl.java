@@ -30,7 +30,7 @@ public class ArticleServiceImpl implements IArticleService {
 
     @Override
     public List<ResponseArticle> getAllArticle() {
-        List<Article> articles = articleRepository.findAll();
+        List<Article> articles = articleRepository.findAllByDeletedFalse();
         List<ResponseArticle> responseArticles = new ArrayList<>();
         for (Article article : articles) {
             ResponseArticle responseArticle = new ResponseArticle();
@@ -41,7 +41,7 @@ public class ArticleServiceImpl implements IArticleService {
             responseArticle.setContent(article.getContent());
             responseArticle.setCreatedDate(String.valueOf(article.getCreatedDate()));
             responseArticle.setModifiedDate(String.valueOf(article.getModifiedDate()));
-            responseArticle.setCreatedBy(article.getCreatedBy().getFirstname()+" "+article.getCreatedBy().getLastname());
+            responseArticle.setCreatedBy(article.getCreatedBy().getFirstname() + " " + article.getCreatedBy().getLastname());
             responseArticle.setAvatarCreatedBy(article.getCreatedBy().getAvatar());
             responseArticles.add(responseArticle);
         }
@@ -59,28 +59,28 @@ public class ArticleServiceImpl implements IArticleService {
         responseArticle.setContent(article.getContent());
         responseArticle.setCreatedDate(String.valueOf(article.getCreatedDate()));
         responseArticle.setModifiedDate(String.valueOf(article.getModifiedDate()));
-        responseArticle.setCreatedBy(article.getCreatedBy().getFirstname()+" "+article.getCreatedBy().getLastname());
+        responseArticle.setCreatedBy(article.getCreatedBy().getFirstname() + " " + article.getCreatedBy().getLastname());
         responseArticle.setAvatarCreatedBy(article.getCreatedBy().getAvatar());
         return responseArticle;
     }
 
     @Override
     public List<Article> getAll() {
-        return articleRepository.findAll();
+        return articleRepository.findAllByDeletedFalse();
     }
 
     @Override
     public Optional<Article> getById(Long id) {
-        return articleRepository.findById(id);
+        return articleRepository.findArticleByDeletedFalseAndId(id);
     }
 
     @Override
     public Article save(Article entity) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         LocalDateTime now = LocalDateTime.now();
-        entity.setCreatedBy(userRepository.findByUsername(authentication.getName()).get());
+        entity.setCreatedBy(userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get());
         entity.setCreatedDate(now);
-        entity.setModifiedBy(userRepository.findByUsername(authentication.getName()).get());
+        entity.setModifiedBy(userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get());
         entity.setModifiedDate(now);
         return articleRepository.save(entity);
     }
@@ -89,13 +89,16 @@ public class ArticleServiceImpl implements IArticleService {
     public Article update(Article entity) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         LocalDateTime now = LocalDateTime.now();
-        entity.setModifiedBy(userRepository.findByUsername(authentication.getName()).get());
+        entity.setModifiedBy(userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get());
         entity.setModifiedDate(now);
         return articleRepository.save(entity);
     }
 
     @Override
     public void deleteById(Long id) {
-        articleRepository.deleteById(id);
+//        articleRepository.deleteById(id);
+        Article article = articleRepository.findById(id).get();
+        article.setDeleted(true);
+        articleRepository.save(article);
     }
 }

@@ -17,7 +17,7 @@ public class userDetailService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userResponsitory.findByUsername(username).orElseThrow(()-> new UsernameNotFoundException("User not found -> username or password"+username));
+        User user = userResponsitory.findUserByDeletedFalseAndUsername(username).orElseThrow(()-> new UsernameNotFoundException("User not found -> username or password"+username));
         return UserPrinciple.build(user);
     }
 }

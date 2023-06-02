@@ -73,6 +73,8 @@ public class User {
     private List<ExamResult> examResults;
     @JsonIgnore
     private boolean status = true;
+    @JsonIgnore
+    private boolean deleted = false;
 
     public User(@NotBlank @Size(min = 3, max = 20) String firstname,
                 @NotBlank @Size(min = 3, max = 20) String lastname,

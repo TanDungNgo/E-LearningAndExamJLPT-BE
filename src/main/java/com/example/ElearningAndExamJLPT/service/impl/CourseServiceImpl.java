@@ -39,21 +39,21 @@ public class CourseServiceImpl implements ICourseService {
 
     @Override
     public List<Course> getAll() {
-        return courseRepository.findAll();
+        return courseRepository.findAllByDeletedFalse();
     }
 
     @Override
     public Optional<Course> getById(Long id) {
-        return courseRepository.findById(id);
+        return courseRepository.findCourseByDeletedFalseAndId(id);
     }
 
     @Override
     public Course save(Course entity) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         LocalDateTime now = LocalDateTime.now();
-        entity.setCreatedBy(userRepository.findByUsername(authentication.getName()).get());
+        entity.setCreatedBy(userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get());
         entity.setCreatedDate(now);
-        entity.setModifiedBy(userRepository.findByUsername(authentication.getName()).get());
+        entity.setModifiedBy(userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get());
         entity.setModifiedDate(now);
         return courseRepository.save(entity);
     }
@@ -62,14 +62,19 @@ public class CourseServiceImpl implements ICourseService {
     public Course update(Course entity) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         LocalDateTime now = LocalDateTime.now();
-        entity.setModifiedBy(userRepository.findByUsername(authentication.getName()).get());
+        entity.setModifiedBy(userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get());
         entity.setModifiedDate(now);
         return courseRepository.save(entity);
     }
 
     @Override
     public void deleteById(Long id) {
-        courseRepository.deleteById(id);
+//        courseRepository.deleteById(id);
+        Optional<Course> course = courseRepository.findCourseByDeletedFalseAndId(id);
+        if (course.isPresent()) {
+            course.get().setDeleted(true);
+            courseRepository.save(course.get());
+        }
     }
 
     @Override
@@ -85,7 +90,7 @@ public class CourseServiceImpl implements ICourseService {
     @Override
     public List<ResponseCourse> getAllCourse() {
         List<ResponseCourse> courses = new ArrayList<>();
-        List<Course> courseList = courseRepository.findAll();
+        List<Course> courseList = courseRepository.findAllByDeletedFalse();
         for (Course course : courseList) {
             ResponseCourse responseCourse = new ResponseCourse();
             responseCourse.setId(course.getId());
@@ -147,12 +152,11 @@ public class CourseServiceImpl implements ICourseService {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication != null && authentication.isAuthenticated()) {
-                User currentUser = userRepository.findByUsername(authentication.getName()).get();
+                User currentUser = userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get();
                 if (enrollmentRepository.existsByStudentIdAndCourseId(currentUser, course))
                     responseCourse.setLessons(lessons);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             responseCourse.setLessons(Collections.emptyList());
         }
         return responseCourse;
@@ -161,9 +165,9 @@ public class CourseServiceImpl implements ICourseService {
     @Override
     public List<ResponseCourse> getSuggestedCourses() {
         List<ResponseCourse> suggestedCourses = new ArrayList<>();
-        List<Course> courses = courseRepository.findAll();
+        List<Course> courses = courseRepository.findAllByDeletedFalse();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Long userId = userRepository.findByUsername(authentication.getName()).get().getId();
+        Long userId = userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get().getId();
         // Lấy thông tin sở thích và lịch sử học tập của người dùng từ cơ sở dữ liệu hoặc hệ thống lưu trữ tương ứng
         List<String> userPreferences = getUserPreferences(userId);
         List<Course> userHistory = getUserHistory(userId);
@@ -211,7 +215,7 @@ public class CourseServiceImpl implements ICourseService {
     @Override
     public void rateCourse(Course course, double rating) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByUsername(authentication.getName()).get();
+        User user = userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get();
         CourseRating courseRating = new CourseRating();
         courseRating.setCourse(course);
         courseRating.setUser(user);

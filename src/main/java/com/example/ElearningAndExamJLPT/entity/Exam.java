@@ -34,6 +34,8 @@ public class Exam extends BaseEntity{
     private Double price;
     @JsonIgnore
     private boolean status = true;
+    @JsonIgnore
+    private boolean deleted = false;
 
     @OneToMany(mappedBy = "exam")
     private List<LanguageKnowledgeQuestion> languageKnowledgeQuestions = new ArrayList<>();

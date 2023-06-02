@@ -24,21 +24,21 @@ public class LessonServiceImpl implements ILessonService {
     private IUserRepository userRepository;
     @Override
     public List<Lesson> getAll() {
-        return lessonRepository.findAll();
+        return lessonRepository.findAllByDeletedFalse();
     }
 
     @Override
     public Optional<Lesson> getById(Long id) {
-        return lessonRepository.findById(id);
+        return lessonRepository.findLessonByDeletedFalseAndId(id);
     }
 
     @Override
     public Lesson save(Lesson entity) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         LocalDateTime now = LocalDateTime.now();
-        entity.setCreatedBy(userRepository.findByUsername(authentication.getName()).get());
+        entity.setCreatedBy(userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get());
         entity.setCreatedDate(now);
-        entity.setModifiedBy(userRepository.findByUsername(authentication.getName()).get());
+        entity.setModifiedBy(userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get());
         entity.setModifiedDate(now);
         return lessonRepository.save(entity);
     }
@@ -52,13 +52,16 @@ public class LessonServiceImpl implements ILessonService {
     public Lesson update(Lesson entity) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         LocalDateTime now = LocalDateTime.now();
-        entity.setModifiedBy(userRepository.findByUsername(authentication.getName()).get());
+        entity.setModifiedBy(userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get());
         entity.setModifiedDate(now);
         return lessonRepository.save(entity);
     }
 
     @Override
     public void deleteById(Long id) {
-        lessonRepository.deleteById(id);
+        Lesson lesson = lessonRepository.findLessonByDeletedFalseAndId(id).get();
+        lesson.setDeleted(true);
+        lessonRepository.save(lesson);
+//        lessonRepository.deleteById(id);
     }
 }

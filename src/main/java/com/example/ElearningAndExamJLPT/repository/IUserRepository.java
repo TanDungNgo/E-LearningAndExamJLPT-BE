@@ -11,10 +11,12 @@ import java.util.Optional;
 @Repository
 public interface IUserRepository extends JpaRepository<User, Long> {
     // Tim kiem user co ton tai trong db k
-    Optional<User> findByUsername(String username);
+    Optional<User> findUserByDeletedFalseAndUsername(String username);
     // Username da co trong db chua
-    Boolean existsByUsername(String username);
+    Boolean existsByUsernameAndDeletedIsFalse(String username);
     // Email da co trong db chua
-    Boolean existsByEmail(String email);
-    List<User> findByRoles(Role role);
+    Boolean existsByEmailAndDeletedIsFalse(String email);
+    List<User> findByRolesAndDeletedIsFalse(Role role);
+    List<User> findAllByDeletedFalse();
+    Optional<User> findUserByDeletedFalseAndId(Long id);
 }

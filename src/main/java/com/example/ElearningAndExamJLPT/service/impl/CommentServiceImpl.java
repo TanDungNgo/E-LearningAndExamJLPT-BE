@@ -38,9 +38,9 @@ public class CommentServiceImpl implements ICommentService {
     public Comment save(Comment entity) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         LocalDateTime now = LocalDateTime.now();
-        entity.setCreatedBy(userRepository.findByUsername(authentication.getName()).get());
+        entity.setCreatedBy(userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get());
         entity.setCreatedDate(now);
-        entity.setModifiedBy(userRepository.findByUsername(authentication.getName()).get());
+        entity.setModifiedBy(userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get());
         entity.setModifiedDate(now);
         return commentRepository.save(entity);
     }

@@ -38,4 +38,6 @@ public class LanguageKnowledgeQuestion extends BaseEntity{
     private Exam exam;
     @JsonIgnore
     private boolean status = true;
+    @JsonIgnore
+    private boolean deleted = false;
 }

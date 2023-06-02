@@ -108,19 +108,19 @@ public class ExamServiceImpl implements IExamService {
         List<Exam> listExam = new ArrayList<>();
         switch (level) {
             case "N5":
-                listExam = examRepository.findAllByLevel(Level.N5);
+                listExam = examRepository.findAllByDeletedFalseAndLevel(Level.N5);
                 break;
             case "N4":
-                listExam = examRepository.findAllByLevel(Level.N4);
+                listExam = examRepository.findAllByDeletedFalseAndLevel(Level.N4);
                 break;
             case "N3":
-                listExam = examRepository.findAllByLevel(Level.N3);
+                listExam = examRepository.findAllByDeletedFalseAndLevel(Level.N3);
                 break;
             case "N2":
-                listExam = examRepository.findAllByLevel(Level.N2);
+                listExam = examRepository.findAllByDeletedFalseAndLevel(Level.N2);
                 break;
             case "N1":
-                listExam = examRepository.findAllByLevel(Level.N1);
+                listExam = examRepository.findAllByDeletedFalseAndLevel(Level.N1);
                 break;
         }
         if (listExam.size() > 0) {
