@@ -25,12 +25,12 @@ public class GrammarServiceImpl implements IGrammarService {
     private IUserRepository userRepository;
     @Override
     public List<Grammar> getAll() {
-        return grammarRepository.findAll();
+        return grammarRepository.findAllByDeletedFalse();
     }
 
     @Override
     public Optional<Grammar> getById(Long id) {
-        return Optional.ofNullable(grammarRepository.findById(id))
+        return Optional.ofNullable(grammarRepository.findGrammarByDeletedFalseAndId(id))
                 .orElseThrow(() -> new UsernameNotFoundException("Grammar by " + id + " can not found"));
     }
 
@@ -38,9 +38,9 @@ public class GrammarServiceImpl implements IGrammarService {
     public Grammar save(Grammar entity) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         LocalDateTime now = LocalDateTime.now();
-        entity.setCreatedBy(userRepository.findByUsername(authentication.getName()).get());
+        entity.setCreatedBy(userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get());
         entity.setCreatedDate(now);
-        entity.setModifiedBy(userRepository.findByUsername(authentication.getName()).get());
+        entity.setModifiedBy(userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get());
         entity.setModifiedDate(now);
         return grammarRepository.save(entity);
     }
@@ -49,14 +49,17 @@ public class GrammarServiceImpl implements IGrammarService {
     public Grammar update(Grammar entity) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         LocalDateTime now = LocalDateTime.now();
-        entity.setModifiedBy(userRepository.findByUsername(authentication.getName()).get());
+        entity.setModifiedBy(userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get());
         entity.setModifiedDate(now);
         return grammarRepository.save(entity);
     }
 
     @Override
     public void deleteById(Long id) {
-        grammarRepository.deleteById(id);
+//        grammarRepository.deleteById(id);
+        Grammar grammar = grammarRepository.findGrammarByDeletedFalseAndId(id).get();
+        grammar.setDeleted(true);
+        grammarRepository.save(grammar);
     }
 
     @Override
@@ -68,7 +71,7 @@ public class GrammarServiceImpl implements IGrammarService {
     @Override
     public List<ResponseGrammar> getAllGrammars() {
         List<ResponseGrammar> responseGrammars = new ArrayList<>();
-        List<Grammar> grammars = grammarRepository.findAll();
+        List<Grammar> grammars = grammarRepository.findAllByDeletedFalse();
         for (Grammar grammar : grammars) {
             ResponseGrammar responseGrammar = new ResponseGrammar();
             responseGrammar.setId(grammar.getId());

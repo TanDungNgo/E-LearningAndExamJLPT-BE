@@ -6,11 +6,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface IVocabularyFolderRepository extends JpaRepository<VocabularyFolder, Long> {
     @Query("SELECT f FROM VocabularyFolder f WHERE " +
             "f.level LIKE CONCAT('%',:query, '%')" +
-            "Or f.title LIKE CONCAT('%', :query, '%')")
+            "Or f.title LIKE CONCAT('%', :query, '%')"+
+            "AND f.deleted = false")
     List<VocabularyFolder> searchVocabularyFolders(String query);
+    List<VocabularyFolder> findAllByDeletedFalse();
+    Optional<VocabularyFolder> findVocabularyFolderByDeletedFalseAndId(Long id);
 }

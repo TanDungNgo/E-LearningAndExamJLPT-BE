@@ -47,4 +47,6 @@ public class Course extends BaseEntity {
     private List<Enrollment> enrollments;
     @JsonIgnore
     private boolean status = true;
+    @JsonIgnore
+    private boolean deleted = false;
 }

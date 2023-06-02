@@ -34,4 +34,6 @@ public class Article extends BaseEntity{
     private String image;
     @JsonIgnore
     private boolean status = true;
+    @JsonIgnore
+    private boolean deleted = false;
 }

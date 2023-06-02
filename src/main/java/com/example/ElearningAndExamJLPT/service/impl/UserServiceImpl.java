@@ -20,27 +20,27 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public Optional<User> findByUsername(String name) {
-        return userRepository.findByUsername(name);
+        return userRepository.findUserByDeletedFalseAndUsername(name);
     }
 
     @Override
     public Boolean existsByUsername(String username) {
-        return userRepository.existsByUsername(username);
+        return userRepository.existsByUsernameAndDeletedIsFalse(username);
     }
 
     @Override
     public Boolean existsByEmail(String email) {
-        return userRepository.existsByEmail(email);
+        return userRepository.existsByEmailAndDeletedIsFalse(email);
     }
 
     @Override
     public List<User> getAll() {
-        return userRepository.findAll();
+        return userRepository.findAllByDeletedFalse();
     }
 
     @Override
     public Optional<User> getById(Long id) {
-        return Optional.ofNullable(userRepository.findById(id))
+        return Optional.ofNullable(userRepository.findUserByDeletedFalseAndId(id))
                 .orElseThrow(() -> new UsernameNotFoundException("Username by " + id + " can not found"));
     }
 
@@ -54,7 +54,7 @@ public class UserServiceImpl implements IUserService {
         Role role = new Role();
         role.setId(2L);
         role.setName(RoleName.TEACHER);
-        return userRepository.findByRoles(role);
+        return userRepository.findByRolesAndDeletedIsFalse(role);
     }
 
     @Override
@@ -64,6 +64,9 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public void deleteById(Long id) {
-        userRepository.deleteById(id);
+//        userRepository.deleteById(id);
+        User user = userRepository.findUserByDeletedFalseAndId(id).get();
+        user.setDeleted(true);
+        userRepository.save(user);
     }
 }

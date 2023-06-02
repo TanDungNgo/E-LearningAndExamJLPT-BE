@@ -8,12 +8,16 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ICourseRepository extends JpaRepository<Course, Long> {
     @Query("SELECT c FROM Course c WHERE " +
-            "c.name LIKE CONCAT('%',:query, '%')" +
-            "Or c.description LIKE CONCAT('%', :query, '%')")
+            "(c.name LIKE CONCAT('%', :query, '%') OR c.description LIKE CONCAT('%', :query, '%'))" +
+            "AND c.deleted = false")
     List<Course> searchCourses(String query);
+
     Page<Course> findAll(Pageable pageable);
+    List<Course> findAllByDeletedFalse();
+    Optional<Course> findCourseByDeletedFalseAndId(Long id);
 }

@@ -36,4 +36,6 @@ public class Grammar extends BaseEntity{
     private Level level;
     @JsonIgnore
     private boolean status = true;
+    @JsonIgnore
+    private boolean deleted = false;
 }

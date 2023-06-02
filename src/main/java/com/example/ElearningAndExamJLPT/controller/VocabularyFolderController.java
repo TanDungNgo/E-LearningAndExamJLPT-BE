@@ -84,4 +84,9 @@ public class VocabularyFolderController {
     public ResponseEntity<List<VocabularyFolder>> searchVocabularyFolders(@RequestParam("query") String query){
         return ResponseEntity.ok(vocabularyFolderService.searchVocabularyFolders(query));
     }
+
+    @GetMapping("/next/{id}")
+    public ResponseEntity<?> getNextVocabularyFolders(@PathVariable("id") Long id){
+        return ResponseEntity.ok(vocabularyFolderService.getNextVocabularyFolders(id));
+    }
 }
