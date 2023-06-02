@@ -1,6 +1,7 @@
 package com.example.ElearningAndExamJLPT.repository;
 
 import com.example.ElearningAndExamJLPT.entity.Course;
+import com.example.ElearningAndExamJLPT.entity.User.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,4 +21,5 @@ public interface ICourseRepository extends JpaRepository<Course, Long> {
     Page<Course> findAll(Pageable pageable);
     List<Course> findAllByDeletedFalse();
     Optional<Course> findCourseByDeletedFalseAndId(Long id);
+    List<Course> findAllByDeletedFalseAndCreatedBy(User user);
 }

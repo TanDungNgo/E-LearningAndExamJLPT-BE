@@ -231,6 +231,45 @@ public class CourseServiceImpl implements ICourseService {
         courseRepository.save(course);
     }
 
+    @Override
+    public List<ResponseCourse> getTopCourses() {
+        return null;
+    }
+
+    @Override
+    public List<ResponseCourse> getMyCourse() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get();
+        List<Course> courses = courseRepository.findAllByDeletedFalseAndCreatedBy(user);
+        List<ResponseCourse> responseCourses = new ArrayList<>();
+        for (Course course : courses) {
+            ResponseCourse responseCourse = new ResponseCourse();
+            responseCourse.setId(course.getId());
+            responseCourse.setName(course.getName());
+            responseCourse.setBanner(course.getBanner());
+            responseCourse.setPrice(course.getPrice());
+            responseCourse.setDescription(course.getDescription());
+            responseCourse.setDuration(course.getDuration());
+            responseCourse.setLevel(course.getLevel());
+            responseCourse.setType(course.getType());
+            responseCourse.setRate(course.getRate());
+            responseCourse.setTeacherName(course.getCreatedBy().getFirstname());
+            responseCourse.setTeacherAvatar(course.getCreatedBy().getAvatar());
+            List<ResponseLesson> lessons = new ArrayList<>();
+            for (Lesson lesson : course.getLessons()) {
+                ResponseLesson responseLesson = new ResponseLesson();
+                responseLesson.setId(lesson.getId());
+                responseLesson.setName(lesson.getName());
+                responseLesson.setUrlVideo(lesson.getUrlVideo());
+                responseLesson.setRate(lesson.getRate());
+                lessons.add(responseLesson);
+            }
+            responseCourse.setLessons(lessons);
+            responseCourses.add(responseCourse);
+        }
+        return responseCourses;
+    }
+
     // Hàm giả định lấy thông tin sở thích của người dùng từ cơ sở dữ liệu hoặc hệ thống lưu trữ tương ứng
     private List<String> getUserPreferences(Long userId) {
         // Logic lấy thông tin sở thích từ cơ sở dữ liệu hoặc hệ thống lưu trữ
