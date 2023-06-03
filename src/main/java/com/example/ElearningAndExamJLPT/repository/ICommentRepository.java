@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface ICommentRepository extends JpaRepository<Comment, Long> {
-    List<Comment> findByLessonId(Lesson lessonId);
+    List<Comment> findByLesson(Lesson lessonId);
     List<Comment> findByParentCommentId(Long parentCommentId);
 }

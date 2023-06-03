@@ -2,7 +2,9 @@ package com.example.ElearningAndExamJLPT.entity;
 
 import com.example.ElearningAndExamJLPT.entity.User.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,4 +34,12 @@ public class ExamResult {
     private Double score;
     private String answers;
     private LocalDateTime examDate;
+
+    @JsonGetter("examId")
+    public String getExamIdName() {
+        if (examId != null) {
+            return examId.getName();
+        }
+        return null;
+    }
 }

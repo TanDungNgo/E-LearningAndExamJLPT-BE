@@ -14,4 +14,5 @@ public interface IUserService extends IService<User, Long>{
     Boolean existsByEmail(String email);
     User save(User user);
     List<User> findByTeacher();
+    List<User> findByStudent();
 }
