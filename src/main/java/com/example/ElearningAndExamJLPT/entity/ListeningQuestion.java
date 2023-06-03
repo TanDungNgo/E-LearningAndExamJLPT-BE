@@ -38,6 +38,8 @@ public class ListeningQuestion extends BaseEntity {
     @JoinColumn(name = "correct_answer")
     private Integer correctAnswer;
     @JsonIgnore
+    private String explanation;
+    @JsonIgnore
     private boolean status = true;
     @JsonIgnore
     private boolean deleted = false;

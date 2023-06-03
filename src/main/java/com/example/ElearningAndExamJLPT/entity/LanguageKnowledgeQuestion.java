@@ -31,6 +31,8 @@ public class LanguageKnowledgeQuestion extends BaseEntity{
     @JsonIgnore
     @JoinColumn(name = "correct_answer")
     private Integer correctAnswer;
+    @JsonIgnore
+    private String explanation;
 
     @ManyToOne
     @JoinColumn(name = "exam_id")

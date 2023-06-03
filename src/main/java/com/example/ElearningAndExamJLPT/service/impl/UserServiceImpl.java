@@ -58,6 +58,14 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    public List<User> findByStudent() {
+        Role role = new Role();
+        role.setId(2L);
+        role.setName(RoleName.STUDENT);
+        return userRepository.findByRolesAndDeletedIsFalse(role);
+    }
+
+    @Override
     public User update(User entity) {
         return userRepository.save(entity);
     }
