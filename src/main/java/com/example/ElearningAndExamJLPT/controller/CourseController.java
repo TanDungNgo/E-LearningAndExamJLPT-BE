@@ -124,9 +124,9 @@ public class CourseController {
 
     @GetMapping("/search")
     public ResponseEntity<ResponseObject> searchCourses(
-            @RequestParam(value = "query", required = false) String query,
-            @RequestParam(value = "type", required = false) String type,
-            @RequestParam(value = "level", required = false) String level
+            @RequestParam(value = "query") String query,
+            @RequestParam(value = "type") String type,
+            @RequestParam(value = "level") String level
     ) {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("ok", "Search course successfully", courseService.searchCourses(query, type, level))
