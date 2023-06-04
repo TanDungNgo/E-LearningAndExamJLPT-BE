@@ -108,7 +108,7 @@ public class GrammarController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Grammar>> searchGrammars(@RequestParam("query") String query) {
+    public ResponseEntity<?> searchGrammars(@RequestParam("query") String query) {
         return ResponseEntity.ok(grammarService.searchGrammars(query));
     }
 }

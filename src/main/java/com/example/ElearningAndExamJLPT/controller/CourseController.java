@@ -34,9 +34,8 @@ public class CourseController {
     public ResponseEntity<ResponseObject> getCoursesByPage(@RequestParam(name = "page", defaultValue = "0") int page,
                                                            @RequestParam(name = "size", defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        Page<Course> courses = courseService.findAll(pageable);
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("ok", "Query course successfully", courses)
+                new ResponseObject("ok", "Query course successfully", courseService.findAll(pageable))
         );
     }
 
@@ -124,9 +123,13 @@ public class CourseController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<ResponseObject> searchCourses(@RequestParam("query") String query) {
+    public ResponseEntity<ResponseObject> searchCourses(
+            @RequestParam(value = "query", required = false) String query,
+            @RequestParam(value = "type", required = false) String type,
+            @RequestParam(value = "level", required = false) String level
+    ) {
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("ok", "Search course successfully", courseService.searchCourses(query))
+                new ResponseObject("ok", "Search course successfully", courseService.searchCourses(query, type, level))
         );
     }
 
@@ -138,8 +141,9 @@ public class CourseController {
                 new ResponseObject("ok", "Suggested Course for you", courseService.getSuggestedCourses())
         );
     }
+
     @PostMapping("/rate/{id}")
-    public  ResponseEntity<?> rateCourse(@PathVariable("id") Long id, @RequestParam("rate") double rate){
+    public ResponseEntity<?> rateCourse(@PathVariable("id") Long id, @RequestParam("rate") double rate) {
         Optional<Course> foundCourse = courseService.getById(id);
         if (foundCourse.isPresent()) {
             Course course = foundCourse.get();
@@ -153,12 +157,14 @@ public class CourseController {
             );
         }
     }
+
     @GetMapping("/my-courses")
     public ResponseEntity<ResponseObject> getMyCourse() {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("ok", "Query course successfully", courseService.getMyCourse())
         );
     }
+
     @GetMapping("/top")
     public ResponseEntity<?> getTopCourse() {
         return ResponseEntity.status(HttpStatus.OK).body(

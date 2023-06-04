@@ -2,10 +2,7 @@ package com.example.ElearningAndExamJLPT.service.impl;
 
 import com.example.ElearningAndExamJLPT.dto.response.ResponseCourse;
 import com.example.ElearningAndExamJLPT.dto.response.ResponseLesson;
-import com.example.ElearningAndExamJLPT.entity.Course;
-import com.example.ElearningAndExamJLPT.entity.CourseRating;
-import com.example.ElearningAndExamJLPT.entity.Enrollment;
-import com.example.ElearningAndExamJLPT.entity.Lesson;
+import com.example.ElearningAndExamJLPT.entity.*;
 import com.example.ElearningAndExamJLPT.entity.User.User;
 import com.example.ElearningAndExamJLPT.repository.ICourseRatingRepository;
 import com.example.ElearningAndExamJLPT.repository.ICourseRepository;
@@ -78,13 +75,87 @@ public class CourseServiceImpl implements ICourseService {
     }
 
     @Override
-    public List<Course> searchCourses(String query) {
-        return courseRepository.searchCourses(query);
+    public List<ResponseCourse> searchCourses(String query,String type, String level) {
+        List<Course> courses = new ArrayList<>();
+        if (type.equals("") && level.equals("")){
+            courses =  courseRepository.searchCourses(query, null, null);
+        }
+        else if (type.equals("")) {
+            if(level.equals("N1"))
+                courses =  courseRepository.searchCourses(query,null, Level.N1);
+            else if(level.equals("N2"))
+                courses =  courseRepository.searchCourses(query,null, Level.N2);
+            else if(level.equals("N3"))
+                courses =  courseRepository.searchCourses(query,null, Level.N3);
+            else if(level.equals("N4"))
+                courses =  courseRepository.searchCourses(query,null, Level.N4);
+            else
+                courses =  courseRepository.searchCourses(query,null, Level.N5);
+        }
+        else if (level.equals("")) {
+            courses =  courseRepository.searchCourses(query, type, null);
+        }
+        else {
+            if(level.equals("N1"))
+                courses =  courseRepository.searchCourses(query,type, Level.N1);
+            else if(level.equals("N2"))
+                courses =  courseRepository.searchCourses(query,type, Level.N2);
+            else if(level.equals("N3"))
+                courses =  courseRepository.searchCourses(query,type, Level.N3);
+            else if(level.equals("N4"))
+                courses =  courseRepository.searchCourses(query,type, Level.N4);
+            else
+                courses =  courseRepository.searchCourses(query,type, Level.N5);
+        }
+        List<ResponseCourse> responseCourses = new ArrayList<>();
+        for (Course course : courses) {
+            ResponseCourse responseCourse = new ResponseCourse();
+            responseCourse.setId(course.getId());
+            responseCourse.setName(course.getName());
+            responseCourse.setBanner(course.getBanner());
+            responseCourse.setPrice(course.getPrice());
+            responseCourse.setDescription(course.getDescription());
+            responseCourse.setDuration(course.getDuration());
+            responseCourse.setLevel(course.getLevel());
+            responseCourse.setType(course.getType());
+            responseCourse.setRate(course.getRate());
+            responseCourse.setTeacherName(course.getCreatedBy().getFirstname());
+            responseCourse.setTeacherAvatar(course.getCreatedBy().getAvatar());
+            List<Enrollment> enrollments = enrollmentRepository.findByCourseId(course);
+            List<User> students = enrollments.stream()
+                    .map(Enrollment::getStudentId)
+                    .collect(Collectors.toList());
+            responseCourse.setNumberOfStudent(students.size());
+            responseCourses.add(responseCourse);
+        }
+        return responseCourses;
     }
 
     @Override
-    public Page<Course> findAll(Pageable pageable) {
-        return courseRepository.findAll(pageable);
+    public List<ResponseCourse> findAll(Pageable pageable) {;
+        List<ResponseCourse> courses = new ArrayList<>();
+        Page<Course> courseList = courseRepository.findAll(pageable);
+        for (Course course : courseList) {
+            ResponseCourse responseCourse = new ResponseCourse();
+            responseCourse.setId(course.getId());
+            responseCourse.setName(course.getName());
+            responseCourse.setBanner(course.getBanner());
+            responseCourse.setPrice(course.getPrice());
+            responseCourse.setDescription(course.getDescription());
+            responseCourse.setDuration(course.getDuration());
+            responseCourse.setLevel(course.getLevel());
+            responseCourse.setType(course.getType());
+            responseCourse.setRate(course.getRate());
+            responseCourse.setTeacherName(course.getCreatedBy().getFirstname());
+            responseCourse.setTeacherAvatar(course.getCreatedBy().getAvatar());
+            List<Enrollment> enrollments = enrollmentRepository.findByCourseId(course);
+            List<User> students = enrollments.stream()
+                    .map(Enrollment::getStudentId)
+                    .collect(Collectors.toList());
+            responseCourse.setNumberOfStudent(students.size());
+            courses.add(responseCourse);
+        }
+        return courses;
     }
 
     @Override
@@ -104,16 +175,16 @@ public class CourseServiceImpl implements ICourseService {
             responseCourse.setRate(course.getRate());
             responseCourse.setTeacherName(course.getCreatedBy().getFirstname());
             responseCourse.setTeacherAvatar(course.getCreatedBy().getAvatar());
-            List<ResponseLesson> lessons = new ArrayList<>();
-            for (Lesson lesson : course.getLessons()) {
-                ResponseLesson responseLesson = new ResponseLesson();
-                responseLesson.setId(lesson.getId());
-                responseLesson.setName(lesson.getName());
-                responseLesson.setUrlVideo(lesson.getUrlVideo());
-                responseLesson.setRate(lesson.getRate());
-                lessons.add(responseLesson);
-            }
-            responseCourse.setLessons(lessons);
+//            List<ResponseLesson> lessons = new ArrayList<>();
+//            for (Lesson lesson : course.getLessons()) {
+//                ResponseLesson responseLesson = new ResponseLesson();
+//                responseLesson.setId(lesson.getId());
+//                responseLesson.setName(lesson.getName());
+//                responseLesson.setUrlVideo(lesson.getUrlVideo());
+//                responseLesson.setRate(lesson.getRate());
+//                lessons.add(responseLesson);
+//            }
+//            responseCourse.setLessons(lessons);
             List<Enrollment> enrollments = enrollmentRepository.findByCourseId(course);
             List<User> students = enrollments.stream()
                     .map(Enrollment::getStudentId)

@@ -24,8 +24,23 @@ public class ArticleServiceImpl implements IArticleService {
 
 
     @Override
-    public List<Article> searchArticles(String query) {
-        return articleRepository.searchArticles(query);
+    public List<ResponseArticle> searchArticles(String query) {
+        List<Article> articles = articleRepository.searchArticles(query);
+        List<ResponseArticle> responseArticles = new ArrayList<>();
+        for (Article article : articles) {
+            ResponseArticle responseArticle = new ResponseArticle();
+            responseArticle.setId(article.getId());
+            responseArticle.setTitle(article.getTitle());
+            responseArticle.setDescription(article.getDescription());
+            responseArticle.setImage(article.getImage());
+            responseArticle.setContent(article.getContent());
+            responseArticle.setCreatedDate(String.valueOf(article.getCreatedDate()));
+            responseArticle.setModifiedDate(String.valueOf(article.getModifiedDate()));
+            responseArticle.setCreatedBy(article.getCreatedBy().getFirstname() + " " + article.getCreatedBy().getLastname());
+            responseArticle.setAvatarCreatedBy(article.getCreatedBy().getAvatar());
+            responseArticles.add(responseArticle);
+        }
+        return responseArticles;
     }
 
     @Override

@@ -6,7 +6,7 @@ import com.example.ElearningAndExamJLPT.entity.Grammar;
 import java.util.List;
 
 public interface IGrammarService extends IService<Grammar, Long>{
-    List<Grammar> searchGrammars(String query);
+    List<ResponseGrammar> searchGrammars(String query);
     List<ResponseGrammar> getAllGrammars();
     ResponseGrammar getGrammar(Grammar grammar);
 }
