@@ -43,7 +43,7 @@ public class EnrollmentController {
         return new ResponseEntity<>(new ResponMessage("Not enrolled!"), HttpStatus.OK);
     }
 
-    @GetMapping(value = "students/{courseId}")
+    @GetMapping(value = "/students/{courseId}")
     public ResponseEntity<?> getStudentsByCourse(@PathVariable("courseId") Long courseId) {
         Optional<Course> course = courseService.getById(courseId);
         if (course.isPresent()) {
@@ -52,5 +52,11 @@ public class EnrollmentController {
                     ));
         }
         return new ResponseEntity<>(new ResponMessage("Not enrolled!"), HttpStatus.OK);
+    }
+    @GetMapping(value = "/my-course")
+    public ResponseEntity<?> getMyCourse() {
+        return ResponseEntity.ok().body(
+                new ResponseObject("ok", "Get enrolled course successfully", enrollmentService.getCoursesByStudent()
+                ));
     }
 }

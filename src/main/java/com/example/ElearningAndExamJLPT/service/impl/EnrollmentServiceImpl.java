@@ -1,7 +1,10 @@
 package com.example.ElearningAndExamJLPT.service.impl;
 
+import com.example.ElearningAndExamJLPT.dto.response.ResponseCourse;
+import com.example.ElearningAndExamJLPT.dto.response.ResponseLesson;
 import com.example.ElearningAndExamJLPT.entity.Course;
 import com.example.ElearningAndExamJLPT.entity.Enrollment;
+import com.example.ElearningAndExamJLPT.entity.Lesson;
 import com.example.ElearningAndExamJLPT.entity.User.User;
 import com.example.ElearningAndExamJLPT.repository.ICourseRepository;
 import com.example.ElearningAndExamJLPT.repository.IEnrollmentRepository;
@@ -13,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -70,6 +74,49 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
                 .map(Enrollment::getStudentId)
                 .collect(Collectors.toList());
         return students;
+    }
+
+    @Override
+    public List<ResponseCourse> getCoursesByStudent() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        List<Enrollment> enrollments = enrollmentRepository.findByStudentId(userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get());
+        List<Course> courses = enrollments.stream()
+                .map(Enrollment::getCourseId)
+                .collect(Collectors.toList());
+        List<ResponseCourse> responseCourses = new ArrayList<>();
+        for (Course course : courses) {
+            ResponseCourse responseCourse = new ResponseCourse();
+            responseCourse.setId(course.getId());
+            responseCourse.setName(course.getName());
+            responseCourse.setBanner(course.getBanner());
+            responseCourse.setPrice(course.getPrice());
+            responseCourse.setDescription(course.getDescription());
+            responseCourse.setDuration(course.getDuration());
+            responseCourse.setLevel(course.getLevel());
+            responseCourse.setType(course.getType());
+            responseCourse.setRate(course.getRate());
+            responseCourse.setTeacherName(course.getCreatedBy().getFirstname());
+            responseCourse.setTeacherAvatar(course.getCreatedBy().getAvatar());
+            List<ResponseLesson> lessons = new ArrayList<>();
+            for (Lesson lesson : course.getLessons()) {
+                ResponseLesson responseLesson = new ResponseLesson();
+                responseLesson.setId(lesson.getId());
+                responseLesson.setName(lesson.getName());
+                responseLesson.setUrlVideo(lesson.getUrlVideo());
+                responseLesson.setRate(lesson.getRate());
+                lessons.add(responseLesson);
+            }
+            responseCourse.setLessons(lessons);
+            //
+            List<Enrollment> enroll = enrollmentRepository.findByCourseId(course);
+            List<User> students = enroll.stream()
+                    .map(Enrollment::getStudentId)
+                    .collect(Collectors.toList());
+            responseCourse.setNumberOfStudent(students.size());
+            //
+            responseCourses.add(responseCourse);
+        }
+        return responseCourses;
     }
 
 }
