@@ -114,6 +114,11 @@ public class CourseServiceImpl implements ICourseService {
                 lessons.add(responseLesson);
             }
             responseCourse.setLessons(lessons);
+            List<Enrollment> enrollments = enrollmentRepository.findByCourseId(course);
+            List<User> students = enrollments.stream()
+                    .map(Enrollment::getStudentId)
+                    .collect(Collectors.toList());
+            responseCourse.setNumberOfStudent(students.size());
             courses.add(responseCourse);
         }
         return courses;
@@ -196,6 +201,11 @@ public class CourseServiceImpl implements ICourseService {
                 lessons.add(responseLesson);
             }
             responseCourse.setLessons(lessons);
+            List<Enrollment> enrollments = enrollmentRepository.findByCourseId(course);
+            List<User> students = enrollments.stream()
+                    .map(Enrollment::getStudentId)
+                    .collect(Collectors.toList());
+            responseCourse.setNumberOfStudent(students.size());
             // Gợi ý khóa học cùng chủ đề
             if (userPreferences.contains(course.getType())) {
                 suggestedCourses.add(responseCourse);
@@ -265,6 +275,13 @@ public class CourseServiceImpl implements ICourseService {
                 lessons.add(responseLesson);
             }
             responseCourse.setLessons(lessons);
+            //
+            List<Enrollment> enrollments = enrollmentRepository.findByCourseId(course);
+            List<User> students = enrollments.stream()
+                    .map(Enrollment::getStudentId)
+                    .collect(Collectors.toList());
+            responseCourse.setNumberOfStudent(students.size());
+            //
             responseCourses.add(responseCourse);
         }
         return responseCourses;
