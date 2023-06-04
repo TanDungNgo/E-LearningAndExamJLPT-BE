@@ -176,9 +176,8 @@ public class AuthController {
         user.setGender(request.getGender());
         user.setEmail(request.getEmail());
         user.setAvatar(request.getAvatar());
-        userService.save(user);
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("ok", "Update profile successfully", "")
+                new ResponseObject("ok", "Update profile successfully", userService.save(user))
         );
 
     }
