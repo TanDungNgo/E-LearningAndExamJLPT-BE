@@ -73,7 +73,6 @@ public class CourseServiceImpl implements ICourseService {
             courseRepository.save(course.get());
         }
     }
-
     @Override
     public List<ResponseCourse> searchCourses(String query,String type, String level) {
         List<Course> courses = new ArrayList<>();
@@ -81,31 +80,45 @@ public class CourseServiceImpl implements ICourseService {
             courses =  courseRepository.searchCourses(query, null, null);
         }
         else if (type.equals("")) {
-            if(level.equals("N1"))
-                courses =  courseRepository.searchCourses(query,null, Level.N1);
-            else if(level.equals("N2"))
-                courses =  courseRepository.searchCourses(query,null, Level.N2);
-            else if(level.equals("N3"))
-                courses =  courseRepository.searchCourses(query,null, Level.N3);
-            else if(level.equals("N4"))
-                courses =  courseRepository.searchCourses(query,null, Level.N4);
-            else
-                courses =  courseRepository.searchCourses(query,null, Level.N5);
+            switch (level) {
+                case "N1":
+                    courses =  courseRepository.searchCourses(query, null, Level.N1);
+                    break;
+                case "N2":
+                    courses =  courseRepository.searchCourses(query, null, Level.N2);
+                    break;
+                case "N3":
+                    courses =  courseRepository.searchCourses(query, null, Level.N3);
+                    break;
+                case "N4":
+                    courses =  courseRepository.searchCourses(query, null, Level.N4);
+                    break;
+                case "N5":
+                    courses =  courseRepository.searchCourses(query, null, Level.N5);
+                    break;
+            }
         }
         else if (level.equals("")) {
             courses =  courseRepository.searchCourses(query, type, null);
         }
         else {
-            if(level.equals("N1"))
-                courses =  courseRepository.searchCourses(query,type, Level.N1);
-            else if(level.equals("N2"))
-                courses =  courseRepository.searchCourses(query,type, Level.N2);
-            else if(level.equals("N3"))
-                courses =  courseRepository.searchCourses(query,type, Level.N3);
-            else if(level.equals("N4"))
-                courses =  courseRepository.searchCourses(query,type, Level.N4);
-            else
-                courses =  courseRepository.searchCourses(query,type, Level.N5);
+            switch (level) {
+                case "N1":
+                    courses =  courseRepository.searchCourses(query, type, Level.N1);
+                    break;
+                case "N2":
+                    courses =  courseRepository.searchCourses(query, type, Level.N2);
+                    break;
+                case "N3":
+                    courses =  courseRepository.searchCourses(query, type, Level.N3);
+                    break;
+                case "N4":
+                    courses =  courseRepository.searchCourses(query, type, Level.N4);
+                    break;
+                case "N5":
+                    courses =  courseRepository.searchCourses(query, type, Level.N5);
+                    break;
+            }
         }
         List<ResponseCourse> responseCourses = new ArrayList<>();
         for (Course course : courses) {
@@ -130,7 +143,6 @@ public class CourseServiceImpl implements ICourseService {
         }
         return responseCourses;
     }
-
     @Override
     public List<ResponseCourse> findAll(Pageable pageable) {;
         List<ResponseCourse> courses = new ArrayList<>();
