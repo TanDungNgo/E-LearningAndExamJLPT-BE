@@ -63,9 +63,20 @@ public class GrammarServiceImpl implements IGrammarService {
     }
 
     @Override
-    public List<Grammar> searchGrammars(String query) {
+    public List<ResponseGrammar> searchGrammars(String query) {
         List<Grammar> grammars = grammarRepository.searchGrammars(query);
-        return grammars;
+        List<ResponseGrammar> responseGrammars = new ArrayList<>();
+        for (Grammar grammar : grammars) {
+            ResponseGrammar responseGrammar = new ResponseGrammar();
+            responseGrammar.setId(grammar.getId());
+            responseGrammar.setText(grammar.getText());
+            responseGrammar.setExplanation(grammar.getExplanation());
+            responseGrammar.setMeans(grammar.getMeans());
+            responseGrammar.setLevel(grammar.getLevel());
+            responseGrammar.setExample(grammar.getExample());
+            responseGrammars.add(responseGrammar);
+        }
+        return responseGrammars;
     }
 
     @Override

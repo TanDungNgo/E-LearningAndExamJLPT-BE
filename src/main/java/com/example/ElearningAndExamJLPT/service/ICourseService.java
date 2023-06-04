@@ -8,8 +8,8 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface ICourseService extends IService<Course,Long> {
-    List<Course> searchCourses(String query);
-    Page<Course> findAll(Pageable pageable);
+    List<ResponseCourse> searchCourses(String query, String type, String level);
+    List<ResponseCourse> findAll(Pageable pageable);
     List<ResponseCourse> getAllCourse();
     ResponseCourse getCourse(Course course);
     List<ResponseCourse> getSuggestedCourses();
