@@ -4,10 +4,7 @@ import com.example.ElearningAndExamJLPT.dto.response.ResponseCourse;
 import com.example.ElearningAndExamJLPT.dto.response.ResponseLesson;
 import com.example.ElearningAndExamJLPT.entity.*;
 import com.example.ElearningAndExamJLPT.entity.User.User;
-import com.example.ElearningAndExamJLPT.repository.ICourseRatingRepository;
-import com.example.ElearningAndExamJLPT.repository.ICourseRepository;
-import com.example.ElearningAndExamJLPT.repository.IEnrollmentRepository;
-import com.example.ElearningAndExamJLPT.repository.IUserRepository;
+import com.example.ElearningAndExamJLPT.repository.*;
 import com.example.ElearningAndExamJLPT.service.ICourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,6 +30,8 @@ public class CourseServiceImpl implements ICourseService {
     private ICourseRatingRepository courseRatingRepository;
     @Autowired
     private IEnrollmentRepository enrollmentRepository;
+    @Autowired
+    private IUserLessonRepository userLessonRepository;
 
     @Override
     public List<Course> getAll() {
@@ -209,6 +208,8 @@ public class CourseServiceImpl implements ICourseService {
 
     @Override
     public ResponseCourse getCourse(Course course) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get();
         ResponseCourse responseCourse = new ResponseCourse();
         responseCourse.setId(course.getId());
         responseCourse.setName(course.getName());
@@ -228,21 +229,28 @@ public class CourseServiceImpl implements ICourseService {
                 .collect(Collectors.toList());
         responseCourse.setNumberOfStudent(students.size());
         //
-        List<ResponseLesson> lessons = new ArrayList<>();
-        for (Lesson lesson : course.getLessons()) {
-            ResponseLesson responseLesson = new ResponseLesson();
-            responseLesson.setId(lesson.getId());
-            responseLesson.setName(lesson.getName());
-            responseLesson.setUrlVideo(lesson.getUrlVideo());
-            responseLesson.setRate(lesson.getRate());
-            lessons.add(responseLesson);
-        }
         try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication != null && authentication.isAuthenticated()) {
-                User currentUser = userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get();
                 if (enrollmentRepository.existsByStudentIdAndCourseId(currentUser, course))
+                {
+                    List<ResponseLesson> lessons = new ArrayList<>();
+                    for (Lesson lesson : course.getLessons()) {
+                        ResponseLesson responseLesson = new ResponseLesson();
+                        responseLesson.setId(lesson.getId());
+                        responseLesson.setName(lesson.getName());
+                        responseLesson.setRate(lesson.getRate());
+                        responseLesson.setCompleted(userLessonRepository.findByLessonAndUser(lesson, currentUser).isCompleted());
+                        if(userLessonRepository.findByLessonAndUser(lesson, currentUser).isCompleted() == true)
+                        {
+                            responseLesson.setUrlVideo(lesson.getUrlVideo());
+                        }
+                        lessons.add(responseLesson);
+                    }
                     responseCourse.setLessons(lessons);
+                }
+                else {
+                    responseCourse.setLessons(Collections.emptyList());
+                }
             }
         } catch (Exception e) {
             responseCourse.setLessons(Collections.emptyList());

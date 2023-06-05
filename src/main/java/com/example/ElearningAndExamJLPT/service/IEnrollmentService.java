@@ -11,4 +11,5 @@ public interface IEnrollmentService extends IService<Enrollment, Long>{
     boolean existsByStudentIdAndCourseId(Long courseId);
     List<User> getStudentsByCourse(Course course);
     List<ResponseCourse> getCoursesByStudent();
+    Enrollment enrollCourse(Long courseId,Enrollment enrollment);
 }

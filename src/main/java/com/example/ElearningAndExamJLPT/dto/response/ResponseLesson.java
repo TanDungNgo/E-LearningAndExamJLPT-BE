@@ -15,4 +15,5 @@ public class ResponseLesson {
     private String description;
     private String urlVideo;
     private Double rate;
+    private boolean completed;
 }
