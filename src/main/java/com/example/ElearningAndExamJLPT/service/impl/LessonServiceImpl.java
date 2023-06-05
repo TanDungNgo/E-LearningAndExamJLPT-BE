@@ -1,8 +1,11 @@
 package com.example.ElearningAndExamJLPT.service.impl;
 
 import com.example.ElearningAndExamJLPT.entity.Lesson;
+import com.example.ElearningAndExamJLPT.entity.User.User;
+import com.example.ElearningAndExamJLPT.entity.UserLesson;
 import com.example.ElearningAndExamJLPT.repository.ICourseRepository;
 import com.example.ElearningAndExamJLPT.repository.ILessonRepository;
+import com.example.ElearningAndExamJLPT.repository.IUserLessonRepository;
 import com.example.ElearningAndExamJLPT.repository.IUserRepository;
 import com.example.ElearningAndExamJLPT.service.ILessonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,8 @@ public class LessonServiceImpl implements ILessonService {
     private ICourseRepository courseRepository;
     @Autowired
     private IUserRepository userRepository;
+    @Autowired
+    private IUserLessonRepository userLessonRepository;
     @Override
     public List<Lesson> getAll() {
         return lessonRepository.findAllByDeletedFalse();
@@ -46,6 +51,19 @@ public class LessonServiceImpl implements ILessonService {
     @Override
     public List<Lesson> searchLessons(String query) {
         return lessonRepository.searchLessons(query);
+    }
+
+    @Override
+    public Lesson markVideoAsWatched(Lesson lesson) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get();
+        UserLesson userLesson = userLessonRepository.findByLessonAndUser(lesson,user);
+        if(userLesson != null){
+            userLesson.setCompleted(true);
+            userLessonRepository.save(userLesson);
+            return lesson;
+        }
+        return null;
     }
 
     @Override

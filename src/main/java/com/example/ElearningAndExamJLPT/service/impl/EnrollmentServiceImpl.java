@@ -6,8 +6,10 @@ import com.example.ElearningAndExamJLPT.entity.Course;
 import com.example.ElearningAndExamJLPT.entity.Enrollment;
 import com.example.ElearningAndExamJLPT.entity.Lesson;
 import com.example.ElearningAndExamJLPT.entity.User.User;
+import com.example.ElearningAndExamJLPT.entity.UserLesson;
 import com.example.ElearningAndExamJLPT.repository.ICourseRepository;
 import com.example.ElearningAndExamJLPT.repository.IEnrollmentRepository;
+import com.example.ElearningAndExamJLPT.repository.IUserLessonRepository;
 import com.example.ElearningAndExamJLPT.repository.IUserRepository;
 import com.example.ElearningAndExamJLPT.service.IEnrollmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,8 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
     private IUserRepository userRepository;
     @Autowired
     private ICourseRepository courseRepository;
+    @Autowired
+    private IUserLessonRepository userLessonRepository;
 
     @Override
     public List<Enrollment> getAll() {
@@ -117,6 +121,26 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
             responseCourses.add(responseCourse);
         }
         return responseCourses;
+    }
+
+    @Override
+    public Enrollment enrollCourse(Long courseId, Enrollment enrollment) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        LocalDateTime now = LocalDateTime.now();
+        enrollment.setStudentId(userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get());
+        enrollment.setRegistrationDate(now);
+        Course course = courseRepository.findById(courseId).get();
+        List<Lesson> lessons = course.getLessons();
+        boolean isFirstLesson = true;
+        for (Lesson lesson : lessons) {
+            UserLesson userLesson = new UserLesson();
+            userLesson.setUser(enrollment.getStudentId());
+            userLesson.setLesson(lesson);
+            userLesson.setCompleted(isFirstLesson);
+            userLessonRepository.save(userLesson);
+            isFirstLesson = false;
+        }
+        return enrollmentRepository.save(enrollment);
     }
 
 }

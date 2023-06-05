@@ -30,7 +30,7 @@ public class EnrollmentController {
         Enrollment enrollment = new Enrollment();
         enrollment.setCourseId(courseService.getById(courseId).get());
         return ResponseEntity.ok().body(
-                new ResponseObject("ok", "Enroll course successfully", enrollmentService.save(enrollment)
+                new ResponseObject("ok", "Enroll course successfully", enrollmentService.enrollCourse(courseId,enrollment)
                 ));
     }
 

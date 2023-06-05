@@ -90,4 +90,18 @@ public class LessonController {
     public ResponseEntity<List<Lesson>> searchLessons(@RequestParam("query") String query){
         return ResponseEntity.ok(lessonService.searchLessons(query));
     }
+    @PutMapping("/watched/{id}")
+    public ResponseEntity<?> markVideoAsWatched(@PathVariable("id") Long id){
+        Optional<Lesson> foundLesson = lessonService.getById(id);
+        if (foundLesson.isPresent()) {
+            lessonService.markVideoAsWatched(lessonService.getById(id).get());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject("ok", "Completed lesson" , "")
+            );
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject("failed", "Cannot find lesson with id = " + id, "")
+            );
+        }
+    }
 }
