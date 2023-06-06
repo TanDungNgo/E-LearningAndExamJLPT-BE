@@ -2,6 +2,7 @@ package com.example.ElearningAndExamJLPT.service.impl;
 
 import com.example.ElearningAndExamJLPT.dto.response.ResponseVocabulary;
 import com.example.ElearningAndExamJLPT.dto.response.ResponseVocabularyFolder;
+import com.example.ElearningAndExamJLPT.entity.Vocabulary;
 import com.example.ElearningAndExamJLPT.entity.VocabularyFolder;
 import com.example.ElearningAndExamJLPT.repository.IUserRepository;
 import com.example.ElearningAndExamJLPT.repository.IVocabularyFolderRepository;
