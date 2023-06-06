@@ -1,5 +1,6 @@
 package com.example.ElearningAndExamJLPT.service.impl;
 
+import com.example.ElearningAndExamJLPT.dto.response.ResponseLesson;
 import com.example.ElearningAndExamJLPT.entity.Lesson;
 import com.example.ElearningAndExamJLPT.entity.User.User;
 import com.example.ElearningAndExamJLPT.entity.UserLesson;
@@ -64,6 +65,23 @@ public class LessonServiceImpl implements ILessonService {
             return lesson;
         }
         return null;
+    }
+
+    @Override
+    public ResponseLesson getLesson(Lesson lesson) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get();
+        UserLesson userLesson = userLessonRepository.findByLessonAndUser(lesson,user);
+        ResponseLesson responseLesson = new ResponseLesson();
+        responseLesson.setId(lesson.getId());
+        responseLesson.setName(lesson.getName());
+        responseLesson.setDescription(lesson.getDescription());
+        responseLesson.setRate(lesson.getRate());
+        responseLesson.setCompleted(userLesson != null && userLesson.isCompleted());
+        if(userLesson != null){
+            responseLesson.setUrlVideo(userLesson.isCompleted() ? lesson.getUrlVideo(): null);
+        }
+        return responseLesson;
     }
 
     @Override

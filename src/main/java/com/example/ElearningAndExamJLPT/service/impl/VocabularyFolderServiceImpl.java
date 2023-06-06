@@ -63,9 +63,18 @@ public class VocabularyFolderServiceImpl implements IVocabularyFolderService {
     }
 
     @Override
-    public List<VocabularyFolder> searchVocabularyFolders(String query) {
-//        return vocabularyFolderRepository.searchVocabularyFolders(query);
-        return null;
+    public List<ResponseVocabularyFolder> searchVocabularyFolders(String query) {
+        List<VocabularyFolder> vocabularyFolders = vocabularyFolderRepository.searchVocabularyFolders(query);
+        List<ResponseVocabularyFolder> responseVocabularyFolders = new ArrayList<>();
+        vocabularyFolders.forEach(vocabularyFolder -> {
+            ResponseVocabularyFolder responseVocabularyFolder = new ResponseVocabularyFolder();
+            responseVocabularyFolder.setId(vocabularyFolder.getId());
+            responseVocabularyFolder.setTitle(vocabularyFolder.getTitle());
+            responseVocabularyFolder.setLevel(vocabularyFolder.getLevel());
+            responseVocabularyFolder.setCount(vocabularyFolder.getVocabularies().size());
+            responseVocabularyFolders.add(responseVocabularyFolder);
+        });
+        return responseVocabularyFolders;
     }
 
     @Override

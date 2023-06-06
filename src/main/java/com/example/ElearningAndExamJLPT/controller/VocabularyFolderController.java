@@ -81,7 +81,7 @@ public class VocabularyFolderController {
         }
     }
     @GetMapping("/search")
-    public ResponseEntity<List<VocabularyFolder>> searchVocabularyFolders(@RequestParam("query") String query){
+    public ResponseEntity<?> searchVocabularyFolders(@RequestParam("query") String query){
         return ResponseEntity.ok(vocabularyFolderService.searchVocabularyFolders(query));
     }
 
