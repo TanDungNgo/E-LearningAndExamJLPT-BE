@@ -95,7 +95,7 @@ public class LessonController {
         Optional<Lesson> foundLesson = lessonService.getById(id);
         if (foundLesson.isPresent()) {
             lessonService.markVideoAsWatched(lessonService.getById(id).get());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+            return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "Completed lesson" , "")
             );
         } else {

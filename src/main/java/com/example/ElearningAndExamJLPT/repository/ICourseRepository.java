@@ -14,10 +14,6 @@ import java.util.Optional;
 
 @Repository
 public interface ICourseRepository extends JpaRepository<Course, Long> {
-    //    @Query("SELECT c FROM Course c WHERE " +
-//            "(c.name LIKE CONCAT('%', :query, '%') OR c.description LIKE CONCAT('%', :query, '%'))" +
-//            "AND c.deleted = false")
-//    List<Course> searchCourses(String query);
     @Query("SELECT c FROM Course c WHERE " +
             "(c.name LIKE CONCAT('%', :query, '%') OR c.description LIKE CONCAT('%', :query, '%'))" +
             "AND (:type IS NULL OR c.type = :type) " +

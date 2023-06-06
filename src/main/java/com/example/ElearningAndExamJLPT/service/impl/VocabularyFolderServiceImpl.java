@@ -64,7 +64,8 @@ public class VocabularyFolderServiceImpl implements IVocabularyFolderService {
 
     @Override
     public List<VocabularyFolder> searchVocabularyFolders(String query) {
-        return vocabularyFolderRepository.searchVocabularyFolders(query);
+//        return vocabularyFolderRepository.searchVocabularyFolders(query);
+        return null;
     }
 
     @Override
