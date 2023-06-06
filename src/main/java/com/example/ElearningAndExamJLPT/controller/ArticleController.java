@@ -97,4 +97,10 @@ public class ArticleController {
             );
         }
     }
+    @GetMapping("/search")
+    public ResponseEntity<ResponseObject> searchArticle(@RequestParam("query") String query) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Query article successfully", articleService.searchArticles(query))
+        );
+    }
 }

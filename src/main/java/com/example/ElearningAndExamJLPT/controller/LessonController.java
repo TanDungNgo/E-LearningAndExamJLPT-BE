@@ -44,8 +44,8 @@ public class LessonController {
         Optional<Lesson> foundLesson = lessonService.getById(id);
         return foundLesson.isPresent() ?
                 ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseObject("ok", "Query lesson successfully", foundLesson)
-                ) :
+                        new ResponseObject("ok", "Query lesson successfully", lessonService.getLesson(foundLesson.get())
+                )) :
                 ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                         new ResponseObject("failed", "Cannot find lesson with id = " + id, "")
                 );
