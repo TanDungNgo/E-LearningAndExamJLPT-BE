@@ -13,7 +13,6 @@ import java.util.Optional;
 public interface IVocabularyFolderRepository extends JpaRepository<VocabularyFolder, Long> {
     @Query("SELECT f FROM VocabularyFolder f WHERE " +
             "f.title LIKE CONCAT('%',:query, '%') " +
-            "Or f.level = :query " +
             "AND f.deleted = false")
     List<VocabularyFolder> searchVocabularyFolders(String query);
     List<VocabularyFolder> findAllByDeletedFalse();
