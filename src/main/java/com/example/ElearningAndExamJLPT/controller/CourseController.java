@@ -165,10 +165,16 @@ public class CourseController {
         );
     }
 
-    @GetMapping("/top")
-    public ResponseEntity<?> getTopCourse() {
+    @GetMapping("/popular")
+    public ResponseEntity<?> getPopularCourse() {
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("ok", "Query course successfully", courseService.getAllCourse())
+                new ResponseObject("ok", "Query course successfully", courseService.getPopularCourses())
+        );
+    }
+    @GetMapping("/new")
+    public ResponseEntity<?> getNewCourse() {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Query course successfully", courseService.getNewCourses())
         );
     }
 }
