@@ -206,7 +206,6 @@ public class CourseServiceImpl implements ICourseService {
     @Override
     public ResponseCourse getCourse(Course course) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get();
         ResponseCourse responseCourse = new ResponseCourse();
         responseCourse.setId(course.getId());
         responseCourse.setName(course.getName());
@@ -228,6 +227,7 @@ public class CourseServiceImpl implements ICourseService {
         //
         try {
             if (authentication != null && authentication.isAuthenticated()) {
+                User currentUser = userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get();
                 if (enrollmentRepository.existsByStudentIdAndCourseId(currentUser, course)) {
                     List<ResponseLesson> lessons = new ArrayList<>();
                     for (Lesson lesson : course.getLessons()) {
