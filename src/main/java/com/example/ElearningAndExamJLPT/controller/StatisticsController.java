@@ -1,6 +1,7 @@
 package com.example.ElearningAndExamJLPT.controller;
 
 import com.example.ElearningAndExamJLPT.dto.response.ResponseObject;
+import com.example.ElearningAndExamJLPT.entity.Level;
 import com.example.ElearningAndExamJLPT.service.impl.CourseServiceImpl;
 import com.example.ElearningAndExamJLPT.service.impl.LessonServiceImpl;
 import com.example.ElearningAndExamJLPT.service.impl.UserServiceImpl;
@@ -38,6 +39,13 @@ public class StatisticsController {
 
         return ResponseEntity.ok().body(
                 new ResponseObject("ok", "Get statistics successfully", statistics)
+        );
+    }
+    @GetMapping("/coursesByLevel")
+    public ResponseEntity<ResponseObject> getCoursesByLevel() {
+        Map<Level, Long> coursesByLevel = courseService.getCountCoursesByLevel();
+        return ResponseEntity.ok().body(
+                new ResponseObject("ok", "Get courses by level successfully", coursesByLevel)
         );
     }
 
