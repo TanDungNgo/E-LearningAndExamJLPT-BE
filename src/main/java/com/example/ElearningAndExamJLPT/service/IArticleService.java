@@ -9,4 +9,5 @@ public interface IArticleService extends IService<Article, Long> {
     List<ResponseArticle> searchArticles(String query);
     List<ResponseArticle> getAllArticle();
     ResponseArticle getArticle(Article article);
+    List<ResponseArticle> getNewArticle();
 }

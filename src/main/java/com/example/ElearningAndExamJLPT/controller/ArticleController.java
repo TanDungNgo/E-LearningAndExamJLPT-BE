@@ -103,4 +103,10 @@ public class ArticleController {
                 new ResponseObject("ok", "Query article successfully", articleService.searchArticles(query))
         );
     }
+    @GetMapping("/new")
+    public ResponseEntity<ResponseObject> getNewArticle() {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Query article successfully", articleService.getNewArticle())
+        );
+    }
 }

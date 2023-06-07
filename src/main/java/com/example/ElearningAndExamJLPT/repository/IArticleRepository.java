@@ -17,4 +17,5 @@ public interface IArticleRepository extends JpaRepository<Article, Long> {
     List<Article> searchArticles(String query);
     List<Article> findAllByDeletedFalse();
     Optional<Article> findArticleByDeletedFalseAndId(Long id);
+    List<Article> findFirst5ByDeletedFalseOrderByCreatedDateDesc();
 }

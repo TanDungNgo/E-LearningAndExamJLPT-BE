@@ -28,4 +28,5 @@ public interface ICourseRepository extends JpaRepository<Course, Long> {
     Optional<Course> findCourseByDeletedFalseAndId(Long id);
 
     List<Course> findAllByDeletedFalseAndCreatedBy(User user);
+    List<Course> findFirst5ByDeletedFalseOrderByCreatedDateDesc();
 }
