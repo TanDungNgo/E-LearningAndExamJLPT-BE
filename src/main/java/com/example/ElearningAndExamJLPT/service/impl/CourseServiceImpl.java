@@ -422,6 +422,7 @@ public class CourseServiceImpl implements ICourseService {
             responseCourse.setNumberOfStudent(students.size());
             responseCourses.add(responseCourse);
         }
+        responseCourses = responseCourses.stream().limit(4).collect(Collectors.toList());
         return responseCourses;
     }
 
