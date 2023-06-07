@@ -398,7 +398,7 @@ public class CourseServiceImpl implements ICourseService {
 
     @Override
     public List<ResponseCourse> getNewCourses() {
-        List<Course> courses = courseRepository.findFirst5ByDeletedFalseOrderByCreatedDateDesc();
+        List<Course> courses = courseRepository.findFirst4ByDeletedFalseOrderByCreatedDateDesc();
         List<ResponseCourse> responseCourses = new ArrayList<>();
         for (Course course : courses) {
             ResponseCourse responseCourse = new ResponseCourse();
@@ -422,6 +422,22 @@ public class CourseServiceImpl implements ICourseService {
             responseCourses.add(responseCourse);
         }
         return responseCourses;
+    }
+
+    @Override
+    public Map<Level, Long> getCountCoursesByLevel() {
+        List<Course> coursesN5 = courseRepository.countCourseByLevel(Level.N5);
+        List<Course> coursesN4 = courseRepository.countCourseByLevel(Level.N4);
+        List<Course> coursesN3 = courseRepository.countCourseByLevel(Level.N3);
+        List<Course> coursesN2 = courseRepository.countCourseByLevel(Level.N2);
+        List<Course> coursesN1 = courseRepository.countCourseByLevel(Level.N1);
+        Map<Level, Long> countByLevel = new HashMap<>();
+        countByLevel.put(Level.N5, (long) coursesN5.size());
+        countByLevel.put(Level.N4, (long) coursesN4.size());
+        countByLevel.put(Level.N3, (long) coursesN3.size());
+        countByLevel.put(Level.N2, (long) coursesN2.size());
+        countByLevel.put(Level.N1, (long) coursesN1.size());
+        return countByLevel;
     }
 
     // Hàm giả định lấy thông tin sở thích của người dùng từ cơ sở dữ liệu hoặc hệ thống lưu trữ tương ứng
