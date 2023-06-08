@@ -72,7 +72,7 @@ public class VocabularyFolderServiceImpl implements IVocabularyFolderService {
             responseVocabularyFolder.setId(vocabularyFolder.getId());
             responseVocabularyFolder.setTitle(vocabularyFolder.getTitle());
             responseVocabularyFolder.setLevel(vocabularyFolder.getLevel());
-            responseVocabularyFolder.setCount(vocabularyFolder.getVocabularies().size());
+            responseVocabularyFolder.setCount(vocabularyFolder.getCount());
             responseVocabularyFolders.add(responseVocabularyFolder);
         });
         return responseVocabularyFolders;
@@ -86,7 +86,7 @@ public class VocabularyFolderServiceImpl implements IVocabularyFolderService {
             responseVocabularyFolder.setId(vocabularyFolder.getId());
             responseVocabularyFolder.setTitle(vocabularyFolder.getTitle());
             responseVocabularyFolder.setLevel(vocabularyFolder.getLevel());
-            responseVocabularyFolder.setCount(vocabularyFolder.getVocabularies().size());
+            responseVocabularyFolder.setCount(vocabularyFolder.getCount());
             List<ResponseVocabulary> vocabularies = new ArrayList<>();
             vocabularyFolder.getVocabularies().forEach(vocabulary -> {
                 ResponseVocabulary responseVocabulary = new ResponseVocabulary();

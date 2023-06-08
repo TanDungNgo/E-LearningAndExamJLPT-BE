@@ -6,6 +6,7 @@ import com.example.ElearningAndExamJLPT.entity.User.Role;
 import com.example.ElearningAndExamJLPT.entity.User.User;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface IUserService extends IService<User, Long>{
@@ -15,4 +16,5 @@ public interface IUserService extends IService<User, Long>{
     User save(User user);
     List<User> findByTeacher();
     List<User> findByStudent();
+    List<Map<String, Object>> getTopTeachers();
 }
