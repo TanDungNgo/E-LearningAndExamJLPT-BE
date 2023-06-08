@@ -50,15 +50,16 @@ public class VocabularyController {
 
     @PutMapping(value = "/{id}", consumes= "application/json")
     public ResponseEntity<ResponseObject> update(@PathVariable("id") Long id, @RequestBody VocabularyDTO newVocabulary) {
-        Vocabulary updatedVocabulary = vocabularyService.getById(id)
-                .map(vocabulary -> {
-                    vocabulary = vocabularyConverter.toVocabularyEntity(newVocabulary);
-                    return vocabularyService.save(vocabulary);
-                }).orElseGet(()->{
-                    Vocabulary vocabulary = vocabularyConverter.toVocabularyEntity(newVocabulary);
-                    vocabulary.setId(id);
-                    return vocabularyService.save(vocabulary);
-                });
+        Vocabulary updatedVocabulary = vocabularyService.getById(id).get();
+        if (updatedVocabulary == null) {
+            updatedVocabulary = vocabularyConverter.toVocabularyEntity(newVocabulary);
+            updatedVocabulary = vocabularyService.save(updatedVocabulary);
+        }
+        else {
+            updatedVocabulary = vocabularyConverter.toVocabularyEntity(newVocabulary);
+            updatedVocabulary.setId(id);
+            updatedVocabulary = vocabularyService.update(updatedVocabulary);
+        }
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("ok","Update vocabularyFolder successfully", updatedVocabulary)
         );

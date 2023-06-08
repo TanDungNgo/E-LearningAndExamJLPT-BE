@@ -93,4 +93,37 @@ public class ExamController {
                         new ResponseObject("failed", "Cannot find exam result with id = " + id, "")
                 );
     }
+
+    @PostMapping("/create")
+    public ResponseEntity<ResponseObject> createExam(@RequestBody Exam exam) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                new ResponseObject("ok", "Create exam successfully", examService.save(exam))
+        );
+    }
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ResponseObject> updateExam(@RequestBody Exam exam, @PathVariable("id") Long id) {
+        Optional<Exam> foundExam = examService.getById(id);
+        if (!foundExam.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject("failed", "Cannot find exam with id = " + id, "")
+            );
+        }
+        exam.setId(id);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Update exam successfully", examService.save(exam))
+        );
+    }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ResponseObject> deleteExam(@PathVariable("id") Long id) {
+        Optional<Exam> foundExam = examService.getById(id);
+        if (!foundExam.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject("failed", "Cannot find exam with id = " + id, "")
+            );
+        }
+        examService.deleteById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Delete exam successfully", "")
+        );
+    }
 }
