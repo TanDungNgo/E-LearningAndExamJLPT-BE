@@ -12,6 +12,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -25,7 +26,7 @@ public class VocabularyFolder extends BaseEntity {
     @NotBlank
     @Size(min = 3, max = 50)
     private String title;
-    @Formula("(SELECT COUNT(*) FROM vocabularies v WHERE v.vocabulary_folder_id = id)")
+    @Formula("(SELECT COUNT(*) FROM vocabularies v WHERE v.vocabulary_folder_id = id AND v.deleted = false)")
     private Integer count;
     @JsonIgnore
     private boolean status = true;
@@ -33,4 +34,10 @@ public class VocabularyFolder extends BaseEntity {
     private boolean deleted = false;
     @OneToMany(mappedBy = "vocabularyFolder")
     private List<Vocabulary> vocabularies = new ArrayList<>();
+    @JsonIgnore
+    public List<Vocabulary> getNonDeletedVocabularies() {
+        return vocabularies.stream()
+                .filter(vocabulary -> !vocabulary.isDeleted())
+                .collect(Collectors.toList());
+    }
 }
