@@ -60,5 +60,18 @@ public class StatisticsController {
                 new ResponseObject("ok", "Get accounts by role successfully", accountsByRole)
         );
     }
-
+    @GetMapping("/topCourses")
+    public ResponseEntity<ResponseObject> getTopCourses() {
+//        Map<String, Long> coursesByStatus = courseService.getCountCoursesByStatus();
+        return ResponseEntity.ok().body(
+                new ResponseObject("ok", "Get courses successfully", null)
+        );
+    }
+    @GetMapping("/topTeachers")
+    public ResponseEntity<ResponseObject> getTopTeachers() {
+        List<Map<String, Object>> teachers = userService.getTopTeachers();
+        return ResponseEntity.ok().body(
+                new ResponseObject("ok", "Get teachers successfully", teachers)
+        );
+    }
 }
