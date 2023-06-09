@@ -2,6 +2,7 @@ package com.example.ElearningAndExamJLPT.controller;
 
 import com.example.ElearningAndExamJLPT.dto.LessonDTO;
 import com.example.ElearningAndExamJLPT.dto.response.ResponseObject;
+import com.example.ElearningAndExamJLPT.entity.Course;
 import com.example.ElearningAndExamJLPT.entity.Lesson;
 import com.example.ElearningAndExamJLPT.service.impl.CourseServiceImpl;
 import com.example.ElearningAndExamJLPT.service.impl.LessonServiceImpl;
@@ -101,6 +102,19 @@ public class LessonController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     new ResponseObject("failed", "Cannot find lesson with id = " + id, "")
+            );
+        }
+    }
+    @GetMapping("/course/{id}")
+    public ResponseEntity<?> getAllByCourse(@PathVariable("id") Long id){
+        Optional<Course> foundCourse = courseService.getById(id);
+        if (foundCourse.isPresent()) {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "Query successfully", lessonService.getAllByCourse(foundCourse.get()))
+            );
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    null
             );
         }
     }

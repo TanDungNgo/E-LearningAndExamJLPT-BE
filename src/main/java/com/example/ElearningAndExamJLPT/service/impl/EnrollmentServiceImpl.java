@@ -17,10 +17,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -141,6 +140,20 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
             isFirstLesson = false;
         }
         return enrollmentRepository.save(enrollment);
+    }
+
+    @Override
+    public Map<String, List<Enrollment>> getMonthlyStudentCount() {
+        List<Enrollment> enrollments = enrollmentRepository.findAll();
+        Map<String, List<Enrollment>> enrollmentsByMonth = new HashMap<>();
+
+        for (Enrollment enrollment : enrollments) {
+            String month = enrollment.getRegistrationDate().getYear() + "-" + enrollment.getRegistrationDate().getMonthValue();
+            List<Enrollment> enrollmentsOfMonth = enrollmentsByMonth.getOrDefault(month, new ArrayList<>());
+            enrollmentsOfMonth.add(enrollment);
+            enrollmentsByMonth.put(month, enrollmentsOfMonth);
+        }
+        return enrollmentsByMonth;
     }
 
 }

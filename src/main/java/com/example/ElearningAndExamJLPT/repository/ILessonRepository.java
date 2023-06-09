@@ -1,5 +1,7 @@
 package com.example.ElearningAndExamJLPT.repository;
 
+import com.example.ElearningAndExamJLPT.dto.response.ResponseLesson;
+import com.example.ElearningAndExamJLPT.entity.Course;
 import com.example.ElearningAndExamJLPT.entity.Lesson;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,4 +19,5 @@ public interface ILessonRepository extends JpaRepository<Lesson, Long> {
     List<Lesson> searchLessons(String query);
     List<Lesson> findAllByDeletedFalse();
     Optional<Lesson> findLessonByDeletedFalseAndId(Long id);
+    List<Lesson> findAllByDeletedFalseAndCourse(Course course);
 }

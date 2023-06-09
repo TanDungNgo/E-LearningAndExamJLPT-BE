@@ -1,9 +1,11 @@
 package com.example.ElearningAndExamJLPT.controller;
 
 import com.example.ElearningAndExamJLPT.dto.response.ResponseObject;
+import com.example.ElearningAndExamJLPT.entity.Enrollment;
 import com.example.ElearningAndExamJLPT.entity.Level;
 import com.example.ElearningAndExamJLPT.entity.User.User;
 import com.example.ElearningAndExamJLPT.service.impl.CourseServiceImpl;
+import com.example.ElearningAndExamJLPT.service.impl.EnrollmentServiceImpl;
 import com.example.ElearningAndExamJLPT.service.impl.LessonServiceImpl;
 import com.example.ElearningAndExamJLPT.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +28,8 @@ public class StatisticsController {
     private UserServiceImpl userService;
     @Autowired
     private LessonServiceImpl lessonService;
+    @Autowired
+    private EnrollmentServiceImpl enrollmentService;
 
     @GetMapping("/dashboard")
     public ResponseEntity<ResponseObject> getStatistics() {
@@ -72,6 +77,17 @@ public class StatisticsController {
         List<Map<String, Object>> teachers = userService.getTopTeachers();
         return ResponseEntity.ok().body(
                 new ResponseObject("ok", "Get teachers successfully", teachers)
+        );
+    }
+    @GetMapping("/monthly-count")
+    public ResponseEntity<?> getMonthlyStudentCount() {
+        Map<String, List<Enrollment>> result = enrollmentService.getMonthlyStudentCount();
+        Map<String, Integer> countMap = new HashMap<>();
+        for (Map.Entry<String, List<Enrollment>> entry : result.entrySet()) {
+            countMap.put(entry.getKey(), entry.getValue().size());
+        }
+        return ResponseEntity.ok(
+                new ResponseObject("ok", "Get monthly student count successfully", countMap)
         );
     }
 }

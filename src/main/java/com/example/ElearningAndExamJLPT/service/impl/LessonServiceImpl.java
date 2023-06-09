@@ -1,6 +1,7 @@
 package com.example.ElearningAndExamJLPT.service.impl;
 
 import com.example.ElearningAndExamJLPT.dto.response.ResponseLesson;
+import com.example.ElearningAndExamJLPT.entity.Course;
 import com.example.ElearningAndExamJLPT.entity.Lesson;
 import com.example.ElearningAndExamJLPT.entity.User.User;
 import com.example.ElearningAndExamJLPT.entity.UserLesson;
@@ -15,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +30,7 @@ public class LessonServiceImpl implements ILessonService {
     private IUserRepository userRepository;
     @Autowired
     private IUserLessonRepository userLessonRepository;
+
     @Override
     public List<Lesson> getAll() {
         return lessonRepository.findAllByDeletedFalse();
@@ -58,8 +61,8 @@ public class LessonServiceImpl implements ILessonService {
     public Lesson markVideoAsWatched(Lesson lesson) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get();
-        UserLesson userLesson = userLessonRepository.findByLessonAndUser(lesson,user);
-        if(userLesson != null){
+        UserLesson userLesson = userLessonRepository.findByLessonAndUser(lesson, user);
+        if (userLesson != null) {
             userLesson.setCompleted(true);
             userLessonRepository.save(userLesson);
             return lesson;
@@ -71,19 +74,33 @@ public class LessonServiceImpl implements ILessonService {
     public ResponseLesson getLesson(Lesson lesson) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get();
-        UserLesson userLesson = userLessonRepository.findByLessonAndUser(lesson,user);
+        UserLesson userLesson = userLessonRepository.findByLessonAndUser(lesson, user);
         ResponseLesson responseLesson = new ResponseLesson();
         responseLesson.setId(lesson.getId());
         responseLesson.setName(lesson.getName());
         responseLesson.setDescription(lesson.getDescription());
         responseLesson.setRate(lesson.getRate());
         responseLesson.setCompleted(userLesson != null && userLesson.isCompleted());
-        if(userLesson != null){
-            responseLesson.setUrlVideo(userLesson.isCompleted() ? lesson.getUrlVideo(): null);
+        if (userLesson != null) {
+            responseLesson.setUrlVideo(userLesson.isCompleted() ? lesson.getUrlVideo() : null);
         }
         return responseLesson;
     }
 
+    @Override
+    public List<ResponseLesson> getAllByCourse(Course course) {
+        List<Lesson> lessons = lessonRepository.findAllByDeletedFalseAndCourse(course);
+        List<ResponseLesson> responseLessons = new ArrayList<>();
+        for (Lesson lesson : lessons) {
+            ResponseLesson responseLesson = new ResponseLesson();
+            responseLesson.setId(lesson.getId());
+            responseLesson.setName(lesson.getName());
+            responseLesson.setDescription(lesson.getDescription());
+            responseLesson.setUrlVideo(lesson.getUrlVideo());
+            responseLessons.add(responseLesson);
+        }
+        return responseLessons;
+    }
     @Override
     public Lesson update(Lesson entity) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
