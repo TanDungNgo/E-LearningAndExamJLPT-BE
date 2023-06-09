@@ -39,17 +39,32 @@ public class ExamServiceImpl implements IExamService {
 
     @Override
     public Exam save(Exam entity) {
-        return null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        LocalDateTime now = LocalDateTime.now();
+        entity.setCreatedBy(userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get());
+        entity.setCreatedDate(now);
+        entity.setModifiedBy(userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get());
+        entity.setModifiedDate(now);
+        return examRepository.save(entity);
     }
 
     @Override
     public Exam update(Exam entity) {
-        return null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        LocalDateTime now = LocalDateTime.now();
+        entity.setModifiedBy(userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get());
+        entity.setModifiedDate(now);
+        return examRepository.save(entity);
     }
 
     @Override
     public void deleteById(Long id) {
-
+        Optional<Exam> exam = examRepository.findExamByDeletedFalseAndId(id);
+        if(exam.isPresent())
+        {
+            exam.get().setDeleted(true);
+            examRepository.save(exam.get());
+        }
     }
 
     @Override
