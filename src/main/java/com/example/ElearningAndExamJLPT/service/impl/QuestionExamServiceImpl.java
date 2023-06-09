@@ -1,6 +1,8 @@
 package com.example.ElearningAndExamJLPT.service.impl;
 
 import com.example.ElearningAndExamJLPT.dto.QuestionDTO;
+import com.example.ElearningAndExamJLPT.dto.response.ResponseQuestion;
+import com.example.ElearningAndExamJLPT.entity.Exam;
 import com.example.ElearningAndExamJLPT.entity.LanguageKnowledgeQuestion;
 import com.example.ElearningAndExamJLPT.entity.ListeningQuestion;
 import com.example.ElearningAndExamJLPT.entity.ReadingQuestion;
@@ -12,6 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class QuestionExamServiceImpl implements IQuestionExamService {
@@ -85,5 +89,59 @@ public class QuestionExamServiceImpl implements IQuestionExamService {
             return listeningQuestionRepository.save(listeningQuestion);
         }
         return null;
+    }
+
+    @Override
+    public List<ResponseQuestion> getAllQuestionExam(Exam exam) {
+        List<ResponseQuestion> responseQuestions = new ArrayList<>();
+        List<LanguageKnowledgeQuestion> languageKnowledgeQuestions = languageKnowledgeQuestionRepository.findByDeletedFalseAndExam(exam);
+        List<ReadingQuestion> readingQuestions = readingQuestionRepository.findByDeletedFalseAndExam(exam);
+        List<ListeningQuestion> listeningQuestions = listeningQuestionRepository.findByDeletedFalseAndExam(exam);
+        for(LanguageKnowledgeQuestion languageKnowledgeQuestion : languageKnowledgeQuestions)
+        {
+            ResponseQuestion responseQuestion = new ResponseQuestion();
+            responseQuestion.setId(languageKnowledgeQuestion.getId());
+            responseQuestion.setTitle(languageKnowledgeQuestion.getTitle());
+            responseQuestion.setText(languageKnowledgeQuestion.getText());
+            responseQuestion.setCorrectAnswer(languageKnowledgeQuestion.getCorrectAnswer());
+            responseQuestion.setExplanation(languageKnowledgeQuestion.getExplanation());
+            responseQuestion.setOption1(languageKnowledgeQuestion.getOption1());
+            responseQuestion.setOption2(languageKnowledgeQuestion.getOption2());
+            responseQuestion.setOption3(languageKnowledgeQuestion.getOption3());
+            responseQuestion.setOption4(languageKnowledgeQuestion.getOption4());
+            responseQuestions.add(responseQuestion);
+        }
+        for (ReadingQuestion readingQuestion : readingQuestions)
+        {
+            ResponseQuestion responseQuestion = new ResponseQuestion();
+            responseQuestion.setId(readingQuestion.getId());
+            responseQuestion.setTitle(readingQuestion.getTitle());
+            responseQuestion.setText(readingQuestion.getText());
+            responseQuestion.setCorrectAnswer(readingQuestion.getCorrectAnswer());
+            responseQuestion.setExplanation(readingQuestion.getExplanation());
+            responseQuestion.setOption1(readingQuestion.getOption1());
+            responseQuestion.setOption2(readingQuestion.getOption2());
+            responseQuestion.setOption3(readingQuestion.getOption3());
+            responseQuestion.setOption4(readingQuestion.getOption4());
+            responseQuestion.setImage(readingQuestion.getImage());
+            responseQuestions.add(responseQuestion);
+        }
+        for (ListeningQuestion listeningQuestion : listeningQuestions)
+        {
+            ResponseQuestion responseQuestion = new ResponseQuestion();
+            responseQuestion.setId(listeningQuestion.getId());
+            responseQuestion.setTitle(listeningQuestion.getTitle());
+            responseQuestion.setText(listeningQuestion.getText());
+            responseQuestion.setCorrectAnswer(listeningQuestion.getCorrectAnswer());
+            responseQuestion.setExplanation(listeningQuestion.getExplanation());
+            responseQuestion.setOption1(listeningQuestion.getOption1());
+            responseQuestion.setOption2(listeningQuestion.getOption2());
+            responseQuestion.setOption3(listeningQuestion.getOption3());
+            responseQuestion.setOption4(listeningQuestion.getOption4());
+            responseQuestion.setImage(listeningQuestion.getImage());
+            responseQuestion.setAudioFile(listeningQuestion.getAudioFile());
+            responseQuestions.add(responseQuestion);
+        }
+        return responseQuestions;
     }
 }
