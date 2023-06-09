@@ -3,6 +3,7 @@ package com.example.ElearningAndExamJLPT.service.impl;
 import com.example.ElearningAndExamJLPT.dto.response.ResponseExam;
 import com.example.ElearningAndExamJLPT.dto.response.ResponseExamResult;
 import com.example.ElearningAndExamJLPT.dto.response.ResponseQuestion;
+import com.example.ElearningAndExamJLPT.dto.response.ResponseUserExam;
 import com.example.ElearningAndExamJLPT.entity.*;
 import com.example.ElearningAndExamJLPT.entity.User.User;
 import com.example.ElearningAndExamJLPT.repository.IExamRepository;
@@ -15,10 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ExamServiceImpl implements IExamService {
@@ -390,6 +388,27 @@ public class ExamServiceImpl implements IExamService {
             return responseExamResult;
         }
         return null;
+    }
+
+    @Override
+    public List<ResponseUserExam> getTop3ExamResult() {
+        List<ExamResult> examResults = examResultRepository.findAll();
+        examResults.sort(Comparator.comparing(ExamResult::getScore).reversed());
+        List<ResponseUserExam> top3ExamResults = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            ResponseUserExam responseUserExam = new ResponseUserExam();
+            responseUserExam.setId(examResults.get(i).getId());
+            responseUserExam.setScore(examResults.get(i).getScore());
+            responseUserExam.setExamName(examResults.get(i).getExamId().getName());
+            responseUserExam.setStudentName(examResults.get(i).getStudentId().getFirstname() + " " + examResults.get(i).getStudentId().getLastname());
+            responseUserExam.setAvatar(examResults.get(i).getStudentId().getAvatar());
+            responseUserExam.setStatus(examResults.get(i).getStatus());
+            responseUserExam.setExamDate(examResults.get(i).getExamDate());
+            top3ExamResults.add(responseUserExam);
+        }
+
+
+        return top3ExamResults;
     }
 
 }

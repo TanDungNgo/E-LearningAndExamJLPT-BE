@@ -2,6 +2,7 @@ package com.example.ElearningAndExamJLPT.service;
 
 import com.example.ElearningAndExamJLPT.dto.response.ResponseExam;
 import com.example.ElearningAndExamJLPT.dto.response.ResponseExamResult;
+import com.example.ElearningAndExamJLPT.dto.response.ResponseUserExam;
 import com.example.ElearningAndExamJLPT.entity.Exam;
 import com.example.ElearningAndExamJLPT.entity.ExamResult;
 import com.example.ElearningAndExamJLPT.entity.User.User;
@@ -15,4 +16,5 @@ public interface IExamService extends IService<Exam,Long>{
     List<ExamResult> getAllExamResult();
     List<ExamResult> getAllExamResultByStudentId();
     ResponseExamResult getExamResultById(Long id);
+    List<ResponseUserExam> getTop3ExamResult();
 }
