@@ -29,12 +29,12 @@ public class ExamServiceImpl implements IExamService {
 
     @Override
     public List<Exam> getAll() {
-        return examRepository.findAll();
+        return examRepository.findAllByDeletedFalse();
     }
 
     @Override
     public Optional<Exam> getById(Long id) {
-        return examRepository.findById(id);
+        return examRepository.findExamByDeletedFalseAndId(id);
     }
 
     @Override

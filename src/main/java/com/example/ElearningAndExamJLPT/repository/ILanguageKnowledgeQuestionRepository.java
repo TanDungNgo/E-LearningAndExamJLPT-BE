@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ILanguageKnowledgeQuestion extends JpaRepository<LanguageKnowledgeQuestion, Long> {
+public interface ILanguageKnowledgeQuestionRepository extends JpaRepository<LanguageKnowledgeQuestion, Long> {
 }
