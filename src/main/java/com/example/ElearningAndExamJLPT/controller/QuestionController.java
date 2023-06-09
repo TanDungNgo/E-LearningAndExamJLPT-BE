@@ -3,6 +3,7 @@ package com.example.ElearningAndExamJLPT.controller;
 import com.example.ElearningAndExamJLPT.dto.QuestionDTO;
 import com.example.ElearningAndExamJLPT.dto.response.ResponseObject;
 import com.example.ElearningAndExamJLPT.entity.Exam;
+import com.example.ElearningAndExamJLPT.entity.LanguageKnowledgeQuestion;
 import com.example.ElearningAndExamJLPT.service.impl.ExamServiceImpl;
 import com.example.ElearningAndExamJLPT.service.impl.QuestionExamServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,5 +38,61 @@ public class QuestionController {
                 new ResponseObject("ok", "Query question successfully", questionExamService.getAllQuestionExam(foundExam.get()))
         );
     }
-
+    @GetMapping("/languageKnowledge/{id}")
+    public ResponseEntity<ResponseObject> getAllQuestionLanguageKnowledge(@PathVariable("id") Long id) {
+        return ResponseEntity.ok().body(
+                new ResponseObject("ok", "Query question successfully",questionExamService.getKnowledgeQuestionById(id))
+        );
+    }
+    @PutMapping(value = "/languageKnowledge/{id}",consumes = "application/json")
+    public ResponseEntity<ResponseObject> updateQuestionLanguageKnowledge(@PathVariable("id") Long id, @RequestBody QuestionDTO questionDTO) {
+        return ResponseEntity.ok().body(
+                new ResponseObject("ok", "Update question successfully",null)
+        );
+    }
+    @DeleteMapping("/languageKnowledge/{id}")
+    public ResponseEntity<ResponseObject> deleteQuestionLanguageKnowledge(@PathVariable("id") Long id) {
+        questionExamService.deleteKnowledgeQuestionById(id);
+        return ResponseEntity.ok().body(
+                new ResponseObject("ok", "Delete question successfully",null)
+        );
+    }
+    @GetMapping("/listening/{id}")
+    public ResponseEntity<ResponseObject> getAllQuestionListening(@PathVariable("id") Long id) {
+        return ResponseEntity.ok().body(
+                new ResponseObject("ok", "Query question successfully",questionExamService.getListeningQuestionById(id))
+        );
+    }
+    @PutMapping(value = "/listening/{id}",consumes = "application/json")
+    public ResponseEntity<ResponseObject> updateQuestionListening(@PathVariable("id") Long id, @RequestBody QuestionDTO questionDTO) {
+        return ResponseEntity.ok().body(
+                new ResponseObject("ok", "Update question successfully",null)
+        );
+    }
+    @DeleteMapping("/listening/{id}")
+    public ResponseEntity<ResponseObject> deleteQuestionListening(@PathVariable("id") Long id) {
+        questionExamService.deleteListeningQuestionById(id);
+        return ResponseEntity.ok().body(
+                new ResponseObject("ok", "Delete question successfully",null)
+        );
+    }
+    @GetMapping("/reading/{id}")
+    public ResponseEntity<ResponseObject> getAllQuestionReading(@PathVariable("id") Long id) {
+        return ResponseEntity.ok().body(
+                new ResponseObject("ok", "Query question successfully",questionExamService.getReadingQuestionById(id))
+        );
+    }
+    @PutMapping(value = "/reading/{id}",consumes = "application/json")
+    public ResponseEntity<ResponseObject> updateQuestionReading(@PathVariable("id") Long id, @RequestBody QuestionDTO questionDTO) {
+        return ResponseEntity.ok().body(
+                new ResponseObject("ok", "Update question successfully",null)
+        );
+    }
+    @DeleteMapping("/reading/{id}")
+    public ResponseEntity<ResponseObject> deleteQuestionReading(@PathVariable("id") Long id) {
+        questionExamService.deleteReadingQuestionById(id);
+        return ResponseEntity.ok().body(
+                new ResponseObject("ok", "Delete question successfully",null)
+        );
+    }
 }
