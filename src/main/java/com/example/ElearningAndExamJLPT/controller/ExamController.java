@@ -4,6 +4,7 @@ package com.example.ElearningAndExamJLPT.controller;
 import com.example.ElearningAndExamJLPT.dto.response.ResponseExamResult;
 import com.example.ElearningAndExamJLPT.dto.response.ResponseObject;
 import com.example.ElearningAndExamJLPT.dto.response.ResponseQuestion;
+import com.example.ElearningAndExamJLPT.dto.response.ResponseUserExam;
 import com.example.ElearningAndExamJLPT.entity.*;
 import com.example.ElearningAndExamJLPT.service.impl.ExamServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,6 +125,13 @@ public class ExamController {
         examService.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("ok", "Delete exam successfully", "")
+        );
+    }
+    @GetMapping("/top-3/score")
+    public ResponseEntity<ResponseObject> getTop3ExamResult(){
+        List<ResponseUserExam> examResults = examService.getTop3ExamResult();
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Query exam result successfully", examResults)
         );
     }
 }

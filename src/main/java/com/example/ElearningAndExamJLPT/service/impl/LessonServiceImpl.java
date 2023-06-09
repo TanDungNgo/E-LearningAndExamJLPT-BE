@@ -3,6 +3,8 @@ package com.example.ElearningAndExamJLPT.service.impl;
 import com.example.ElearningAndExamJLPT.dto.response.ResponseLesson;
 import com.example.ElearningAndExamJLPT.entity.Course;
 import com.example.ElearningAndExamJLPT.entity.Lesson;
+import com.example.ElearningAndExamJLPT.entity.User.Role;
+import com.example.ElearningAndExamJLPT.entity.User.RoleName;
 import com.example.ElearningAndExamJLPT.entity.User.User;
 import com.example.ElearningAndExamJLPT.entity.UserLesson;
 import com.example.ElearningAndExamJLPT.repository.ICourseRepository;
@@ -74,15 +76,25 @@ public class LessonServiceImpl implements ILessonService {
     public ResponseLesson getLesson(Lesson lesson) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get();
-        UserLesson userLesson = userLessonRepository.findByLessonAndUser(lesson, user);
         ResponseLesson responseLesson = new ResponseLesson();
-        responseLesson.setId(lesson.getId());
-        responseLesson.setName(lesson.getName());
-        responseLesson.setDescription(lesson.getDescription());
-        responseLesson.setRate(lesson.getRate());
-        responseLesson.setCompleted(userLesson != null && userLesson.isCompleted());
-        if (userLesson != null) {
-            responseLesson.setUrlVideo(userLesson.isCompleted() ? lesson.getUrlVideo() : null);
+        if(hasRole(user, RoleName.TEACHER) || hasRole(user, RoleName.ADMIN)) {
+            responseLesson.setId(lesson.getId());
+            responseLesson.setName(lesson.getName());
+            responseLesson.setDescription(lesson.getDescription());
+            responseLesson.setRate(lesson.getRate());
+            responseLesson.setCompleted(true);
+            responseLesson.setUrlVideo(lesson.getUrlVideo());
+        }
+        else {
+            UserLesson userLesson = userLessonRepository.findByLessonAndUser(lesson, user);
+            responseLesson.setId(lesson.getId());
+            responseLesson.setName(lesson.getName());
+            responseLesson.setDescription(lesson.getDescription());
+            responseLesson.setRate(lesson.getRate());
+            responseLesson.setCompleted(userLesson != null && userLesson.isCompleted());
+            if (userLesson != null) {
+                responseLesson.setUrlVideo(userLesson.isCompleted() ? lesson.getUrlVideo() : null);
+            }
         }
         return responseLesson;
     }
@@ -101,6 +113,7 @@ public class LessonServiceImpl implements ILessonService {
         }
         return responseLessons;
     }
+
     @Override
     public Lesson update(Lesson entity) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -116,5 +129,14 @@ public class LessonServiceImpl implements ILessonService {
         lesson.setDeleted(true);
         lessonRepository.save(lesson);
 //        lessonRepository.deleteById(id);
+    }
+
+    public boolean hasRole(User user, RoleName roleName) {
+        for (Role role : user.getRoles()) {
+            if (role.getName().equals(roleName)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
