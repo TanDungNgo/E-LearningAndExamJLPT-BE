@@ -1,6 +1,7 @@
 package com.example.ElearningAndExamJLPT.controller;
 
 
+import com.example.ElearningAndExamJLPT.dto.ExamDTO;
 import com.example.ElearningAndExamJLPT.dto.response.ResponseExamResult;
 import com.example.ElearningAndExamJLPT.dto.response.ResponseObject;
 import com.example.ElearningAndExamJLPT.dto.response.ResponseQuestion;
@@ -96,22 +97,30 @@ public class ExamController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ResponseObject> createExam(@RequestBody Exam exam) {
+    public ResponseEntity<ResponseObject> createExam(@RequestBody ExamDTO examDTO) {
+        Exam exam = new Exam();
+        exam.setName(examDTO.getName());
+        exam.setLevel(examDTO.getLevel());
+        exam.setPrice(examDTO.getPrice());
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new ResponseObject("ok", "Create exam successfully", examService.save(exam))
         );
     }
     @PutMapping("/update/{id}")
-    public ResponseEntity<ResponseObject> updateExam(@RequestBody Exam exam, @PathVariable("id") Long id) {
+    public ResponseEntity<ResponseObject> updateExam(@RequestBody ExamDTO newExam, @PathVariable("id") Long id) {
         Optional<Exam> foundExam = examService.getById(id);
         if (!foundExam.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     new ResponseObject("failed", "Cannot find exam with id = " + id, "")
             );
         }
+        Exam exam = foundExam.get();
         exam.setId(id);
+        exam.setName(newExam.getName());
+        exam.setLevel(newExam.getLevel());
+        exam.setPrice(newExam.getPrice());
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("ok", "Update exam successfully", examService.save(exam))
+                new ResponseObject("ok", "Update exam successfully", examService.update(exam))
         );
     }
     @DeleteMapping("/delete/{id}")

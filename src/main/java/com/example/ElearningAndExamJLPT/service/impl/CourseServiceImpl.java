@@ -3,6 +3,8 @@ package com.example.ElearningAndExamJLPT.service.impl;
 import com.example.ElearningAndExamJLPT.dto.response.ResponseCourse;
 import com.example.ElearningAndExamJLPT.dto.response.ResponseLesson;
 import com.example.ElearningAndExamJLPT.entity.*;
+import com.example.ElearningAndExamJLPT.entity.User.Role;
+import com.example.ElearningAndExamJLPT.entity.User.RoleName;
 import com.example.ElearningAndExamJLPT.entity.User.User;
 import com.example.ElearningAndExamJLPT.repository.*;
 import com.example.ElearningAndExamJLPT.service.ICourseService;
@@ -228,22 +230,36 @@ public class CourseServiceImpl implements ICourseService {
         try {
             if (authentication != null && authentication.isAuthenticated()) {
                 User currentUser = userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get();
-                if (enrollmentRepository.existsByStudentIdAndCourseId(currentUser, course)) {
+                if (course.getCreatedBy().getId().equals(currentUser.getId())) {
                     List<ResponseLesson> lessons = new ArrayList<>();
                     for (Lesson lesson : course.getLessons()) {
                         ResponseLesson responseLesson = new ResponseLesson();
                         responseLesson.setId(lesson.getId());
                         responseLesson.setName(lesson.getName());
                         responseLesson.setRate(lesson.getRate());
-                        responseLesson.setCompleted(userLessonRepository.findByLessonAndUser(lesson, currentUser).isCompleted());
-                        if (userLessonRepository.findByLessonAndUser(lesson, currentUser).isCompleted() == true) {
-                            responseLesson.setUrlVideo(lesson.getUrlVideo());
-                        }
+                        responseLesson.setCompleted(true);
+                        responseLesson.setUrlVideo(lesson.getUrlVideo());
                         lessons.add(responseLesson);
                     }
                     responseCourse.setLessons(lessons);
                 } else {
-                    responseCourse.setLessons(Collections.emptyList());
+                    if (enrollmentRepository.existsByStudentIdAndCourseId(currentUser, course)) {
+                        List<ResponseLesson> lessons = new ArrayList<>();
+                        for (Lesson lesson : course.getLessons()) {
+                            ResponseLesson responseLesson = new ResponseLesson();
+                            responseLesson.setId(lesson.getId());
+                            responseLesson.setName(lesson.getName());
+                            responseLesson.setRate(lesson.getRate());
+                            responseLesson.setCompleted(userLessonRepository.findByLessonAndUser(lesson, currentUser).isCompleted());
+                            if (userLessonRepository.findByLessonAndUser(lesson, currentUser).isCompleted() == true) {
+                                responseLesson.setUrlVideo(lesson.getUrlVideo());
+                            }
+                            lessons.add(responseLesson);
+                        }
+                        responseCourse.setLessons(lessons);
+                    } else {
+                        responseCourse.setLessons(Collections.emptyList());
+                    }
                 }
             }
         } catch (Exception e) {
@@ -454,5 +470,14 @@ public class CourseServiceImpl implements ICourseService {
         // ...
 
         return Collections.emptyList(); // Return the user's learning history
+    }
+
+    public boolean hasRole(User user, RoleName roleName) {
+        for (Role role : user.getRoles()) {
+            if (role.getName().equals(roleName)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
