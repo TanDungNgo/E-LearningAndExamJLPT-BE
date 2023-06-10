@@ -38,12 +38,12 @@ public class QuestionController {
                 new ResponseObject("ok", "Query question successfully", questionExamService.getAllQuestionExam(foundExam.get()))
         );
     }
-    @PutMapping(value = "/languageKnowledge/{id}",consumes = "application/json")
-    public ResponseEntity<ResponseObject> updateQuestionLanguageKnowledge(@PathVariable("id") Long id, @RequestBody QuestionDTO questionDTO) {
-        return ResponseEntity.ok().body(
-                new ResponseObject("ok", "Update question successfully",null)
-        );
-    }
+//    @PutMapping(value = "/languageKnowledge/{id}",consumes = "application/json")
+//    public ResponseEntity<ResponseObject> updateQuestionLanguageKnowledge(@PathVariable("id") Long id, @RequestBody QuestionDTO questionDTO) {
+//        return ResponseEntity.ok().body(
+//                new ResponseObject("ok", "Update question successfully",null)
+//        );
+//    }
     @DeleteMapping("/languageKnowledge/{id}")
     public ResponseEntity<ResponseObject> deleteQuestionLanguageKnowledge(@PathVariable("id") Long id) {
         return ResponseEntity.ok().body(
