@@ -1,16 +1,15 @@
 package com.example.ElearningAndExamJLPT.service.impl;
 
+import com.example.ElearningAndExamJLPT.dto.NoteDTO;
 import com.example.ElearningAndExamJLPT.dto.response.ResponseLesson;
 import com.example.ElearningAndExamJLPT.entity.Course;
 import com.example.ElearningAndExamJLPT.entity.Lesson;
+import com.example.ElearningAndExamJLPT.entity.Note;
 import com.example.ElearningAndExamJLPT.entity.User.Role;
 import com.example.ElearningAndExamJLPT.entity.User.RoleName;
 import com.example.ElearningAndExamJLPT.entity.User.User;
 import com.example.ElearningAndExamJLPT.entity.UserLesson;
-import com.example.ElearningAndExamJLPT.repository.ICourseRepository;
-import com.example.ElearningAndExamJLPT.repository.ILessonRepository;
-import com.example.ElearningAndExamJLPT.repository.IUserLessonRepository;
-import com.example.ElearningAndExamJLPT.repository.IUserRepository;
+import com.example.ElearningAndExamJLPT.repository.*;
 import com.example.ElearningAndExamJLPT.service.ILessonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -32,6 +31,8 @@ public class LessonServiceImpl implements ILessonService {
     private IUserRepository userRepository;
     @Autowired
     private IUserLessonRepository userLessonRepository;
+    @Autowired
+    private INoteRepository noteRepository;
 
     @Override
     public List<Lesson> getAll() {
@@ -112,6 +113,37 @@ public class LessonServiceImpl implements ILessonService {
             responseLessons.add(responseLesson);
         }
         return responseLessons;
+    }
+
+    @Override
+    public Note addNoteToLesson(Lesson lesson, NoteDTO note) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get();
+        Note newNote = new Note();
+        newNote.setLesson(lesson);
+        newNote.setContent(note.getContent());
+        newNote.setTime(note.getTime());
+        newNote.setUser(user);
+        return noteRepository.save(newNote);
+    }
+
+    @Override
+    public List<Note> getAllNotesByLesson(Lesson lesson) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get();
+        return noteRepository.findAllByDeletedFalseAndLessonAndUser(lesson, user);
+    }
+
+    @Override
+    public Note updateNoteInLesson(Lesson lesson, NoteDTO note) {
+        return null;
+    }
+
+    @Override
+    public void deleteNoteInLesson(Long id) {
+        Note note = noteRepository.findNoteByDeletedFalseAndId(id).get();
+        note.setDeleted(true);
+        noteRepository.save(note);
     }
 
     @Override
