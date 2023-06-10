@@ -110,19 +110,19 @@ public class LessonController {
         }
     }
 
-//    @GetMapping("/course/{id}")
-//    public ResponseEntity<?> getAllByCourse(@PathVariable("id") Long id) {
-//        Optional<Course> foundCourse = courseService.getById(id);
-//        if (foundCourse.isPresent()) {
-//            return ResponseEntity.status(HttpStatus.OK).body(
-//                    new ResponseObject("ok", "Query successfully", lessonService.getAllByCourse(foundCourse.get()))
-//            );
-//        } else {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-//                    null
-//            );
-//        }
-//    }
+    @GetMapping("/course/{id}")
+    public ResponseEntity<?> getAllByCourse(@PathVariable("id") Long id) {
+        Optional<Course> foundCourse = courseService.getById(id);
+        if (foundCourse.isPresent()) {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "Query successfully", lessonService.getAllByCourse(foundCourse.get()))
+            );
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    null
+            );
+        }
+    }
 
     @PostMapping("/note/{id}")
     public ResponseEntity<?> addNoteToLesson(@PathVariable("id") Long id, @RequestBody NoteDTO note) {
@@ -150,31 +150,31 @@ public class LessonController {
             );
         }
     }
-//    @DeleteMapping("/note/{id}")
-//    public ResponseEntity<?> deleteNoteFromLesson(@PathVariable("id") Long id) {
-//        Optional<Lesson> foundLesson = lessonService.getById(id);
-//        if (foundLesson.isPresent()) {
-//            lessonService.deleteNoteInLesson(id);
-//            return ResponseEntity.status(HttpStatus.OK).body(
-//                    new ResponseObject("ok", "Delete note successfully", "")
-//            );
-//        } else {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-//                    new ResponseObject("failed", "Cannot find lesson with id = " + id, "")
-//            );
-//        }
-//    }
-//    @PutMapping("/note/{id}")
-//    public ResponseEntity<?> updateNoteInLesson(@PathVariable("id") Long id, @RequestBody NoteDTO note) {
-//        Optional<Lesson> foundLesson = lessonService.getById(id);
-//        if (foundLesson.isPresent()) {
-//            return ResponseEntity.status(HttpStatus.OK).body(
-//                    new ResponseObject("ok", "Update note successfully", lessonService.updateNoteInLesson(foundLesson.get(), note))
-//            );
-//        } else {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-//                    new ResponseObject("failed", "Cannot find lesson with id = " + id, "")
-//            );
-//        }
-//    }
+    @DeleteMapping("/note/{id}")
+    public ResponseEntity<?> deleteNoteFromLesson(@PathVariable("id") Long id) {
+        Optional<Lesson> foundLesson = lessonService.getById(id);
+        if (foundLesson.isPresent()) {
+            lessonService.deleteNoteInLesson(id);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "Delete note successfully", "")
+            );
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject("failed", "Cannot find lesson with id = " + id, "")
+            );
+        }
+    }
+    @PutMapping("/note/{id}")
+    public ResponseEntity<?> updateNoteInLesson(@PathVariable("id") Long id, @RequestBody NoteDTO note) {
+        Optional<Lesson> foundLesson = lessonService.getById(id);
+        if (foundLesson.isPresent()) {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "Update note successfully", lessonService.updateNoteInLesson(foundLesson.get(), note))
+            );
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject("failed", "Cannot find lesson with id = " + id, "")
+            );
+        }
+    }
 }
