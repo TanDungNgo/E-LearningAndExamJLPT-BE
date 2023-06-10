@@ -23,12 +23,6 @@ public class QuestionExamServiceImpl implements IQuestionExamService {
     @Autowired
     private IExamRepository examRepository;
     @Autowired
-    private ILanguageKnowledgeQuestionRepository languageKnowledgeQuestionRepository;
-    @Autowired
-    private IReadingQuestionRepository readingQuestionRepository;
-    @Autowired
-    private IListeningQuestionRepository listeningQuestionRepository;
-    @Autowired
     private IUserRepository userRepository;
 
     @Override
@@ -50,7 +44,8 @@ public class QuestionExamServiceImpl implements IQuestionExamService {
             languageKnowledgeQuestion.setOption4(questionDTO.getAnswers().get(3) == null ? null : questionDTO.getAnswers().get(3));
             languageKnowledgeQuestion.setCreatedDate(now);
             languageKnowledgeQuestion.setCreatedBy(userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get());
-            return languageKnowledgeQuestionRepository.save(languageKnowledgeQuestion);
+//            return languageKnowledgeQuestionRepository.save(languageKnowledgeQuestion);
+            return languageKnowledgeQuestion;
         }
         else if(questionDTO.getType() == 1)
         {
@@ -68,7 +63,8 @@ public class QuestionExamServiceImpl implements IQuestionExamService {
             readingQuestion.setImage(questionDTO.getImage());
             readingQuestion.setCreatedDate(now);
             readingQuestion.setCreatedBy(userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get());
-            return readingQuestionRepository.save(readingQuestion);
+//            return readingQuestionRepository.save(readingQuestion);
+            return readingQuestion;
         }
         else if(questionDTO.getType() == 2)
         {
@@ -87,7 +83,8 @@ public class QuestionExamServiceImpl implements IQuestionExamService {
             listeningQuestion.setImage(questionDTO.getImage());
             listeningQuestion.setCreatedDate(now);
             listeningQuestion.setCreatedBy(userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get());
-            return listeningQuestionRepository.save(listeningQuestion);
+//            return listeningQuestionRepository.save(listeningQuestion);
+            return listeningQuestion;
         }
         return null;
     }
@@ -95,144 +92,144 @@ public class QuestionExamServiceImpl implements IQuestionExamService {
     @Override
     public List<ResponseQuestion> getAllQuestionExam(Exam exam) {
         List<ResponseQuestion> responseQuestions = new ArrayList<>();
-        List<LanguageKnowledgeQuestion> languageKnowledgeQuestions = languageKnowledgeQuestionRepository.findByDeletedFalseAndExam(exam);
-        List<ReadingQuestion> readingQuestions = readingQuestionRepository.findByDeletedFalseAndExam(exam);
-        List<ListeningQuestion> listeningQuestions = listeningQuestionRepository.findByDeletedFalseAndExam(exam);
-        for(LanguageKnowledgeQuestion languageKnowledgeQuestion : languageKnowledgeQuestions)
-        {
-            ResponseQuestion responseQuestion = new ResponseQuestion();
-            responseQuestion.setId(languageKnowledgeQuestion.getId());
-            responseQuestion.setTitle(languageKnowledgeQuestion.getTitle());
-            responseQuestion.setText(languageKnowledgeQuestion.getText());
-            responseQuestion.setCorrectAnswer(languageKnowledgeQuestion.getCorrectAnswer());
-            responseQuestion.setExplanation(languageKnowledgeQuestion.getExplanation());
-            responseQuestion.setOption1(languageKnowledgeQuestion.getOption1());
-            responseQuestion.setOption2(languageKnowledgeQuestion.getOption2());
-            responseQuestion.setOption3(languageKnowledgeQuestion.getOption3());
-            responseQuestion.setOption4(languageKnowledgeQuestion.getOption4());
-            responseQuestions.add(responseQuestion);
-        }
-        for (ReadingQuestion readingQuestion : readingQuestions)
-        {
-            ResponseQuestion responseQuestion = new ResponseQuestion();
-            responseQuestion.setId(readingQuestion.getId());
-            responseQuestion.setTitle(readingQuestion.getTitle());
-            responseQuestion.setText(readingQuestion.getText());
-            responseQuestion.setCorrectAnswer(readingQuestion.getCorrectAnswer());
-            responseQuestion.setExplanation(readingQuestion.getExplanation());
-            responseQuestion.setOption1(readingQuestion.getOption1());
-            responseQuestion.setOption2(readingQuestion.getOption2());
-            responseQuestion.setOption3(readingQuestion.getOption3());
-            responseQuestion.setOption4(readingQuestion.getOption4());
-            responseQuestion.setImage(readingQuestion.getImage());
-            responseQuestions.add(responseQuestion);
-        }
-        for (ListeningQuestion listeningQuestion : listeningQuestions)
-        {
-            ResponseQuestion responseQuestion = new ResponseQuestion();
-            responseQuestion.setId(listeningQuestion.getId());
-            responseQuestion.setTitle(listeningQuestion.getTitle());
-            responseQuestion.setText(listeningQuestion.getText());
-            responseQuestion.setCorrectAnswer(listeningQuestion.getCorrectAnswer());
-            responseQuestion.setExplanation(listeningQuestion.getExplanation());
-            responseQuestion.setOption1(listeningQuestion.getOption1());
-            responseQuestion.setOption2(listeningQuestion.getOption2());
-            responseQuestion.setOption3(listeningQuestion.getOption3());
-            responseQuestion.setOption4(listeningQuestion.getOption4());
-            responseQuestion.setImage(listeningQuestion.getImage());
-            responseQuestion.setAudioFile(listeningQuestion.getAudioFile());
-            responseQuestions.add(responseQuestion);
-        }
+//        List<LanguageKnowledgeQuestion> languageKnowledgeQuestions = languageKnowledgeQuestionRepository.findByDeletedFalseAndExam(exam);
+//        List<ReadingQuestion> readingQuestions = readingQuestionRepository.findByDeletedFalseAndExam(exam);
+//        List<ListeningQuestion> listeningQuestions = listeningQuestionRepository.findByDeletedFalseAndExam(exam);
+//        for(LanguageKnowledgeQuestion languageKnowledgeQuestion : languageKnowledgeQuestions)
+//        {
+//            ResponseQuestion responseQuestion = new ResponseQuestion();
+//            responseQuestion.setId(languageKnowledgeQuestion.getId());
+//            responseQuestion.setTitle(languageKnowledgeQuestion.getTitle());
+//            responseQuestion.setText(languageKnowledgeQuestion.getText());
+//            responseQuestion.setCorrectAnswer(languageKnowledgeQuestion.getCorrectAnswer());
+//            responseQuestion.setExplanation(languageKnowledgeQuestion.getExplanation());
+//            responseQuestion.setOption1(languageKnowledgeQuestion.getOption1());
+//            responseQuestion.setOption2(languageKnowledgeQuestion.getOption2());
+//            responseQuestion.setOption3(languageKnowledgeQuestion.getOption3());
+//            responseQuestion.setOption4(languageKnowledgeQuestion.getOption4());
+//            responseQuestions.add(responseQuestion);
+//        }
+//        for (ReadingQuestion readingQuestion : readingQuestions)
+//        {
+//            ResponseQuestion responseQuestion = new ResponseQuestion();
+//            responseQuestion.setId(readingQuestion.getId());
+//            responseQuestion.setTitle(readingQuestion.getTitle());
+//            responseQuestion.setText(readingQuestion.getText());
+//            responseQuestion.setCorrectAnswer(readingQuestion.getCorrectAnswer());
+//            responseQuestion.setExplanation(readingQuestion.getExplanation());
+//            responseQuestion.setOption1(readingQuestion.getOption1());
+//            responseQuestion.setOption2(readingQuestion.getOption2());
+//            responseQuestion.setOption3(readingQuestion.getOption3());
+//            responseQuestion.setOption4(readingQuestion.getOption4());
+//            responseQuestion.setImage(readingQuestion.getImage());
+//            responseQuestions.add(responseQuestion);
+//        }
+//        for (ListeningQuestion listeningQuestion : listeningQuestions)
+//        {
+//            ResponseQuestion responseQuestion = new ResponseQuestion();
+//            responseQuestion.setId(listeningQuestion.getId());
+//            responseQuestion.setTitle(listeningQuestion.getTitle());
+//            responseQuestion.setText(listeningQuestion.getText());
+//            responseQuestion.setCorrectAnswer(listeningQuestion.getCorrectAnswer());
+//            responseQuestion.setExplanation(listeningQuestion.getExplanation());
+//            responseQuestion.setOption1(listeningQuestion.getOption1());
+//            responseQuestion.setOption2(listeningQuestion.getOption2());
+//            responseQuestion.setOption3(listeningQuestion.getOption3());
+//            responseQuestion.setOption4(listeningQuestion.getOption4());
+//            responseQuestion.setImage(listeningQuestion.getImage());
+//            responseQuestion.setAudioFile(listeningQuestion.getAudioFile());
+//            responseQuestions.add(responseQuestion);
+//        }
         return responseQuestions;
     }
 
     @Override
     public ResponseQuestion getKnowledgeQuestionById(Long id) {
-        Optional<LanguageKnowledgeQuestion> languageKnowledgeQuestion = languageKnowledgeQuestionRepository.findByIdAndDeletedFalse(id);
+//        Optional<LanguageKnowledgeQuestion> languageKnowledgeQuestion = languageKnowledgeQuestionRepository.findByIdAndDeletedFalse(id);
         ResponseQuestion responseQuestion = new ResponseQuestion();
-        if(languageKnowledgeQuestion.isPresent())
-        {
-            responseQuestion.setId(languageKnowledgeQuestion.get().getId());
-            responseQuestion.setTitle(languageKnowledgeQuestion.get().getTitle());
-            responseQuestion.setText(languageKnowledgeQuestion.get().getText());
-            responseQuestion.setCorrectAnswer(languageKnowledgeQuestion.get().getCorrectAnswer());
-            responseQuestion.setExplanation(languageKnowledgeQuestion.get().getExplanation());
-            responseQuestion.setOption1(languageKnowledgeQuestion.get().getOption1());
-            responseQuestion.setOption2(languageKnowledgeQuestion.get().getOption2());
-            responseQuestion.setOption3(languageKnowledgeQuestion.get().getOption3());
-            responseQuestion.setOption4(languageKnowledgeQuestion.get().getOption4());
-        }
+//        if(languageKnowledgeQuestion.isPresent())
+//        {
+//            responseQuestion.setId(languageKnowledgeQuestion.get().getId());
+//            responseQuestion.setTitle(languageKnowledgeQuestion.get().getTitle());
+//            responseQuestion.setText(languageKnowledgeQuestion.get().getText());
+//            responseQuestion.setCorrectAnswer(languageKnowledgeQuestion.get().getCorrectAnswer());
+//            responseQuestion.setExplanation(languageKnowledgeQuestion.get().getExplanation());
+//            responseQuestion.setOption1(languageKnowledgeQuestion.get().getOption1());
+//            responseQuestion.setOption2(languageKnowledgeQuestion.get().getOption2());
+//            responseQuestion.setOption3(languageKnowledgeQuestion.get().getOption3());
+//            responseQuestion.setOption4(languageKnowledgeQuestion.get().getOption4());
+//        }
         return responseQuestion;
     }
 
     @Override
     public ResponseQuestion getListeningQuestionById(Long id) {
-        Optional<ListeningQuestion> listeningQuestion = listeningQuestionRepository.findByIdAndDeletedFalse(id);
+//        Optional<ListeningQuestion> listeningQuestion = listeningQuestionRepository.findByIdAndDeletedFalse(id);
         ResponseQuestion responseQuestion = new ResponseQuestion();
-        if(listeningQuestion.isPresent())
-        {
-            responseQuestion.setId(listeningQuestion.get().getId());
-            responseQuestion.setTitle(listeningQuestion.get().getTitle());
-            responseQuestion.setText(listeningQuestion.get().getText());
-            responseQuestion.setCorrectAnswer(listeningQuestion.get().getCorrectAnswer());
-            responseQuestion.setExplanation(listeningQuestion.get().getExplanation());
-            responseQuestion.setOption1(listeningQuestion.get().getOption1());
-            responseQuestion.setOption2(listeningQuestion.get().getOption2());
-            responseQuestion.setOption3(listeningQuestion.get().getOption3());
-            responseQuestion.setOption4(listeningQuestion.get().getOption4());
-            responseQuestion.setAudioFile(listeningQuestion.get().getAudioFile());
-            responseQuestion.setImage(listeningQuestion.get().getImage());
-        }
+//        if(listeningQuestion.isPresent())
+//        {
+//            responseQuestion.setId(listeningQuestion.get().getId());
+//            responseQuestion.setTitle(listeningQuestion.get().getTitle());
+//            responseQuestion.setText(listeningQuestion.get().getText());
+//            responseQuestion.setCorrectAnswer(listeningQuestion.get().getCorrectAnswer());
+//            responseQuestion.setExplanation(listeningQuestion.get().getExplanation());
+//            responseQuestion.setOption1(listeningQuestion.get().getOption1());
+//            responseQuestion.setOption2(listeningQuestion.get().getOption2());
+//            responseQuestion.setOption3(listeningQuestion.get().getOption3());
+//            responseQuestion.setOption4(listeningQuestion.get().getOption4());
+//            responseQuestion.setAudioFile(listeningQuestion.get().getAudioFile());
+//            responseQuestion.setImage(listeningQuestion.get().getImage());
+//        }
         return responseQuestion;
     }
 
     @Override
     public ResponseQuestion getReadingQuestionById(Long id) {
-        Optional<ReadingQuestion> readingQuestion = readingQuestionRepository.findByIdAndDeletedFalse(id);
+//        Optional<ReadingQuestion> readingQuestion = readingQuestionRepository.findByIdAndDeletedFalse(id);
         ResponseQuestion responseQuestion = new ResponseQuestion();
-        if(readingQuestion.isPresent())
-        {
-            responseQuestion.setId(readingQuestion.get().getId());
-            responseQuestion.setTitle(readingQuestion.get().getTitle());
-            responseQuestion.setText(readingQuestion.get().getText());
-            responseQuestion.setCorrectAnswer(readingQuestion.get().getCorrectAnswer());
-            responseQuestion.setExplanation(readingQuestion.get().getExplanation());
-            responseQuestion.setOption1(readingQuestion.get().getOption1());
-            responseQuestion.setOption2(readingQuestion.get().getOption2());
-            responseQuestion.setOption3(readingQuestion.get().getOption3());
-            responseQuestion.setOption4(readingQuestion.get().getOption4());
-            responseQuestion.setImage(readingQuestion.get().getImage());
-        }
+//        if(readingQuestion.isPresent())
+//        {
+//            responseQuestion.setId(readingQuestion.get().getId());
+//            responseQuestion.setTitle(readingQuestion.get().getTitle());
+//            responseQuestion.setText(readingQuestion.get().getText());
+//            responseQuestion.setCorrectAnswer(readingQuestion.get().getCorrectAnswer());
+//            responseQuestion.setExplanation(readingQuestion.get().getExplanation());
+//            responseQuestion.setOption1(readingQuestion.get().getOption1());
+//            responseQuestion.setOption2(readingQuestion.get().getOption2());
+//            responseQuestion.setOption3(readingQuestion.get().getOption3());
+//            responseQuestion.setOption4(readingQuestion.get().getOption4());
+//            responseQuestion.setImage(readingQuestion.get().getImage());
+//        }
         return responseQuestion;
     }
 
     @Override
     public void deleteKnowledgeQuestionById(Long id) {
-        Optional<LanguageKnowledgeQuestion> languageKnowledgeQuestion = languageKnowledgeQuestionRepository.findByIdAndDeletedFalse(id);
-        if(languageKnowledgeQuestion.isPresent())
-        {
-            languageKnowledgeQuestion.get().setDeleted(true);
-            languageKnowledgeQuestionRepository.save(languageKnowledgeQuestion.get());
-        }
+//        Optional<LanguageKnowledgeQuestion> languageKnowledgeQuestion = languageKnowledgeQuestionRepository.findByIdAndDeletedFalse(id);
+//        if(languageKnowledgeQuestion.isPresent())
+//        {
+//            languageKnowledgeQuestion.get().setDeleted(true);
+//            languageKnowledgeQuestionRepository.save(languageKnowledgeQuestion.get());
+//        }
     }
 
     @Override
     public void deleteListeningQuestionById(Long id) {
-        Optional<ListeningQuestion> listeningQuestion = listeningQuestionRepository.findByIdAndDeletedFalse(id);
-        if(listeningQuestion.isPresent())
-        {
-            listeningQuestion.get().setDeleted(true);
-            listeningQuestionRepository.save(listeningQuestion.get());
-        }
+//        Optional<ListeningQuestion> listeningQuestion = listeningQuestionRepository.findByIdAndDeletedFalse(id);
+//        if(listeningQuestion.isPresent())
+//        {
+//            listeningQuestion.get().setDeleted(true);
+//            listeningQuestionRepository.save(listeningQuestion.get());
+//        }
     }
 
     @Override
     public void deleteReadingQuestionById(Long id) {
-        Optional<ReadingQuestion> readingQuestion = readingQuestionRepository.findByIdAndDeletedFalse(id);
-        if(readingQuestion.isPresent())
-        {
-            readingQuestion.get().setDeleted(true);
-            readingQuestionRepository.save(readingQuestion.get());
-        }
+//        Optional<ReadingQuestion> readingQuestion = readingQuestionRepository.findByIdAndDeletedFalse(id);
+//        if(readingQuestion.isPresent())
+//        {
+//            readingQuestion.get().setDeleted(true);
+//            readingQuestionRepository.save(readingQuestion.get());
+//        }
     }
 }
