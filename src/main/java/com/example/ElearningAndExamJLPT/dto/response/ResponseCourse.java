@@ -26,4 +26,5 @@ public class ResponseCourse {
     private String teacherName;
     private String teacherAvatar;
     private List<ResponseLesson> lessons;
+    private Integer numberOfLesson;
 }

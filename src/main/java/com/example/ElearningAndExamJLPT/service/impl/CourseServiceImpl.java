@@ -242,6 +242,7 @@ public class CourseServiceImpl implements ICourseService {
                         lessons.add(responseLesson);
                     }
                     responseCourse.setLessons(lessons);
+                    responseCourse.setNumberOfLesson(course.getLessons().size());
                 } else {
                     if (enrollmentRepository.existsByStudentIdAndCourseId(currentUser, course)) {
                         List<ResponseLesson> lessons = new ArrayList<>();
@@ -257,8 +258,10 @@ public class CourseServiceImpl implements ICourseService {
                             lessons.add(responseLesson);
                         }
                         responseCourse.setLessons(lessons);
+                        responseCourse.setNumberOfLesson(course.getLessons().size());
                     } else {
                         responseCourse.setLessons(Collections.emptyList());
+                        responseCourse.setNumberOfLesson(course.getLessons().size());
                     }
                 }
             }
