@@ -52,6 +52,11 @@ public class LessonServiceImpl implements ILessonService {
         entity.setCreatedDate(now);
         entity.setModifiedBy(user);
         entity.setModifiedDate(now);
+        return setEnrollment(lessonRepository.save(entity));
+    }
+    public Lesson setEnrollment(Lesson entity){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get();
         List<Enrollment> enrollments = enrollmentRepository.findByCourseId(entity.getCourse());
         for (Enrollment enrollment : enrollments) {
             UserLesson userLesson = new UserLesson();
@@ -60,7 +65,7 @@ public class LessonServiceImpl implements ILessonService {
             userLesson.setCompleted(false);
             userLessonRepository.save(userLesson);
         }
-        return lessonRepository.save(entity);
+        return entity;
     }
 
     @Override
