@@ -21,6 +21,5 @@ public class QuestionDTO {
     private Integer correctAnswer;
     private String explanation;
     private Integer type;
-    private Level level;
     private Long examId;
 }
