@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class QuestionExamServiceImpl implements IQuestionExamService {
@@ -143,5 +144,94 @@ public class QuestionExamServiceImpl implements IQuestionExamService {
             responseQuestions.add(responseQuestion);
         }
         return responseQuestions;
+    }
+    @Override
+    public ResponseQuestion getKnowledgeQuestionById(Long id) {
+        Optional<LanguageKnowledgeQuestion> languageKnowledgeQuestion = languageKnowledgeQuestionRepository.findByIdAndDeletedFalse(id);
+        ResponseQuestion responseQuestion = new ResponseQuestion();
+        if(languageKnowledgeQuestion.isPresent())
+        {
+            responseQuestion.setId(languageKnowledgeQuestion.get().getId());
+            responseQuestion.setTitle(languageKnowledgeQuestion.get().getTitle());
+            responseQuestion.setText(languageKnowledgeQuestion.get().getText());
+            responseQuestion.setCorrectAnswer(languageKnowledgeQuestion.get().getCorrectAnswer());
+            responseQuestion.setExplanation(languageKnowledgeQuestion.get().getExplanation());
+            responseQuestion.setOption1(languageKnowledgeQuestion.get().getOption1());
+            responseQuestion.setOption2(languageKnowledgeQuestion.get().getOption2());
+            responseQuestion.setOption3(languageKnowledgeQuestion.get().getOption3());
+            responseQuestion.setOption4(languageKnowledgeQuestion.get().getOption4());
+        }
+        return responseQuestion;
+    }
+
+    @Override
+    public ResponseQuestion getListeningQuestionById(Long id) {
+        Optional<ListeningQuestion> listeningQuestion = listeningQuestionRepository.findByIdAndDeletedFalse(id);
+        ResponseQuestion responseQuestion = new ResponseQuestion();
+        if(listeningQuestion.isPresent())
+        {
+            responseQuestion.setId(listeningQuestion.get().getId());
+            responseQuestion.setTitle(listeningQuestion.get().getTitle());
+            responseQuestion.setText(listeningQuestion.get().getText());
+            responseQuestion.setCorrectAnswer(listeningQuestion.get().getCorrectAnswer());
+            responseQuestion.setExplanation(listeningQuestion.get().getExplanation());
+            responseQuestion.setOption1(listeningQuestion.get().getOption1());
+            responseQuestion.setOption2(listeningQuestion.get().getOption2());
+            responseQuestion.setOption3(listeningQuestion.get().getOption3());
+            responseQuestion.setOption4(listeningQuestion.get().getOption4());
+            responseQuestion.setAudioFile(listeningQuestion.get().getAudioFile());
+            responseQuestion.setImage(listeningQuestion.get().getImage());
+        }
+        return responseQuestion;
+    }
+
+    @Override
+    public ResponseQuestion getReadingQuestionById(Long id) {
+        Optional<ReadingQuestion> readingQuestion = readingQuestionRepository.findByIdAndDeletedFalse(id);
+        ResponseQuestion responseQuestion = new ResponseQuestion();
+        if(readingQuestion.isPresent())
+        {
+            responseQuestion.setId(readingQuestion.get().getId());
+            responseQuestion.setTitle(readingQuestion.get().getTitle());
+            responseQuestion.setText(readingQuestion.get().getText());
+            responseQuestion.setCorrectAnswer(readingQuestion.get().getCorrectAnswer());
+            responseQuestion.setExplanation(readingQuestion.get().getExplanation());
+            responseQuestion.setOption1(readingQuestion.get().getOption1());
+            responseQuestion.setOption2(readingQuestion.get().getOption2());
+            responseQuestion.setOption3(readingQuestion.get().getOption3());
+            responseQuestion.setOption4(readingQuestion.get().getOption4());
+            responseQuestion.setImage(readingQuestion.get().getImage());
+        }
+        return responseQuestion;
+    }
+
+    @Override
+    public void deleteKnowledgeQuestionById(Long id) {
+        Optional<LanguageKnowledgeQuestion> languageKnowledgeQuestion = languageKnowledgeQuestionRepository.findByIdAndDeletedFalse(id);
+        if(languageKnowledgeQuestion.isPresent())
+        {
+            languageKnowledgeQuestion.get().setDeleted(true);
+            languageKnowledgeQuestionRepository.save(languageKnowledgeQuestion.get());
+        }
+    }
+
+    @Override
+    public void deleteListeningQuestionById(Long id) {
+        Optional<ListeningQuestion> listeningQuestion = listeningQuestionRepository.findByIdAndDeletedFalse(id);
+        if(listeningQuestion.isPresent())
+        {
+            listeningQuestion.get().setDeleted(true);
+            listeningQuestionRepository.save(listeningQuestion.get());
+        }
+    }
+
+    @Override
+    public void deleteReadingQuestionById(Long id) {
+        Optional<ReadingQuestion> readingQuestion = readingQuestionRepository.findByIdAndDeletedFalse(id);
+        if(readingQuestion.isPresent())
+        {
+            readingQuestion.get().setDeleted(true);
+            readingQuestionRepository.save(readingQuestion.get());
+        }
     }
 }

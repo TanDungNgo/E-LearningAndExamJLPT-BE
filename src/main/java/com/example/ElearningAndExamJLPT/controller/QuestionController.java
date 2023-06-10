@@ -38,6 +38,12 @@ public class QuestionController {
                 new ResponseObject("ok", "Query question successfully", questionExamService.getAllQuestionExam(foundExam.get()))
         );
     }
+    @GetMapping("/languageKnowledge/{id}")
+    public ResponseEntity<ResponseObject> getAllQuestionLanguageKnowledge(@PathVariable("id") Long id) {
+        return ResponseEntity.ok().body(
+                new ResponseObject("ok", "Query question successfully",questionExamService.getKnowledgeQuestionById(id))
+        );
+    }
     @PutMapping(value = "/languageKnowledge/{id}",consumes = "application/json")
     public ResponseEntity<ResponseObject> updateQuestionLanguageKnowledge(@PathVariable("id") Long id, @RequestBody QuestionDTO questionDTO) {
         return ResponseEntity.ok().body(
@@ -46,8 +52,15 @@ public class QuestionController {
     }
     @DeleteMapping("/languageKnowledge/{id}")
     public ResponseEntity<ResponseObject> deleteQuestionLanguageKnowledge(@PathVariable("id") Long id) {
+        questionExamService.deleteKnowledgeQuestionById(id);
         return ResponseEntity.ok().body(
                 new ResponseObject("ok", "Delete question successfully",null)
+        );
+    }
+    @GetMapping("/listening/{id}")
+    public ResponseEntity<ResponseObject> getAllQuestionListening(@PathVariable("id") Long id) {
+        return ResponseEntity.ok().body(
+                new ResponseObject("ok", "Query question successfully",questionExamService.getListeningQuestionById(id))
         );
     }
     @PutMapping(value = "/listening/{id}",consumes = "application/json")
@@ -58,8 +71,15 @@ public class QuestionController {
     }
     @DeleteMapping("/listening/{id}")
     public ResponseEntity<ResponseObject> deleteQuestionListening(@PathVariable("id") Long id) {
+        questionExamService.deleteListeningQuestionById(id);
         return ResponseEntity.ok().body(
                 new ResponseObject("ok", "Delete question successfully",null)
+        );
+    }
+    @GetMapping("/reading/{id}")
+    public ResponseEntity<ResponseObject> getAllQuestionReading(@PathVariable("id") Long id) {
+        return ResponseEntity.ok().body(
+                new ResponseObject("ok", "Query question successfully",questionExamService.getReadingQuestionById(id))
         );
     }
     @PutMapping(value = "/reading/{id}",consumes = "application/json")
@@ -70,6 +90,7 @@ public class QuestionController {
     }
     @DeleteMapping("/reading/{id}")
     public ResponseEntity<ResponseObject> deleteQuestionReading(@PathVariable("id") Long id) {
+        questionExamService.deleteReadingQuestionById(id);
         return ResponseEntity.ok().body(
                 new ResponseObject("ok", "Delete question successfully",null)
         );
