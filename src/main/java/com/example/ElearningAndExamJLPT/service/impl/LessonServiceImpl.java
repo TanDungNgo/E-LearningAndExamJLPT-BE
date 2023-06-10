@@ -31,8 +31,8 @@ public class LessonServiceImpl implements ILessonService {
     private IUserRepository userRepository;
     @Autowired
     private IUserLessonRepository userLessonRepository;
-    @Autowired
-    private INoteRepository noteRepository;
+//    @Autowired
+//    private INoteRepository noteRepository;
 
     @Override
     public List<Lesson> getAll() {
@@ -118,21 +118,23 @@ public class LessonServiceImpl implements ILessonService {
 
     @Override
     public Note addNoteToLesson(Lesson lesson, NoteDTO note) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get();
-        Note newNote = new Note();
-        newNote.setLesson(lesson);
-        newNote.setContent(note.getContent());
-        newNote.setTime(note.getTime());
-        newNote.setUser(user);
-        return noteRepository.save(newNote);
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        User user = userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get();
+//        Note newNote = new Note();
+//        newNote.setLesson(lesson);
+//        newNote.setContent(note.getContent());
+//        newNote.setTime(note.getTime());
+//        newNote.setUser(user);
+//        return noteRepository.save(newNote);
+        return null;
     }
 
     @Override
     public List<Note> getAllNotesByLesson(Lesson lesson) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get();
-        return noteRepository.findAllByDeletedFalseAndLessonAndUser(lesson, user);
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        User user = userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get();
+//        return noteRepository.findAllByDeletedFalseAndLessonAndUser(lesson, user);
+        return null;
     }
 
     @Override
@@ -142,9 +144,9 @@ public class LessonServiceImpl implements ILessonService {
 
     @Override
     public void deleteNoteInLesson(Long id) {
-        Note note = noteRepository.findNoteByDeletedFalseAndId(id).get();
-        note.setDeleted(true);
-        noteRepository.save(note);
+//        Note note = noteRepository.findNoteByDeletedFalseAndId(id).get();
+//        note.setDeleted(true);
+//        noteRepository.save(note);
     }
 
     @Override
