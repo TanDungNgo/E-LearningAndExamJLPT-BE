@@ -52,6 +52,7 @@ public class LessonServiceImpl implements ILessonService {
         entity.setCreatedDate(now);
         entity.setModifiedBy(userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get());
         entity.setModifiedDate(now);
+
         return lessonRepository.save(entity);
     }
 
