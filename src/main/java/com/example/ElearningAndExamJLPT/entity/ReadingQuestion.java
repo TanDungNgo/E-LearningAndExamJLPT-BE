@@ -23,7 +23,6 @@ public class ReadingQuestion extends BaseEntity{
     @Lob
     private String image;
     private String text;
-    @NotNull(message = "Level is mandatory")
     @Enumerated(EnumType.STRING)
     private Level level;
     private String option1;

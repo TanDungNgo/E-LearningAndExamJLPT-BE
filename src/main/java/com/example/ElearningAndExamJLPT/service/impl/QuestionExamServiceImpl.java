@@ -40,7 +40,6 @@ public class QuestionExamServiceImpl implements IQuestionExamService {
             LanguageKnowledgeQuestion languageKnowledgeQuestion = new LanguageKnowledgeQuestion();
             languageKnowledgeQuestion.setTitle(questionDTO.getTitle());
             languageKnowledgeQuestion.setText(questionDTO.getText());
-            languageKnowledgeQuestion.setLevel(questionDTO.getLevel());
             languageKnowledgeQuestion.setExam(examRepository.findExamByDeletedFalseAndId(questionDTO.getExamId()).get());
             languageKnowledgeQuestion.setCorrectAnswer(questionDTO.getCorrectAnswer());
             languageKnowledgeQuestion.setExplanation(questionDTO.getExplanation());
@@ -57,7 +56,6 @@ public class QuestionExamServiceImpl implements IQuestionExamService {
             ReadingQuestion readingQuestion = new ReadingQuestion();
             readingQuestion.setTitle(questionDTO.getTitle());
             readingQuestion.setText(questionDTO.getText());
-            readingQuestion.setLevel(questionDTO.getLevel());
             readingQuestion.setExam(examRepository.findExamByDeletedFalseAndId(questionDTO.getExamId()).get());
             readingQuestion.setCorrectAnswer(questionDTO.getCorrectAnswer());
             readingQuestion.setExplanation(questionDTO.getExplanation());
@@ -75,7 +73,6 @@ public class QuestionExamServiceImpl implements IQuestionExamService {
             ListeningQuestion listeningQuestion = new ListeningQuestion();
             listeningQuestion.setTitle(questionDTO.getTitle());
             listeningQuestion.setText(questionDTO.getText());
-            listeningQuestion.setLevel(questionDTO.getLevel());
             listeningQuestion.setExam(examRepository.findExamByDeletedFalseAndId(questionDTO.getExamId()).get());
             listeningQuestion.setCorrectAnswer(questionDTO.getCorrectAnswer());
             listeningQuestion.setExplanation(questionDTO.getExplanation());
