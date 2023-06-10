@@ -1,7 +1,6 @@
 package com.example.ElearningAndExamJLPT.controller;
 
 import com.example.ElearningAndExamJLPT.dto.LessonDTO;
-import com.example.ElearningAndExamJLPT.dto.NoteDTO;
 import com.example.ElearningAndExamJLPT.dto.response.ResponseObject;
 import com.example.ElearningAndExamJLPT.entity.Course;
 import com.example.ElearningAndExamJLPT.entity.Lesson;
@@ -22,7 +21,6 @@ public class LessonController {
     private LessonServiceImpl lessonService;
     @Autowired
     private CourseServiceImpl courseService;
-
     @GetMapping
     public ResponseEntity<ResponseObject> getAllLesson() {
         return ResponseEntity.status(HttpStatus.OK).body(
@@ -54,7 +52,7 @@ public class LessonController {
                 );
     }
 
-    @PutMapping(value = "/{id}", consumes = "application/json")
+    @PutMapping(value = "/{id}", consumes= "application/json")
     public ResponseEntity<ResponseObject> update(@PathVariable("id") Long id, @RequestBody LessonDTO newLesson) {
         Lesson updatedLesson = lessonService.getById(id)
                 .map(lesson -> {
@@ -62,7 +60,7 @@ public class LessonController {
                     lesson.setDescription(newLesson.getDescription());
                     lesson.setUrlVideo(newLesson.getUrlVideo());
                     return lessonService.update(lesson);
-                }).orElseGet(() -> {
+                }).orElseGet(()->{
                     Lesson lesson = new Lesson();
                     lesson.setName(newLesson.getName());
                     lesson.setDescription(newLesson.getDescription());
@@ -71,7 +69,7 @@ public class LessonController {
                     return lessonService.save(lesson);
                 });
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("ok", "Update lesson successfully", updatedLesson)
+                new ResponseObject("ok","Update lesson successfully", updatedLesson)
         );
     }
 
@@ -89,19 +87,17 @@ public class LessonController {
             );
         }
     }
-
     @GetMapping("/search")
-    public ResponseEntity<List<Lesson>> searchLessons(@RequestParam("query") String query) {
+    public ResponseEntity<List<Lesson>> searchLessons(@RequestParam("query") String query){
         return ResponseEntity.ok(lessonService.searchLessons(query));
     }
-
     @PutMapping("/watched/{id}")
-    public ResponseEntity<?> markVideoAsWatched(@PathVariable("id") Long id) {
+    public ResponseEntity<?> markVideoAsWatched(@PathVariable("id") Long id){
         Optional<Lesson> foundLesson = lessonService.getById(id);
         if (foundLesson.isPresent()) {
             lessonService.markVideoAsWatched(lessonService.getById(id).get());
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "Completed lesson", "")
+                    new ResponseObject("ok", "Completed lesson" , "")
             );
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
@@ -109,9 +105,8 @@ public class LessonController {
             );
         }
     }
-
     @GetMapping("/course/{id}")
-    public ResponseEntity<?> getAllByCourse(@PathVariable("id") Long id) {
+    public ResponseEntity<?> getAllByCourse(@PathVariable("id") Long id){
         Optional<Course> foundCourse = courseService.getById(id);
         if (foundCourse.isPresent()) {
             return ResponseEntity.status(HttpStatus.OK).body(
@@ -119,61 +114,7 @@ public class LessonController {
             );
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    null
-            );
-        }
-    }
-
-    @PostMapping("/note/{id}")
-    public ResponseEntity<?> addNoteToLesson(@PathVariable("id") Long id, @RequestBody NoteDTO note) {
-        Optional<Lesson> foundLesson = lessonService.getById(id);
-        if (foundLesson.isPresent()) {
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "Add note successfully", lessonService.addNoteToLesson(foundLesson.get(), note))
-            );
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ResponseObject("failed", "Cannot find lesson with id = " + id, "")
-            );
-        }
-    }
-    @GetMapping("/notes/{id}")
-    public ResponseEntity<?> getAllNotesByLesson(@PathVariable("id") Long id) {
-        Optional<Lesson> foundLesson = lessonService.getById(id);
-        if (foundLesson.isPresent()) {
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "Query successfully", lessonService.getAllNotesByLesson(foundLesson.get()))
-            );
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ResponseObject("failed", "Cannot find lesson with id = " + id, "")
-            );
-        }
-    }
-    @DeleteMapping("/note/{id}")
-    public ResponseEntity<?> deleteNoteFromLesson(@PathVariable("id") Long id) {
-        Optional<Lesson> foundLesson = lessonService.getById(id);
-        if (foundLesson.isPresent()) {
-            lessonService.deleteNoteInLesson(id);
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "Delete note successfully", "")
-            );
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ResponseObject("failed", "Cannot find lesson with id = " + id, "")
-            );
-        }
-    }
-    @PutMapping("/note/{id}")
-    public ResponseEntity<?> updateNoteInLesson(@PathVariable("id") Long id, @RequestBody NoteDTO note) {
-        Optional<Lesson> foundLesson = lessonService.getById(id);
-        if (foundLesson.isPresent()) {
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "Update note successfully", lessonService.updateNoteInLesson(foundLesson.get(), note))
-            );
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ResponseObject("failed", "Cannot find lesson with id = " + id, "")
+                    new ResponseObject("failed", "Cannot find course with id = " + id, "")
             );
         }
     }
