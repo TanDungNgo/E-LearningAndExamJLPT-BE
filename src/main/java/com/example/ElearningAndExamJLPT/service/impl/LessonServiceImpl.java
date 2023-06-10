@@ -2,13 +2,10 @@ package com.example.ElearningAndExamJLPT.service.impl;
 
 import com.example.ElearningAndExamJLPT.dto.NoteDTO;
 import com.example.ElearningAndExamJLPT.dto.response.ResponseLesson;
-import com.example.ElearningAndExamJLPT.entity.Course;
-import com.example.ElearningAndExamJLPT.entity.Lesson;
-import com.example.ElearningAndExamJLPT.entity.Note;
+import com.example.ElearningAndExamJLPT.entity.*;
 import com.example.ElearningAndExamJLPT.entity.User.Role;
 import com.example.ElearningAndExamJLPT.entity.User.RoleName;
 import com.example.ElearningAndExamJLPT.entity.User.User;
-import com.example.ElearningAndExamJLPT.entity.UserLesson;
 import com.example.ElearningAndExamJLPT.repository.*;
 import com.example.ElearningAndExamJLPT.service.ILessonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +30,8 @@ public class LessonServiceImpl implements ILessonService {
     private IUserLessonRepository userLessonRepository;
     @Autowired
     private INoteRepository noteRepository;
+    @Autowired
+    private IEnrollmentRepository enrollmentRepository;
 
     @Override
     public List<Lesson> getAll() {
@@ -47,11 +46,20 @@ public class LessonServiceImpl implements ILessonService {
     @Override
     public Lesson save(Lesson entity) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get();
         LocalDateTime now = LocalDateTime.now();
-        entity.setCreatedBy(userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get());
+        entity.setCreatedBy(user);
         entity.setCreatedDate(now);
-        entity.setModifiedBy(userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get());
+        entity.setModifiedBy(user);
         entity.setModifiedDate(now);
+        List<Enrollment> enrollments = enrollmentRepository.findByCourseId(entity.getCourse());
+        for (Enrollment enrollment : enrollments) {
+            UserLesson userLesson = new UserLesson();
+            userLesson.setLesson(entity);
+            userLesson.setUser(enrollment.getStudentId());
+            userLesson.setCompleted(false);
+            userLessonRepository.save(userLesson);
+        }
         return lessonRepository.save(entity);
     }
 
