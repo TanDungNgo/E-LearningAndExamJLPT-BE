@@ -68,6 +68,9 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = userRepository.findUserByDeletedFalseAndUsername(authentication.getName()).get();
         Course course = courseRepository.findById(courseId).get();
+        if(course.getCreatedBy().getId().equals(currentUser.getId())){
+            return true;
+        }
         return enrollmentRepository.existsByStudentIdAndCourseId(currentUser, course);
     }
     @Override
