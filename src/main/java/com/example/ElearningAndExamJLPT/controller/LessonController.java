@@ -119,7 +119,7 @@ public class LessonController {
             );
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    null
+                    new ResponseObject("failed", "Cannot find course with id = " + id, "")
             );
         }
     }
