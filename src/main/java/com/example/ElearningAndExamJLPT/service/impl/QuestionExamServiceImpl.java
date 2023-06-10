@@ -82,7 +82,8 @@ public class QuestionExamServiceImpl implements IQuestionExamService {
             listeningQuestion.setOption1(questionDTO.getAnswers().get(0) == null ? null : questionDTO.getAnswers().get(0));
             listeningQuestion.setOption2(questionDTO.getAnswers().get(1) == null ? null : questionDTO.getAnswers().get(1));
             listeningQuestion.setOption3(questionDTO.getAnswers().get(2) == null ? null : questionDTO.getAnswers().get(2));
-            listeningQuestion.setOption4(questionDTO.getAnswers().get(3) == null ? null : questionDTO.getAnswers().get(3));
+            if(questionDTO.getAnswers().size()> 3)
+                listeningQuestion.setOption4(questionDTO.getAnswers().get(3) == null ? null : questionDTO.getAnswers().get(3));
             listeningQuestion.setAudioFile(questionDTO.getAudioFile());
             listeningQuestion.setImage(questionDTO.getImage());
             listeningQuestion.setCreatedDate(now);
